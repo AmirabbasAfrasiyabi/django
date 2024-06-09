@@ -1,0 +1,140 @@
+{% extends "manager/base.html" %} {% block content %}
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="/static/js/GetJalaliDateTime.js"> </script>
+    <script src="/static/js/ConvertToJalaliDate.js"> </script>
+    <link href="/static/css/responsiva-manager.css" rel="stylesheet">
+</head>
+</head>
+    <div class="block justify-content-center">
+        <div class="block heading f-08"> جستجو در نظرهای ارسالی </div>
+             <form action="" method="POST">
+             {% csrf_token %}
+             <div style="font-size: small;">
+                  <label for="NOReciepts"><b> تعداد </b></label>
+                  <input style="width: 10%;" class="transparent" id="NOComments"    type="number" name="NOComments" min="1">
+                  <b >  نظر نمایش داده شود. </b>
+                  <input type="hidden" name="CommentType"   value="SearchComments"> 
+                  <input type="hidden" name="Type"          value="{{Type}}"> 
+             </div>
+             <div class="flex-container" style="font-size: medium;">
+                  <div class="flexform" >
+                     <b > روز </b><br>
+                     <input class="transparent"  type="number"   name="day"   id="day" min="1" max="31">
+                  </div>
+                  <div class="flexform">
+                     <b> ماه </b><br>
+                     <input class="transparent"  type="number"   name="month" id="month" min="1" max="12">
+                  </div>
+                  <div class="flexform">
+                     <b> سال </b><br>
+                     <input class="transparent"  type="number"   name="year"  id="year" min="1398">
+                  </div>
+                  <div class="flexform">
+                     <input class="normal-button" value="مشاهده" type="submit" id="disbtn">
+                  </div>
+             </div>
+             </form>
+        </div>
+        <br/>
+        <div class="block heading f-1"> {{title}} </div>
+        <table>
+            <tbody>
+                <tr>
+                    <th>درمورد بخش</th>
+                    <th>تاریخ ثبت نظر</th>
+                    <th>ساعت ثبت نظر</th>
+                </tr>
+                {% if comments.count > 0 %}
+                 {% if ST == 'N' or ST == 'None' %}
+                   {% for comment in comments %}
+                    <span id="list{{comment.pk}}" style="display:none;">
+                      <tr id="Tag-a{{comment.pk}}"  >
+                          <td id="branch{{comment.pk}}">{{comment.branch}}</td>
+                          <td id="date{{comment.pk}}">{{comment.j_date}}</td>
+                          <td id="time{{comment.pk}}">{{comment.date|date:'H:i:s'}}</td>
+                      </tr>
+                      <form action="" method="POST" id="moreInf{{comment.pk}}">
+                      {% csrf_token %}
+                          <input type="hidden" name="CommentType"   value="moreInf"> 
+                          <input type="hidden" name="CommentPK" value="{{comment.pk}}"> 
+                      </form>
+                    </span>
+                      <script>
+                          var Syear  = {{Syear}}
+                          var Smonth = {{Smonth}}
+                          var year   = {{comment.date.year}}
+                          var month  = {{comment.date.month}}
+                          var day    = {{comment.date.day}}
+                          jalali = gregorian_to_jalali(year, month, day)
+                          if (jalali[0] == Syear){
+                              if (jalali[1] == Smonth){
+                                  $('#list{{comment.pk}}').css('display','block')
+                              }
+                          }
+                      </script>
+                   {% endfor %}
+                  {% else %}
+                   {% for comment in comments %}
+                      <tr id="Tag-a{{comment.pk}}">
+                          <td id="branch{{comment.pk}}">{{comment.branch}}</td>
+                          <td id="date{{comment.pk}}">{{comment.j_date}}</td>
+                          <td id="time{{comment.pk}}">{{comment.date|date:'H:i:s'}}</td>
+                      </tr>
+                      <form action="" method="POST" id="moreInf{{comment.pk}}">
+                      {% csrf_token %}
+                          <input type="hidden" name="CommentType"   value="moreInf"> 
+                          <input type="hidden" name="CommentPK" value="{{comment.pk}}"> 
+                      </form>
+                   {% endfor %}
+                 {% endif %}
+                 
+                {% endif %}
+            </tbody>
+        </table>
+        {%if comments.count == 0 %}
+           <p class="pt-1 f-08">پیامی ثبت نشده است.</p>
+        {%endif%}
+    </div>
+<script>
+    $('[id*="branch"]').each(function(){
+        var Bcode = $(this).text();
+        const Bnames =['پروفایل','پشتیبانی حضوری','ارزیابی‌ها','پیگیری‌ها','فروشگاه','پرداخت‌ها','معرفی ولنس','خدمت عمومی','خدمت تخصصی'];
+        $(this).text(Bnames[Bcode-1]);
+    });
+    
+    $('[id*="time"] , [id*="date"]').each(function(){
+        var str = $(this).text();
+        const PersianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+        var rep = str.replace(/\d/g, x => PersianDigits[x]);
+        $(this).text(rep);
+    });
+    
+    $('[id*="date"]').each(function(){
+        const PersianMonths = ['مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند', 'فروردین', 'اردیبهشت', 'خرداد', 'تیر','مرداد','شهریور'];
+        const EnglishMonths = ['Mehr','Aban','Azar','Dey','Bahman','Esfand','Farvardin','Ordibehesht','Khordad','Tir','Mordad','Shahrivar'];
+        for (let i =0; i < 12; i++){
+            var str = $(this).text();
+            var rep = str.replace(EnglishMonths[i] , PersianMonths[i]);
+            $(this).text(rep);
+            $(this).css("direction" , "rtl");
+        }
+    });
+    
+    $('[id*="Tag-a"]').each(function(){
+       $(this).click(function(){
+           var str = $(this).attr('id');
+           var res = str.replace("Tag-a", "");
+           var FrmId = "#moreInf" + res
+           $(FrmId).submit();
+       });
+    });
+    
+    $(document).ready(function(){
+        var currentdate = GetJalaliDateTime();
+        var yearNow     = currentdate[0];
+        var monthNow    = currentdate[1];
+        $("#year") .attr('value', yearNow );
+        $("#month").attr('value', monthNow );
+    });
+</script>
+{% endblock %}

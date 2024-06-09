@@ -1,0 +1,50 @@
+{% extends "manager/base.html" %} {% block content %}
+<div class="block">
+  <div class="block heading mb-5">{{title}}</div>
+  <table class="w-100">
+    <tbody>
+      <tr>
+        <th>نام </th>
+        <th>نام خانوادگی</th>
+        <th>شماره همراه</th>
+        <th>تاریخ انجام آزمون</th>
+        <th>ساعت انجام آزمون</th>
+      </tr>
+      {% for inf in info %}
+      <tr id="Tag-a{{inf.pk}}">
+        <td>{{inf.user.profiledb.firstname}}</td>
+        <td>{{inf.user.profiledb.lastname}}</td>
+        <td class="phone">{{inf.user.username}}</td>
+        <td class="date">{{inf.j_date_submit}}</td>
+        <td class="time">{{inf.date|date:'H:i:s'}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<script>
+  $('.date , .time , .phone').each(function(){
+    const PersianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    var str = $(this).text()
+    var rep = str.replace(/\d/g, x => PersianDigits[x]);
+    $(this).text(rep)
+  });
+  $('.date').each(function(){
+    const PersianMonths = ['مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند', 'فروردین', 'اردیبهشت', 'خرداد', 'تیر','مرداد','شهریور'];
+    const EnglishMonths = ['Mehr','Aban','Azar','Dey','Bahman','Esfand','Farvardin','Ordibehesht','Khordad','Tir','Mordad','Shahrivar'];
+    for (let i =0; i < 12; i++){
+      var str = $(this).text()
+      var rep = str.replace(EnglishMonths[i] , PersianMonths[i])
+      $(this).text(rep)
+      $(this).css("direction" , "rtl")
+    }
+  });
+  $('[id*="Tag-a"]').each(function(){
+    $(this).click(function(){
+      var ReservationPK = $(this).attr('id').replace("Tag-a", "");
+      var address= window.location.pathname + ReservationPK+'/'
+      window.location.replace(address)
+    });
+  });
+</script>
+{% endblock %}

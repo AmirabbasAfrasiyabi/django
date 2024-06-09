@@ -1,0 +1,30 @@
+{% extends "wellness/base.html" %} {% block content %}
+<div class="container">
+    <div class="block">
+        <div class="block"> رزرو پشتیبانی حضوری </div>
+        <img class="avatar-img my-3" src="/static/health.svg">
+        {% if user.is_authenticated and user.profiledb %}
+        {% for service in services %}
+        <button class="normal-button" onclick="location.href='/dashboard/services/{{service.slug}}';">{{service.name}}</button>
+        {% endfor %}
+        {% else %}
+        <div class="block" id="pop-up">
+            <p class="small-fontsize"> به دلیل عدم تکمیل اطلاعات پروفایل، شما مجاز به استفاده از این بخش نیستید.</p>
+            <p class="small-fontsize"> ابتدا با فشردن دکمه زیر اطلاعات خود را تکمیل نموده و سپس وارد بخش پشتیبانی حضوری شوید.</p>
+            <button class="normal-button btn-lg" id="profilemodal">پروفایل</button>
+        </div>
+    </div>
+
+<!-- The Modal -->
+{% include "wellness/ProfilePopUp.html" %}
+{% endif %}
+</div>
+<script>
+    $('#profilemodal').click(function(){
+        $("#myModal").modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+    });   
+</script>
+{% endblock %}

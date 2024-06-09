@@ -1,0 +1,31 @@
+{% extends "wellness/base.html" %}
+{% block content %}
+<div class="container">
+    <div class="block">
+    <div class="block"> انتقادها و پیشنهادها </div>
+        <br />
+    {% if status == "valid" %}
+        <button class="normal-button" onclick="location.href='/dashboard/comments/SendText' "> ارسال پیام </button>
+        <button class="normal-button" onclick="location.href='/dashboard/comments/rating' "   > امتیازدهی </button>
+    </div>
+    {% else %}
+        <div class="block" id="pop-up">
+            <p class="small-fontsize"> به دلیل عدم تکمیل اطلاعات پروفایل، شما مجاز به استفاده از این بخش نیستید.</p>
+            <p class="small-fontsize"> ابتدا با فشردن دکمه زیر اطلاعات خود را تکمیل نموده و سپس با ارسال نظرات خود، ما را در بهبود کیفیت ارائه خدمات به شما عزیزان یاری نمایید.</p>
+            <button class="normal-button btn-lg" id="profilemodal">پروفایل</button>
+        </div>
+    {% endif %}
+    </div>
+</div>
+
+<!-- The Modal -->
+{% include "wellness/ProfilePopUp.html" %}
+<script>
+    $('#profilemodal').click(function(){
+        $("#myModal").modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+    });   
+</script>
+{% endblock content %}

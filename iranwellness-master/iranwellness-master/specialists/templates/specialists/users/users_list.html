@@ -1,0 +1,110 @@
+{% extends "manager/base.html" %}
+{% block content %}
+<div class="container">
+    <div class="block">
+        <div class="block heading"> جستجوی اطلاعات کاربران </div>
+        <div class="justify-content-center">
+            <form method="GET">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <b style="font-size: medium;"> نام </b><br>
+                        <input
+                           type="text"
+                           name="firstname"
+                           maxlength="20"
+                           class="transparent"
+                           value="{{ request.GET.firstname }}"
+                           placeholder="ایران"
+                        >
+                    </div>
+                    <div class="col-md-4">
+                        <b style="font-size: medium;"> نام خانوادگی </b><br>
+                        <input
+                           type="text"
+                           name="lastname"
+                           maxlength="20"
+                           class="transparent"
+                           value="{{ request.GET.lastname }}"
+                           placeholder="ولنس"
+                        >
+                    </div>
+                    <div class="col-md-4">
+                        <b style="font-size: medium;"> شماره همراه </b><br>
+                        <input
+                           type="tel"
+                           name="phonenumber"
+                           maxlength="11"
+                           class="transparent en-number"
+                           style="direction: ltr;"
+                           value="{{ request.GET.phone }}"
+                           placeholder="09XXXXXXXXX"
+                        >
+                    </div>
+                </div>
+                <input class="normal-button" value="جستجو" type="submit">
+            </form>
+            <table>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">نام</th>
+                    <th scope="col">نام خانوادگی</th>
+                    <th scope="col">شماره همراه</th>
+                </tr>
+                
+                {% if users_list %}
+                    {% for  user in users_list %}
+                        <tr class="pointer" onclick=window.location="{% url 'specialists:user-detail' id=user.id %}?{{ request.GET.urlencode }}";>
+                            <td> {{ forloop.counter }}</td>
+                            <td>{{ user.profiledb.firstname }}</td>
+                            <td>{{ user.profiledb.lastname }}</td>
+                            <td>{{ user.username }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="10"> اطلاعات فردی با این مشخصات در سیستم ثبت نشده است!</td>
+                    </tr>
+                {% endif %}
+                
+            </table>
+
+            <!-- pagination -->
+            {% if page_obj.has_other_pages %}
+            <script src="/static/js/pagination_settings.js"></script>
+            <nav>
+                <ul class="pagination">
+
+                  {% if page_obj.has_previous %}
+                  <li class="page-item"><a class="page-link" href="?page={{page_obj.previous_page_number}}&{{QUERY_STRING}}">قبلی</a></li>
+                  {% else %}
+                  <li class="page-item disabled"><span class="page-link">قبلی</span></li>
+                  {% endif %}
+
+                  {% for page_num in page_obj.paginator.page_range %}
+                  {% if page_obj.number == page_num %}
+                  <li class="page-item page-num active">
+                    <a class="page-link fa-number">{{page_num}}</a>
+                  </li>
+                  {% else %}
+                  <li class="page-item page-num">
+                    <a class="page-link fa-number" href="?page={{page_num}}&{{QUERY_STRING}}">{{page_num}}</a>
+                  </li>
+                  {% endif %}
+                  {% endfor %}
+
+                  {% if page_obj.has_next %}
+                  <li class="page-item"><a class="page-link" href="?page={{page_obj.next_page_number}}&{{QUERY_STRING}}">بعدی</a></li>
+                  {% else %}
+                  <li class="page-item disabled"><span class="page-link">بعدی</span></li>
+                  {% endif %}
+
+                </ul>
+            </nav>
+            {% endif %}
+            <!-- end pagination -->
+
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

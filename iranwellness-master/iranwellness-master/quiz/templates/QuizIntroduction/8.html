@@ -1,0 +1,48 @@
+{% extends "wellness/base.html" %} {% block content %}
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link href="/static/css/quizintroduction.css" rel="stylesheet">
+</head>
+
+<div class="container p-2">
+  <div class="block text-right" dir="rtl" lang="fa">
+  <small>
+   <div class="block mb-5">معرفی مسیر بازی و کار کردن</div>
+   <div class="my-scroll" dir="rtl">
+   <div class="pl-105">
+    <div>
+      <audio class="mp3" controls >
+        <source src="/static/audio/QuizIntroduction/play and working.mp3">
+      </audio>
+    </div>
+    <p>بیشتر زندگی روزانه‌ی ما مشمول یکی از این دو دسته می‌شود. در رابطه با بزرگسالان، اکثریت زمان برای کار می‌گذرد و زمان بسیار کمی به بازی اختصاص داده می‌شود. برای بزرگسالان، بازی بیشتر شامل فعالیت‌هایی است که به عنوان راه فرار انجام می‌شوند -به عنوان مثال در جهت فراموشی مسئولیت‌های کاری. بسیاری از مردم به جای بازی شادی‌آور، خلاقانه و آنی که برای وِلْنِسْ حیاتی است، به صنعت سرگرمی روی می‌آورند. قبل از شروع مدرسه بچه‌ها بیشتر وقت خود را به بازی می‌گذرانند که فعالیتی حیاتی برای رشد آن‌هاست. بازی کودکان می‌تواند بازی یا کار در نظر گرفته شود بسته به اینکه فعالیت هدفدار است یا خیر.</p>
+    <p>وقتی ما واقعاً در حال بازی هستیم، دیگر درمورد نحوه‌ی عملکرد و دستاورد فکر نمی‌کنیم و کاملاً در آن فعالیت غرق می‌شویم. هیچ حس باید و نبایدی وجود ندارد و هر کاری انجام دهیم، درست است. ما همراه با جریان هستیم.</p>
+    <p>این بخش در مورد بازیابی و احیای روح بازی است که وقتی حس می‌کنیم بار کار و زندگی زیاد شده است، می‌تواند تعادل را به زندگی بازگرداند.</p>
+   </div>
+   </div>
+   <button class="normal-button">انجام آزمون</button>
+ </small>
+ </div>
+</div>
+
+<script>
+    $('.normal-button').each(function(index){
+        $(this).click(function(){
+            var num  = "{{number}}"
+            var stat = "{{status}}"
+            if (stat == "invalid") {
+                $('.modal-body').text('به دلایل ولنسی شما تا {{RD}} روز دیگر مجاز به انجام ارزیابی جدید نمی‌باشید.');
+                $(this).attr('data-toggle',"modal");
+                $(this).attr('data-target', "#myModal");
+            }
+            else if (stat == "WithoutResult") {
+                $('.modal-body').text('به علت وجود آزمون تحلیل‌نشده مجاز به انجام ارزیابی جدید نمی‌باشید.');
+                $(this).attr('data-toggle',"modal");
+                $(this).attr('data-target', "#myModal");
+            }
+            else if (stat == "valid")         { window.location.href = '/dashboard/evaluation/quiz/'+ num; }
+        });   
+    });
+</script>
+
+{% include "QuizIntroduction/QuizModal.html" %}
+{% endblock %}

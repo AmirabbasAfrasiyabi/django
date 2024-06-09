@@ -1,0 +1,30 @@
+﻿{% extends "wellness/base.html" %} {% block content %}
+<script src="/static/js/ConvertNumbers.js"></script>
+<div class="container">
+  <div class="block">
+    <div class="block heading"> ورود به پنل کاربری</div>
+      <img class="avatar-img my-3" style="width: 35vmin;" src="/static/sms.svg">
+      <form method="POST">
+        {% csrf_token %}
+        <div class="justify-content-center">
+            <div>لطفاً شماره همراه خود را وارد نمایید:</div>
+            <div><input class="transparent"   type="tel" maxlength="11"    name="phone" id="phone" placeholder="09121234567"></div>
+            <div><input class="normal-button" type="submit" value="ارسال کد فعال‌سازی" /></div>
+        </div>
+      </form>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function(){
+    ConvertToEnglish('#phone');
+    $("form").submit(function(event){
+      toastr.remove()
+      if (!/^09[0-9]{9}/.test($("#phone").val())){
+        toastr.error('شماره همراه را به درستی وارد کنید!');
+        event.preventDefault();
+      }
+    });
+  });
+</script>
+{% endblock %}

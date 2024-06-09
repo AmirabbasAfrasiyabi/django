@@ -1,0 +1,152 @@
+{% extends "manager/base.html" %}{% block content %}
+
+<div class="container">
+    <div class="block position-relative pb-6rem">
+      {% if title == "Health" %}
+         <div class="block heading">آپلود فایل‌های دستگاه هلث </div>
+      {% elif title == "Resonance" %}
+         <div class="block heading">آپلود فایل‌های دستگاه EDS </div>
+      {% endif %}
+      {% if message %}
+      <br />
+      {{message}}
+      {% else %}
+        <table>
+           <tbody>
+                <tr>
+                    <th>نام </th>
+                    <th>نام خانوادگی</th>
+                    <th>شماره همراه</th>
+                    <th>زمان مراجعه </th>
+                </tr>
+                <tr>
+                    <td>{{reserve.user.profiledb.firstname}}</td>
+                    <td>{{reserve.user.profiledb.lastname}}</td>
+                    <td>{{reserve.user.username}}</td>
+                    <td>{{reserve.string}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <form method="POST" enctype="multipart/form-data">
+            {%csrf_token%}
+            <!-- start first result file -->
+            <div class="row no-gutters align-items-center px-4 formFileContainer" style="border: 1.4px solid white;">
+                <div class="col-12 col-md-4 py-2">
+		       	    <label class="btn back-transparent">
+                        <span>انتخاب فایل pdf</span>
+                        <input type="file" name="result" accept=".pdf" onchange="changeInputFile(this)">
+                    </label>
+                </div>
+                <div class="col-12 col-md-4 py-2">
+                    <div class="fileName"></div>
+                </div>
+                <div class="col-12 col-md-4 py-2">
+                    <div class="btn back-pink deleteFile">حذف فایل</div>
+                </div>
+            </div>
+            <!-- end first result file -->
+            <!-- start second result file -->
+            <div class="row no-gutters align-items-center px-4 formFileContainer" style="border: 1.4px solid white;">
+                <div class="col-12 col-md-4 py-2">
+		       	    <label class="btn back-transparent">
+                        <span>انتخاب فایل pdf</span>
+                        <input type="file" name="result2" accept=".pdf" onchange="changeInputFile(this)">
+                    </label>
+                </div>
+                <div class="col-12 col-md-4 py-2">
+                    <div class="fileName"></div>
+                </div>
+                <div class="col-12 col-md-4 py-2">
+                    <div class="btn back-pink deleteFile">حذف فایل</div>
+                </div>
+            </div>
+            <!-- end second result file -->
+            <!-- start third result file -->
+			<div class="row no-gutters align-items-center px-4 formFileContainer" style="border: 1.4px solid white;">
+                <div class="col-12 col-md-4 py-2">
+		       	    <label class="btn back-transparent">
+                        <span>انتخاب فایل pdf</span>
+                        <input type="file" name="result3" accept=".pdf" onchange="changeInputFile(this)">
+                    </label>
+                </div>
+                <div class="col-12 col-md-4 py-2">
+                    <div class="fileName"></div>
+                </div>
+                <div class="col-12 col-md-4 py-2">
+                    <div class="btn back-pink deleteFile">حذف فایل</div>
+                </div>
+            </div>
+            <!-- end third result file -->
+			<br />
+			<button class="btn back-transparent" style="width: 200px;" onclick="submitForm(event)">ثبت</button>
+		</form>
+       {% endif %}
+       <button class="btn back-transparent position-absolute left-0 bottom-0 fs-small m-3 m-md-4" style="width: 200px;" id="BackToWaitingList">لیست انتظار</button>
+	</div>
+</div>
+
+<script>
+    function checkFileFormat(target) {
+        const allowedFormats = ["application/pdf"]
+        let validFormat = true;
+        let errorText = "";
+        if ( !allowedFormats.includes($(target)[0].files[0].type)) {
+            // make empty input file
+            $(target).val("");
+            // set variables
+            validFormat = false;
+            errorText = "به علت عدم همخوانی فرمت فایل آپلودشده با فرمت مجاز، فایل آپلود نخواهد شد.";
+        }
+        return [validFormat, errorText];
+    }
+    function displayUploadedFileName (target) {
+        const fileName = $(target)[0].files[0].name;
+        const formFileContainer = $(target).parents('.formFileContainer');
+        const fileNameDiv = $(formFileContainer).find('.fileName');
+        $(fileNameDiv).text(fileName);
+    }
+    function changeInputFile(target) {
+        const file = $(target)[0].files[0]
+        if (file){
+            // check file format
+            [validFormat, errorText] = checkFileFormat(target);
+            if (errorText) {
+                toastr.remove();
+                toastr.error(errorText);
+            } else {
+                displayUploadedFileName(target);
+            }
+        }
+    }
+    //check uploaded files before submit form
+    function submitForm (event) {
+        event.preventDefault();
+        //check number of uploaded files
+        const NumberUploadedFiles = $('input[name^=result]').filter(function() {return $(this).val() != '';}).length
+        if ( NumberUploadedFiles == 0 ) {
+            toastr.remove();
+            toastr.warning("فایلی برای ثبت ارسال نشده است!");
+        } else if ( NumberUploadedFiles > 0 ) {
+            $('form').submit();
+        }
+    }
+    // delete btn
+    $('.deleteFile').click(function(){
+        const formFileContainer = $(this).parents('.formFileContainer');
+        const inputFile = $(formFileContainer).find('input[type=file]');
+        const fileNameDiv = $(formFileContainer).find('.fileName');
+        // make empty input type file
+        inputFile.val("");
+        // delete file-name if exists
+        fileNameDiv.text("");
+    });
+    // Back to the waiting list button url
+    $(document).ready(function(){
+        const CommonLocation = window.location.pathname
+        const address = CommonLocation.replace((CommonLocation.split('/').reverse()[1]+'/'),'')
+        $('#BackToWaitingList').attr('onclick','location.href='+"'"+address+"'")
+    })
+</script>
+
+{% endblock %}

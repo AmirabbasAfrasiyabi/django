@@ -1,0 +1,53 @@
+{% extends "manager/base.html" %}
+{% block content %}
+<div class="container">
+  <div class="boxs">
+    <h3>تعطیلات</h3>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="sel1">روز</label>
+        <select class="custom-select" name="dayselect">
+          {% for i in days %}
+          <option value="{{i}}">{{i}}</option>
+          {% endfor %}
+        </select>
+        <label for="sel2">ماه</label>
+        <select class="custom-select" name="monthselect">
+          {% for month in months %}
+          <option value="{{forloop.counter}}">{{month}}</option>
+          {% endfor %}
+        </select>
+        <label for="sel3">سال</label>
+        <select class="custom-select" name="yearselect">
+          {% for year in years %}
+          <option value="{{forloop.counter0}}">{{year}}</option>
+          {% endfor %}
+        </select>
+        <input class="form-control btn btn-success" style="width: auto; vertical-align: middle;" type="submit"
+          value="اضافه/حذف ">
+      </div>
+    </form>
+    <table class="table table-striped table-dark">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">year</th>
+          <th scope="col">month</th>
+          <th scope="col">day</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for date in calendar %}
+        <tr>
+          <th scope="row">{{loop.index}}</th>
+          <td>{{date.year}}</td>
+          <td>{{date.month}}</td>
+          <td>{{date.day}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

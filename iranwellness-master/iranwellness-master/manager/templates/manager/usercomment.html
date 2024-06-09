@@ -1,0 +1,71 @@
+{% extends "manager/base.html" %} {% block content %}
+
+<div class="container">
+    <div class="block justify-content-center">
+        <div class="block heading"> {{title}} </div>
+        <div class="row f-06">
+            <div class="col-1"></div>
+            <div class="col-5" style="text-align:right;">نام:</div>
+            <div class="col-5" style="text-align:right;">{{userInfo.firstname}}</div>
+        </div>
+        <div class="row f-06">
+            <div class="col-1"></div>
+            <div class="col-5" style="text-align:right;">نام خانوادگی:</div>
+            <div class="col-5" style="text-align:right;">{{userInfo.lastname}}</div>
+        </div>
+        <div class="row f-06">
+            <div class="col-1"></div>
+            <div class="col-5" style="text-align:right;">شماره همراه فرستنده نظر:</div>
+            <div class="col-5" style="text-align:right;" id="phone">{{userInfo.user.username}}</div>
+        </div>
+        <div class="row f-06">
+            <div class="col-1"></div>
+            <div class="col-5" style="text-align:right;">نظر درمورد بخش:</div>
+            <div class="col-5" style="text-align:right;" id="branch"></div>
+        </div>
+        <div class="row f-06">
+            <div class="col-1"></div>
+            <div class="col-5" style="text-align:right;">تاریخ ارسال نظر:</div>
+            <div class="col-5" style="text-align:right;" id="date">{{comment.j_date}}</div>
+        </div>
+        <div class="row f-06">
+            <div class="col-1"></div>
+            <div class="col-5" style="text-align:right;">ساعت ارسال نظر:</div>
+            <div class="col-5" style="text-align:right;" id="time">{{comment.date|date:'H:i:s'}}</div>
+        </div>
+        <div class="row f-06 mt-4">
+            <div class="col-1"></div>
+            <div class="col-5" style="text-align:right;">متن پیام:</div>
+        </div>
+        <div class="row f-06">
+            <div class="col-4"></div>
+            <div class="col-6 transparent" style="text-align:center;min-height:5em;">{{comment.text}}</div>
+        </div>
+    </div>
+</div>
+<script>
+    var Bcode    = "{{comment.branch}}"
+    const Bnames =['پروفایل','پشتیبانی حضوری','ارزیابی‌ها','پیگیری‌ها','فروشگاه','پرداخت‌ها','معرفی ولنس','هلث','EDS']
+    $("#branch").text(Bnames[Bcode-1])
+    var str1 = $('#date').text();
+    var str2 = $('#time').text();
+    var str3 = $('#phone').text();
+    const PersianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    var rep1 = str1.replace(/\d/g, x => PersianDigits[x]);
+    var rep2 = str2.replace(/\d/g, x => PersianDigits[x]);
+    var rep3 = str3.replace(/\d/g, x => PersianDigits[x]);
+    $('#date').text(rep1);
+    $('#time').text(rep2);
+    $('#phone').text(rep3);
+                    
+    const PersianMonths = ['مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند', 'فروردین', 'اردیبهشت', 'خرداد', 'تیر','مرداد','شهریور'];
+    const EnglishMonths = ['Mehr','Aban','Azar','Dey','Bahman','Esfand','Farvardin','Ordibehesht','Khordad','Tir','Mordad','Shahrivar'];
+                    
+    for (let i =0; i < 12; i++){
+        var str = $('#date').text();
+        var rep = str.replace(EnglishMonths[i] , PersianMonths[i]);
+        $('#date').text(rep);
+        $('#date').css("direction" , "rtl");
+    }
+</script>
+{% endblock %}

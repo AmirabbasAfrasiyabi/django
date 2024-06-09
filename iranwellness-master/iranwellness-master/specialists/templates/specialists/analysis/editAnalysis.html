@@ -1,0 +1,112 @@
+{% extends "manager/base.html" %}{% block content %}
+<head>
+  <script src="/static/js/LimitFileUploadFormat/LimitFileUploadFormatPdf.js"></script>
+</head>
+
+<div class="container">
+  <div class="block position-relative pb-6rem">
+  <div class="block heading mb-5">مشاهده و ویرایش فایل‌های ارزیابی آپلودشده</div>
+  <table>
+    <tbody>
+      <tr>
+        <th>نام</th>
+        <th>نام خانوادگی</th>
+        <th>شماره همراه</th>
+        <th>شماره ثابت</th>
+      </tr>
+      <tr>
+        <td>{{profileInfo.firstname}}</td>
+        <td>{{profileInfo.lastname}}</td>
+        <td>{{profileInfo.user.username}}</td>
+        <td>{{profileInfo.phone1}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="my-3">
+    {% if info %}
+      <form action="" method="POST">
+        {% csrf_token %}
+        <select class="transparent ptb-1em" name="PK"> 
+        {% for inf in info %}
+          <option class="transparent ptb-1em" value="{{inf.pk}}" > {{inf.string}} </option>
+        {% endfor %}
+        </select>
+        <input type="hidden" value="search"  name="determiner">
+        <div><input class="normal-button" value="درخواست دریافت لینک فایل" type="submit"></div>
+      </form>
+    {% endif %}
+    {% if selectedVisit %}
+      <p class="small mt-5">{{selectedVisit.string}}</p>
+      {% if selectedVisit.result %}
+        <p class="small mb-0 mt-5" style="direction: ltr;" id="previousFileName"></p>
+        <a class="btn normal-button f-2em" href="{{selectedVisit.result.url}}"> دریافت فایل </a>
+        <p class="small mb-0 mt-5" style="direction: ltr;" id="newFileName"></p>
+        <form method="POST" enctype="multipart/form-data" id="editForm">
+          {%csrf_token%}
+          <input type="hidden" value="{{ selectedVisit.year}}"               name="year">
+          <input type="hidden" value="{{ selectedVisit.month}}"              name="month">
+          <input type="hidden" value="{{ selectedVisit.day}}"                name="day">
+          <input type="hidden" value="{{ selectedVisit.order}}"              name="order">
+          <input type="hidden" value="edit"  name="determiner">
+          <input type="file" id="specialistfile" name="result" accept=".pdf" onchange="PdfValidator()" required>
+          <label  class="normal-button" id="choosefile" for="specialistfile" > انتخاب فایل pdf جدید </label>
+          <button type="submit" class="normal-button" id="subbtn">ارسال فایل </button>
+        </form>
+      {% else %}
+        <p class="small mt-5"> فایلی برای این مراجعه ارسال نشده است! </p>
+      {% endif %}
+    {% endif %}
+    {% if message %}
+    <p class="small mt-5" id="msg">{{message}}</p>
+    {% endif %}
+  </div>
+  <button class="normal-button position-absolute left-0 bottom-0 w-28 fs-small" id="BackToSearchPage">صفحه جستجو</button>
+  </div>
+</div>
+<script>
+$(document).ready(function(){
+  /*Set back to search page button*/
+  const CommonLocation = window.location.pathname
+  const address = CommonLocation.replace(CommonLocation.split('/').reverse()[1],'chooseUser')
+  $('#BackToSearchPage').attr('onclick','location.href='+"'"+address+"'")
+  
+  var PreviousFileAddress="{{selectedVisit.result.name}}"
+  $("#previousFileName").text(PreviousFileAddress.replace(window.location.pathname.split("/")[3].toLowerCase()+"_results/",""))
+  $("#subbtn").click(function(){
+    if($("#specialistfile").val() == "") {toastr.error("فایلی برای جایگزینی با فایل قبلی آپلود نشده است!")}
+  });
+})
+  function PdfValidator() {
+    $("#msg").text("")
+    var pdfid = '#specialistfile';
+    var pdfvalidation = LimitFileUploadFormatpdf (pdfid);
+    if (pdfvalidation == "invalid") {$("#myModal").modal({backdrop: 'static', keyboard: false});}
+    else {$("#newFileName").text($(pdfid)[0].files[0].name)}
+  }
+</script>
+
+<!-- The Modal for Limit File format-->
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header d-flex justify-content-between">
+        <div>
+          <h4 class="modal-title">جهت اطلاع</h4>
+        </div>
+      </div>
+      <!-- Modal body -->
+        <div class="modal-body f-01em">
+          به علت عدم همخوانی فرمت فایل آپلودشده با فرمت مجاز، آپلود نخواهد شد.
+        </div>
+      <!-- Modal footer -->
+        <div class="modal-footer">
+          <div >
+            <button type="button" class="btn btn-success" data-dismiss="modal"> متوجه شدم. </button>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+<div style="height: 5vh;"></div>
+{% endblock content %}

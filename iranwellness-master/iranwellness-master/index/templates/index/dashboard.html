@@ -1,0 +1,295 @@
+{% extends "wellness/base.html" %}{% block content %}
+<div class="container">
+    <div class="block">
+        <div class="block heading">پنل کاربری </div>
+        <div class="row justify-content-around">
+            <div class="square-button col-sm-4 col-lg-2  position-relative">
+                <div class="h-100 d-flex flex-column justify-content-around align-items-center" onclick="location.href='/dashboard/profile/'">
+                    <i class="fa fa-user f-3" aria-hidden="true"></i>
+                    <div>پروفایل</div>
+                </div>
+                <i class="fa fa-info-circle position-absolute top-0 left-0 m-2" aria-hidden="true" data-toggle="modal" data-target="#profile-info-modal"></i>
+            </div>
+            <div class="square-button col-sm-4 col-lg-2  position-relative">
+                <div class="h-100 d-flex flex-column justify-content-around align-items-center" onclick="location.href='/dashboard/services/'">
+                    <i class="fa fa-calendar f-3" aria-hidden="true"></i>
+                    <div>پشتیبانی حضوری</div>
+                </div>
+                <i class="fa fa-info-circle position-absolute top-0 left-0 m-2" aria-hidden="true" data-toggle="modal" data-target="#services-info-modal"></i>
+            </div>
+            <div class="square-button col-sm-4 col-lg-2  position-relative">
+                <div class="h-100 d-flex flex-column justify-content-around align-items-center" onclick="location.href='/dashboard/evaluation/'">
+                    <i class="fa fa-edit f-3" aria-hidden="true"></i>
+                    <div>ارزیابی ها</div>
+                </div>
+                <i class="fa fa-info-circle position-absolute top-0 left-0 m-2" aria-hidden="true" data-toggle="modal" data-target="#quiz-info-modal"></i>
+            </div>
+            <div class="square-button col-sm-4 col-lg-2 position-relative">
+                <div class="h-100 d-flex flex-column justify-content-around align-items-center" onclick="location.href='/dashboard/ticket/'">
+                    <i class="fa fa-file f-3" aria-hidden="true"></i>
+                    <div>پشتیبانی غیرحضوری</div>
+                </div>
+                <i class="fa fa-info-circle position-absolute top-0 left-0 m-2" aria-hidden="true" data-toggle="modal" data-target="#ticket-info-modal"></i>
+            </div>
+        </div>
+        <div class="row justify-content-around">
+            <div class="square-button col-sm-4 col-lg-2 position-relative">
+                <div class="h-100 d-flex flex-column justify-content-around align-items-center" onclick="location.href='/dashboard/shop/';">
+                    <i class="fa fa-shopping-cart f-3" aria-hidden="true"></i>
+                    <div>فروشگاه</div>
+                </div>
+                <i class="fa fa-info-circle position-absolute top-0 left-0 m-2" aria-hidden="true" data-toggle="modal" data-target="#products-info-modal"></i>
+            </div>
+            <div class="square-button col-sm-4 col-lg-2 position-relative">
+                <div class="h-100 d-flex flex-column justify-content-around align-items-center">
+                    <i class="fa fa-credit-card f-3" aria-hidden="true"></i>
+                    <div>پرداخت‌ها</div>
+                </div>
+                <i class="fa fa-info-circle position-absolute top-0 left-0 m-2" aria-hidden="true" data-toggle="modal" data-target="#payments-info-modal"></i>
+            </div>
+            <div class="square-button col-sm-4 col-lg-2 square-button-woi d-flex flex-column justify-content-around align-items-center" onclick="location.href='/introduction';">
+                <i class="fa fa-info-circle f-3" aria-hidden="true"></i>
+                <div>معرفی ولنس</div>
+            </div>
+            <div class="square-button col-sm-4 col-lg-2 square-button-woi d-flex flex-column justify-content-around align-items-center" onclick="location.href='/dashboard/comments/';"
+            >
+                <i class="fa fa-comments f-3" aria-hidden="true"></i>
+                <div>انتقادها و پیشنهادها</div>
+            </div>
+        </div>
+        <div class="f-05 fixed-top w-100 h-100" id="notif">
+            <div class="position-sticky w-40 br-6 pointer animated fadeInRight mr-4 dark-background opacity-0" style="margin-top:60px;">
+                <div class="w-100 p-2">
+                    <div class="px-3 pt-1">
+                        <p class="justify-text mb-0">برای مطالعه‌ی "اخبار کروناویروس" از طریق لینک موجود در منوی بازشونده در قسمت بالای وب‌اپلیکیشن وارد شوید.</p>
+                    </div>
+                    <div class="w-100 d-flex flex-row-reverse p-2">
+                        <div class="br-6 col-sm-8 col-md-3 mr-1 p-1 end-well-color shadow-lg" id="closeForever">بستن و عدم نمایش دوباره</div>
+                        <div class="br-6 col-sm-3 col-md-3 ml-1 p-0 end-well-color shadow-lg d-flex align-items-center justify-content-center" id="closeNow">بستن</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- The Modal profile info -->
+<div class="modal fade background-modal" id="profile-info-modal" >
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content background-modal-content" >
+            <!-- Modal Header -->
+            <div class="modal-header d-flex justify-content-between">
+                <h4 class="modal-title">راهنمای پروفایل</h4>
+                <button type="button" class="closemodal" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <br />
+            <!-- Modal body -->
+            <div class="modal-body">
+                <p> در این بخش اطلاعات شخصی خود را وارد نمایید. </p>
+                <p> در صورت عدم تکمیل این بخش، امکان دسترسی به امکانات بخش‌های
+                <b>ارزیابی‌ها</b>،
+                <b>پیگیری‌ها</b>،
+                <b>فروشگاه</b>
+                و
+                <b>پشتیبانی حضوری</b>
+                وجود ندارد.
+                </p>
+                <p>پس از تکمیل این بخش، می‌توانید از امکانات بخش‌های ذکرشده بهره‌مند شوید.</p>
+                <br/>
+                <p>پیشاپیش از همکاری شما صمیمانه سپاسگزاریم.</p>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <div >
+                    <button type="button" class="btn btn-understand" data-dismiss="modal"> متوجه شدم. </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- The Modal services info -->
+<div class="modal fade background-modal" id="services-info-modal" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content background-modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header d-flex justify-content-between">
+                <h4 class="modal-title">راهنمای پشتیبانی حضوری</h4>
+                <button type="button" class="closemodal" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <br />
+            <!-- Modal body -->
+            <div class="modal-body">
+                <p>در این بخش امکان رزرو خدمات حضوری 
+                <strong><b>مرکز خدمات ولنس</b></strong>
+                برای شما کاربر گرامی فراهم شده است.
+                </p>
+                <p>در این بخش ابتدا نوع خدمت خود را انتخاب کرده و سپس با انتخاب روز و ساعت موردنظر خود از میان زمان‌های مجاز، رزرو شما انجام خواهد شد.</p>
+                <p>
+                    <i class="fa fa-exclamation-triangle"></i>
+                    <b>توجه داشته باشید که تنها تا ۲ روز قبل از تاریخ موردنظر خود، رزرو نوبت امکان‌پذیر است.</b></p>
+                <p>پس از مراجعه به
+                <strong><b>مرکز خدمات ولنس</b></strong>
+                نیز فایل‌های ارسال‌شده توسط متخصصین ولنسی، در قسمت "دریافت فایل‌های مراجعه‌های پیشین" قابل دسترسی می‌باشند.
+                </p>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <div >
+                    <button type="button" class="btn btn-understand" data-dismiss="modal"> متوجه شدم. </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- The Modal quiz info -->
+<div class="modal fade background-modal" id="quiz-info-modal" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content background-modal-content" >
+            <!-- Modal Header -->
+            <div class="modal-header d-flex justify-content-between">
+                <h4 class="modal-title">راهنمای ارزیابی‌ها</h4>
+                <button type="button" class="closemodal" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <br />
+            <!-- Modal body -->
+            <div class="modal-body justify-text">
+                <p>این بخش شامل دو قسمت "ارزیابی جدید" و "تحلیل ارزیابی‌های پیشین" می‌باشد.</p>
+                <ul>
+                    <li>در قسمت ارزیابی جدید، آزمون ابعاد ۱۲گانه ولنس قرار داده شده است. پس از انجام آزمون هر بُعد و ارسال پاسخ‌ها، پاسخ‌های کاربر برای متخصصین ولنس ارسال شده، توسط آنها تحلیل شده و سپس در قسمت تحلیل ارزیابی‌های پیشین قابل دسترسی می‌باشد.
+                    <br />
+                    توجه داشته باشید که پس از انتخاب بعد موردنظر خود، ابتدا فایل صوتی و متن راهنمای آن بُعد در اختیار شما قرار گرفته و در صورت مجاز بودن به انجام ارزیابی، به صفحه سؤالات آزمون هدایت خواهید شد.</li>
+                    <li>در قسمت تحلیل ارزیابی‌های پیشین، فایل‌های ارسالی توسط متخصصین ولنس برای آزمون‌های کاربر قابل دریافت می‌باشند که این فایل‌ها می‌توانند فرمت‌های متفاوتی داشته باشند.</li>
+                </ul>
+                <div>
+                    <i class="fa fa-exclamation-triangle"></i>
+                    <span> در این بخش توجه به چند نکته از اهمیت ویژه‌ای برخوردار است:</span>
+                </div>
+                <ul>
+                    <li>رعایت ترتیب انجام آزمون‌ها ضروری نیست.</li>
+                    <li>از آنجایی که پاسخ به تعداد بالای سؤالات تمامی ابعاد در زمان کوتاه، طاقت‌فرسا بوده و از سوی دیگر وضعیت جسمی و روحی افراد در مدت کوتاه تغییر قابل توجهی نخواهد داشت، به منظور دریافت تحلیل کلی تمامی ابعاد در کنار یکدیگر، بازه زمانی حداکثر ۱۲ روزه از تاریخ انجام آزمون اولین بُعد در نظر گرفته شده است و توجه به این بازه زمانی، به دریافت هر چه بهتر نتایج مورد نظر شما کاربر گرامی کمک خواهد نمود.</li>
+                    <li>پس از انجام آزمون هر بُعد، در کمترین زمان ممکن، آزمون هر بُعد به صورت جداگانه تحلیل شده و در قسمت "تحلیل ارزیابی‌های پیشین" قابل دسترسی می‌باشد اما در این بازه ۱۲ روزه ( از تاریخ انجام آزمون اولین بُعد مورد نظر شما) امکان انجام آزمون ابعاد به صورت تکراری وجود ندارد.</li>
+                    <li>پس از گذشت بازه زمانی ۱۲روزه، در صورت دریافت تحلیل آزمون هر بُعد و تحلیل کلی ابعادی که آزمون آنها توسط کاربر پاسخ داده شده‌اند، امکان انجام آزمون مجدد فراهم خواهد شد.</li>
+                </ul>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <div >
+                    <button type="button" class="btn btn-understand" data-dismiss="modal"> متوجه شدم. </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- The Modal ticket info -->
+<div class="modal fade background-modal" id="ticket-info-modal" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content background-modal-content" >
+            <!-- Modal Header -->
+            <div class="modal-header d-flex justify-content-between">
+                <h4 class="modal-title">راهنمای پیگیری‌ها</h4>
+                <button type="button" class="closemodal" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <br />
+            <!-- Modal body -->
+            <div class="modal-body">
+                <p>در این بخش به منظور رفاه حال کاربران، امکان ارتباط با متخصصین
+                <strong><b>مرکز خدمات ولنس</b></strong>
+                فراهم شده است و در کمترین زمان ممکن اطلاعات تخصصی موردنظر خود را دریافت خواهید نمود.
+                </p>
+                <p> در این بخش همچنین پذیرای هرگونه انتقاد و پیشنهادی در ارتباط با خدمات حضوری از سوی شما کاربر گرامی خواهیم بود. </p>
+                <p>به منظور مطرح نمودن سؤالات عمومی نیز، افزونه "رای‌چت" در قسمت سمت راست پایین صفحه در اختیار شما قرار گرفته است.</p>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <div >
+                    <button type="button" class="btn btn-understand" data-dismiss="modal"> متوجه شدم. </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- The Modal products info -->
+<div class="modal fade background-modal" id="products-info-modal" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content background-modal-content" >
+            <!-- Modal Header -->
+            <div class="modal-header d-flex justify-content-between">
+                <h4 class="modal-title">راهنمای فروشگاه</h4>
+                <button type="button" class="closemodal" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <br />
+            <!-- Modal body -->
+            <div class="modal-body">
+                <p>در این بخش محصولات مربوط به
+                <strong><b>بهینه زیستی</b></strong>
+                شما کاربر گرامی در دسته‌بندی‌های متعددی قرار داده شده‌اند.
+                </p>
+                <p>با کلیک کردن بر روی تصویر هر محصول، معرفی مربوط به آن را مشاهده نموده و در صورت تمایل، آن محصول را در سبد خرید خود قرار می‌دهید. سپس با مراجعه به بخش "پرداخت‌ها"، امکان پرداخت هزینه محصول به صورت آنلاین فراهم گردیده است.</p>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <div >
+                    <button type="button" class="btn btn-understand" data-dismiss="modal"> متوجه شدم. </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- The Modal payments info -->
+<div class="modal fade background-modal" id="payments-info-modal" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content background-modal-content" >
+            <!-- Modal Header -->
+            <div class="modal-header d-flex justify-content-between">
+                <h4 class="modal-title">راهنمای پرداخت‌ها</h4>
+                <button type="button" class="closemodal" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <br />
+            <!-- Modal body -->
+            <div class="modal-body justify-text">
+                <p>اطلاعات این بخش به دو قسمت "اطلاعات پشتیبانی حضوری" و "سبد خرید فروشگاه" تقسیم می‌شود.</p>
+                <ul>
+                    <li>
+                        <p>در قسمت اطلاعات مربوط به پشتیبانی حضوری، زمان مربوط به خدمات حضوری رزروشده کاربر پیش از مراجعه به
+                        <strong><b>مرکز خدمات ولنس</b></strong>
+                        به همراه وضعیت پرداخت آنها نمایش داده می‌شوند.</p>
+                        <p>
+                            <i class="fa fa-exclamation-triangle"></i>
+                            <b>کاربر گرامی توجه داشته باشید که از ۲۴ ساعت قبل از نوبت رزروشده، لغو آن امکان‌پذیر نخواهد بود.  لطفاً هنگام رزرو پشتیبانی حضوری نهایت توجه و دقت را داشته باشید.</b>
+                        </p>
+                    </li>
+                    <li>در قسمت سبد خرید فروشگاه نیز امکان حذف محصول از سبد خرید و پرداخت هزینه محصول و سپس دریافت آن فراهم گردیده است.</li>
+                </ul>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <div >
+                    <button type="button" class="btn btn-understand" data-dismiss="modal"> متوجه شدم. </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+      var DisplayStatus="{{displayStatus}}"
+      if (DisplayStatus == 'close'){$('#notif').remove()}
+      $('#closeNow').click(function(){
+        $('#notif').remove()
+      })
+      $('#closeForever').click(function(){
+        $.ajax({
+            method: 'POST',
+            url: document.location.pathname,
+            data:{ displayStatus : 'close'},
+            success: function(response){ $('#notif').remove() }
+        })
+      })
+    });
+</script>
+{% endblock %}

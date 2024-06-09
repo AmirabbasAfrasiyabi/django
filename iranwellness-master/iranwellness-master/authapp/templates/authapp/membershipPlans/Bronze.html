@@ -1,0 +1,32 @@
+{% extends "wellness/base.html" %} {% block content %}
+<div class="container">
+    <div class="block">
+        <div class="block">طرح برنزی</div>
+        <div class="my-5">
+            <div class="text-justify">
+                <p>لطفاً خدمات ارائه‌شده را به طور کامل مطالعه کنید و سپس نسبت به تهیه‌ی اشتراک اقدام فرمایید.</p>
+                <div class="my-2em mx-md-5">
+                    <p>با عضویت در اشتراک برنزی خدمات و مزایای زیر در اختیار شما قرار می‌گیرد:</p>
+                    <ul>
+                        <li class="my-1em">
+                            <div class="font-weight-bold">آزمون‌های ولنس:</div>
+                            <div class="text-center">امکان انجام کلیه‌ی آزمون‌های ولنس به همراه نتایج هر آزمون</div>
+                        </li>
+                        <li class="my-1em">
+                            <div class="font-weight-bold">مشاوره‌ی حضوری:</div>
+                            <div class="text-center">۱. صحبت با متخصصین ۲. استفاده از سیستم‌های مرکز</div>
+                        </li>
+                        <li class="my-1em">
+                            <div class="font-weight-bold">ارزیابی هولوگرافیک:</div>
+                            <div class="text-center">ارزیابی هولوگرافیک به صورت حضوری و به همراه ارائه‌ی نتایج ارزیابی و توضیح موارد</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <form action="" method="POST">{% csrf_token %}
+                <input class="normal-button" id="submit" type="submit" value="دریافت طرح" disabled />
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "wellness/base.html" %} {% block content %}
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link href="/static/css/quizintroduction.css" rel="stylesheet">
+</head>
+
+<div class="container p-2">
+  <div class="block text-right" dir="rtl" lang="fa">
+  <small>
+   <div class="block mb-5">معرفی مسیر ورا رفتن</div>
+   <div class="my-scroll" dir="rtl">
+   <div class="pl-105">
+    <div>
+      <audio class="mp3" controls >
+        <source src="/static/audio/QuizIntroduction/trancending.mp3">
+      </audio>
+    </div>
+    <p>ورا رفتن صورت‌های مختلفی دارد: تجربه‌ی نقطه‌ی اوج عملکرد، جریان، بودن در موقعیت تجربه، بیدار بودن و حاضر بودن کامل در لحظه.</p>
+    <p>ورا رفتن، لحظه‌ی غلبه کردن و عبور از مرزهای نامرئی بین حفاظت و یادگیری، انقباض و گسترش، گفتن نه به زندگی و گفتن بله به آن است. این بُعد، بُعد ایمان و روحانیت و تجربه‌ی اتصال ما به چیزی بزرگتر از خودمان است. این دانش و تجربه، الهام‌دهنده‌ی عشق و مسئولیت‌پذیری در قبال خود است که ما را از  ابتدای چرخه به انتهای چرخه‌ی وِلْنِسْ می‌رساند.</p>
+    </div>
+   </div>
+   <button class="normal-button">انجام آزمون</button>
+ </small>
+ </div>
+</div>
+
+<script>
+    $('.normal-button').each(function(index){
+        $(this).click(function(){
+            var num  = "{{number}}"
+            var stat = "{{status}}"
+            if (stat == "invalid") {
+                $('.modal-body').text('به دلایل ولنسی شما تا {{RD}} روز دیگر مجاز به انجام ارزیابی جدید نمی‌باشید.');
+                $(this).attr('data-toggle',"modal");
+                $(this).attr('data-target', "#myModal");
+            }
+            else if (stat == "WithoutResult") {
+                $('.modal-body').text('به علت وجود آزمون تحلیل‌نشده مجاز به انجام ارزیابی جدید نمی‌باشید.');
+                $(this).attr('data-toggle',"modal");
+                $(this).attr('data-target', "#myModal");
+            }
+            else if (stat == "valid")         { window.location.href = '/dashboard/evaluation/quiz/'+ num; }
+        });   
+    });
+</script>
+
+{% include "QuizIntroduction/QuizModal.html" %}
+{% endblock %}

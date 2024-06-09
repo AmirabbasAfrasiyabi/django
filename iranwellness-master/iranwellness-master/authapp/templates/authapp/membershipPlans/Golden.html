@@ -1,0 +1,75 @@
+{% extends "wellness/base.html" %} {% block content %}
+<div class="container">
+    <div class="block">
+        <div class="block">طرح طلایی</div>
+        <div class="my-5">
+            <div class="text-justify">
+                <p>لطفاً خدمات ارائه‌شده را به طور کامل مطالعه کنید و سپس نسبت به تهیه‌ی اشتراک اقدام فرمایید.</p>
+                <div class="my-2em mx-md-5">
+                    <p>با عضویت در اشتراک طلایی خدمات و مزایای زیر در اختیار شما قرار می‌گیرد:</p>
+                    <ul>
+                        <li class="my-1em">
+                            <div class="font-weight-bold">آزمون‌های ولنس:</div>
+                            <ul>
+                              <li >امکان انجام کلیه آزمون‌های ولنس</li>
+                              <li >
+                                  <div>تحلیل و ارزیابی هر آزمون متناسب با سبک زندگی فرد به همراه:</div>
+                                  <ul>
+                                      <li>ارائه پیشنهادات تغذیه‌ای به صورت شخصی‌سازی‌شده</li>
+                                      <li>ارائه پیشنهادات ورزشی به صورت شخصی‌سازی‌شده</li>
+                                      <li>ارزیابی و پیشنهادات اختصاصی جهت ارتقاء کیفیت زندگی</li>
+                                  </ul>
+                              </li>
+                            </ul>
+                        </li>
+                        <li class="my-1em">
+                            <div class="font-weight-bold">مشاوره:</div>
+                            <ul>
+                                <li>
+                                    <div>تلفنی:</div>
+                                    <div class="text-center">مکالمه تلفنی با متخصصین</div>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li>
+                                    <div>حضوری:</div>
+                                    <div class="text-center">۱. صحبت با متخصصین ۲. استفاده از سیستم‌های مرکز</div>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li>
+                                    <div>آنلاین:</div>
+                                    <div class="text-center">از طریق شبکه‌های اجتماعی، پشتیبانی بر خط سایت</div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="my-1em">
+                            <div class="font-weight-bold">ارزیابی هولوگرافیک:</div>
+                            <ul>
+                                <li>
+                                    <div>ارزیابی هولوگرافیک به صورت:</div>
+                                    <ul>
+                                        <li>آفلاین</li>
+                                        <li>حضوری</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="my-1em">
+                            <div class="font-weight-bold">ارائه نتایج ارزیابی به همراه:</div>
+                            <ul>
+                                <li>ارائه پیشنهادات تغذیه‌ای</li>
+                                <li>ارائه و معرفی مکمل‌ها</li>
+                                <li>ارائه پیشنهادات ورزشی</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <form action="" method="POST">{% csrf_token %}
+            <input class="normal-button" id="submit" type="submit" value="دریافت طرح" disabled />
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,324 @@
+{% extends "manager/base.html" %} {% block content %}
+<style>
+  label {
+    margin-top: 0.5em;
+  }
+</style>
+<div class="container">
+  <div class="block">
+    <div class="block heading">نتیجه رزرو</div>
+    
+    <!-- result-table -->
+    <table>
+      <tr>
+        <th>تاریخ</th>
+        <th>ساعت</th>
+        <th>نوع خدمت</th>
+      </tr>
+      <tr>
+        <td>{{date}}</td>
+        <td>{{time}}</td>
+        <td>{{type}}</td>
+      </tr>
+    </table>
+    <!-- end result-table -->
+    
+    <!-- phonenumber-input -->
+    <div class="pt-4" style="font-size: medium;">شماره همراه</div>
+    <input
+       type="tel"
+       name="phone"
+       id="phonenumber"
+       class="transparent py-2 en-number"
+       style="direction: ltr;"
+       placeholder="09XXXXXXXXX"
+       maxlength="11"
+       autocomplete="off"
+    />
+
+    <button class="btn back-transparent w-50 my-3" id="submit_reserve">رزرو</button>
+    
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="profileModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="profileModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="justify-content-center modal-header">
+            <h5 class="modal-title" id="profileModalLabel">اطلاعات کاربر</h5>
+          </div>
+          <div class="modal-body">
+            <form id="reservation_profile_form">
+              <div class="row">
+                <div class="col-sm-6">
+                  <label for="username">شماره همراه</label>
+                  <input
+                     type="text"
+                     name="username"
+                     id="username"
+                     class="form-control bg-white en-number"
+                     maxlength="11"
+                     readonly
+                  />
+                </div>
+                <div class="col-sm-6">
+                  <label for="wellid">کد ولنسی</label>
+                  <input
+                     type="text"
+                     name="wellid"
+                     id="wellid"
+                     class="form-control en-number"
+                     placeholder="کد ولسنی"
+                     maxlength="15"
+                  />
+                </div>
+                <div class="col-sm-6">
+                  <label for="firstname">نام</label>
+                  <input
+                     type="text"
+                     name="firstname"
+                     id="firstname"
+                     class="form-control"
+                     placeholder="نام *"
+                     maxlength="20"
+                  />
+                </div>
+                <div class="col-sm-6">
+                  <label for="lastname">نام خانوادگی</label>
+                  <input
+                     type="text"
+                     name="lastname"
+                     id="lastname"
+                     class="form-control"
+                     placeholder="نام خانوادگی *"
+                     maxlength="20"
+                  />
+                </div>
+                <div class="col-sm-6">
+                  <label for="job">شغل</label>
+                  <input
+                     type="text"
+                     name="job"
+                     id="job"
+                     class="form-control"
+                     placeholder="شغل"
+                     maxlength="20"
+                  />
+                </div>
+                <div class="col-sm-6">
+                  <label for="phone1">تلفن ثابت</label>
+                  <input
+                     type="text"
+                     name="phone1"
+                     id="phone1"
+                     class="form-control en-number"
+                     placeholder="021xxxxxxxx"
+                     maxlength="11"
+                  />
+                </div>
+                <div class="col-sm-6">
+                  <label for="phone3">شماره شبکه های اجتماعی</label>
+                  <input
+                     type="text"
+                     name="phone3"
+                     id="phone3"
+                     class="form-control en-number"
+                     placeholder="09xxxxxxxxx"
+                     maxlength="11"
+                  />
+                </div>
+                <div class="col-sm-6">
+                  <label for="email">ایمیل</label>
+                  <input
+                     type="email"
+                     name="Email"
+                     id="email"
+                     class="form-control"
+                     placeholder="example@domain.com"
+                  />
+                </div>
+                <div class="col-sm-6">
+                  <label for="address1">آدرس منزل</label>
+                  <textarea
+                     name="address1"
+                     id="address1"
+                     class="form-control"
+                     placeholder="آدرس منزل"
+                  ></textarea>
+                </div>
+                <div class="col-sm-6">
+                  <label for="address2">آدرس حدودی محل کار</label>
+                  <textarea
+                     name="address2"
+                     id="address2"
+                     class="form-control"
+                     placeholder="آدرس حدودی محل کار"
+                  ></textarea>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+          <button class="btn btn-secondary" data-dismiss="modal">
+            بستن
+          </button>
+          <button id="submit" class="btn btn-primary round">
+            ثبت
+          </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end Modal -->
+
+  </div>
+</div>
+
+<script>
+    function CheckPhoneNumberValidity(phone) {
+      let validPhoneNumber = true;
+      let errorText = "";
+      if (!/^09[0-9]{9}$/.test(phone)) {
+        validPhoneNumber = false;
+        errorText = "شماره همراه را به درستی وارد کنید!";
+      }
+      return [validPhoneNumber, errorText];
+    }
+
+    const validate_wellness_id = (wellnes_id) => {
+      const re = /^$|^\d{9}$/;
+      if (re.test(String(wellnes_id))) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
+    const validate_phonenumber = (phone) => {
+      const re = /^09\d{9}$/;
+      return re.test(String(phone));
+    };
+
+    const validate_email = (email) => {
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(String(email).toLowerCase());
+    };
+    
+    $("#submit_reserve").on("click", function () {
+      // check phonenumber validity
+      let phonenumber = $("#phonenumber").val();
+      [validPhoneNumber, errorText] = CheckPhoneNumberValidity(phonenumber);
+      if (!validPhoneNumber) {
+        toastr.remove();
+        toastr.warning(errorText);
+        return;
+      }
+      toastr.remove();
+      // show spinner
+      $("#loading").show();
+      $("#profileModal").modal("toggle");
+      $.get(`/auth/api/profiles/${phonenumber}/`)
+      .done(function (data) {
+          $("#wellid").val(data.wellid);
+          $("#firstname").val(data.firstname);
+          $("#lastname").val(data.lastname);
+          $("#email").val(data.Email);
+          $("#phone1").val(data.phone1.toEnglishDigit());
+          $("#job").val(data.job);
+          $("#phone3").val(data.phone3.toEnglishDigit());
+          $("#address1").val(data.address1);
+          $("#address2").val(data.address2);
+      })
+      .always(function() {
+          $("#username").val(phonenumber);
+          // Hide spinner image
+          $("#loading").hide();
+      });
+    });
+
+    $("#submit").click((e) => {
+      e.preventDefault();
+      if (!validate_wellness_id($("#wellid").val())) {
+        toastr.remove();
+        $("html, body").animate({ scrollTop: 0 }, 1000);
+        toastr.options.showEasing = "swing";
+        toastr.options.showMethod = "slideDown";
+        toastr.error("کد ولنسی وارد شده صحیح نیست");
+        return;
+      }
+
+      if ($("#firstname").val() == "") {
+        toastr.remove();
+        $("html, body").animate({ scrollTop: 0 }, 1000);
+        toastr.options.showEasing = "swing";
+        toastr.options.showMethod = "slideDown";
+        toastr.error("لطفاً نام را وارد کنید");
+        return;
+      }
+
+      if ($("#lastname").val() == "") {
+        toastr.remove();
+        $("html, body").animate({ scrollTop: 0 }, 1000);
+        toastr.options.showEasing = "swing";
+        toastr.options.showMethod = "slideDown";
+        toastr.error("لطفاً نام خانوادگی را وارد کنید");
+        return;
+      }
+
+      // check email
+      let email_address = $("#email").val();
+      if (email_address) {
+        if (!validate_email(email_address)) {
+          toastr.remove();
+          $("html, body").animate({ scrollTop: 0 }, 1000);
+          toastr.options.showEasing = "swing";
+          toastr.options.showMethod = "slideDown";
+          toastr.error("ایمیل وارد شده صحیح نیست");
+          return;
+        }
+      }
+
+      // check social_media_phonenumber
+      let social_media_phonenumber = $("#phone3").val();
+      if (social_media_phonenumber) {
+        if (!validate_phonenumber(social_media_phonenumber)) {
+          toastr.remove();
+          $("html, body").animate({ scrollTop: 0 }, 1000);
+          toastr.options.showEasing = "swing";
+          toastr.options.showMethod = "slideDown";
+          toastr.error("شماره شبکه‌های اجتماعی وارد شده صحیح نیست");
+          return;
+        }
+      }
+      
+      $("#loading").show();
+      $.post({
+          url: window.location.pathname,
+          headers: {'X-CSRFToken':'{{ csrf_token }}'},
+          data: $('#reservation_profile_form input,textarea').serialize()
+      })
+      .done(function (data, textStatus, jqXHR) {
+          // Process data, as received in data parameter
+          if(data.status == 'success') {
+            $("#profileModal").modal("toggle");
+            toastr.remove();
+            toastr.success('',data.message,{"closeButton": true,"timeOut": "0","extendedTimeOut": "0"});
+            window.location.assign(`{% url 'manager:reservation' %}`);
+          } else {
+              toastr.remove();
+              toastr.warning(data.message);
+          }
+      })
+      .always(function(jqXHR, textStatus, errorThrown) {
+          // Hide spinner image
+          $("#loading").hide();
+      });
+      
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "wellness/base.html" %} {% block content %}
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link href="/static/css/quizintroduction.css" rel="stylesheet">
+</head>
+
+<div class="container p-2">
+  <div class="block text-right" dir="rtl" lang="fa">
+  <small>
+   <div class="block mb-5">معرفی مسیر فکر کردن</div>
+   <div class="my-scroll" dir="rtl">
+   <div class="pl-105">
+    <div>
+      <audio class="mp3" controls >
+        <source src="/static/audio/QuizIntroduction/thinking.mp3">
+      </audio>
+    </div>
+    <p>افکار و احساسات، هنر و کاردستی مغز انسان هستند. مغز مانند ریه، قلب و معده برای تبدیل انرژی کار می‌کند. ما مغز را با مواد مغذی حاصل از غذایی که می‌خوریم، ایده‌های جالبی که از مردم می‌گیریم، مناظر، صداها و حرکات اطرافمان، اطلاعات موجود در کتاب‌ها و مدیا تغذیه می‌کنیم. مقداری از این انرژی به صورت داده در مغز ذخیره می‌شود تا در زمان مناسب در آینده مورداستفاده قرار گیرد. باقی انرژی برای عملکرد مغز شامل برنامه‌ریزی، حل مسئله، خیال‌پردازی و برقراری ارتباط استفاده می‌شود.</p>
+    <p>مطالعات انجام‌شده روی مصرف انرژی مغز نشان می‌دهند وقتی فردی به یک EEG (دستگاهی که فعالیت مغز را ثبت می‌کند) متصل است، الگوهای متنوع فکر کردن و فکر نکردن، ایمپالس‌های الکتریکی متفاوتی را از خود نشان می‌دهد. اگر به سختی فکر کنیم، فرکانس امواج مغزی افزایش می‌یابد و اگر کم فکر کنیم، امواج مغزی آرام می‌شوند. بعد از یک روز کار ذهنی شدید، شما از نظر فیزیکی خسته می‌شوید؛ چرا که فکر کردن فرایندی انرژی‌بر است.</p>
+    <p>این بخش بر روی قدرت تفکر تمرکز دارد و ارتباط بین سلامت فیزیکی و ذهنی  را بررسی می‌کند و در جهت افزایش سطح وِلْنِسْ گزینه‌هایی را برای استفاده از قدرت تفکر ارائه می‌دهد.</p>
+    </div>
+   </div>
+   <button class="normal-button">انجام آزمون</button>
+ </small>
+ </div>
+</div>
+
+<script>
+    $('.normal-button').each(function(index){
+        $(this).click(function(){
+            var num  = "{{number}}"
+            var stat = "{{status}}"
+            if (stat == "invalid") {
+                $('.modal-body').text('به دلایل ولنسی شما تا {{RD}} روز دیگر مجاز به انجام ارزیابی جدید نمی‌باشید.');
+                $(this).attr('data-toggle',"modal");
+                $(this).attr('data-target', "#myModal");
+            }
+            else if (stat == "WithoutResult") {
+                $('.modal-body').text('به علت وجود آزمون تحلیل‌نشده مجاز به انجام ارزیابی جدید نمی‌باشید.');
+                $(this).attr('data-toggle',"modal");
+                $(this).attr('data-target', "#myModal");
+            }
+            else if (stat == "valid")         { window.location.href = '/dashboard/evaluation/quiz/'+ num; }
+        });   
+    });
+</script>
+
+{% include "QuizIntroduction/QuizModal.html" %}
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "manager/base.html" %}{% block content %}
+<div class="container">
+    <div class="block">
+        <div class="block heading">انتخاب تایم حضور</div>
+        <select id="time-select" class="form-control">
+            <option value="1" >تایم نیم ساعته</option>
+            <option value="2" >تایم یک ساعته</option>
+            <option value="3" >تایم یک و نیم ساعته</option>
+        </select>
+        <button class="normal-button" id="search">جستجو</button>
+        <select class="form-control mt-3 d-none" id="order"></select>
+        <button class="normal-button d-none" id="go_to_result_page" onclick="GetResult()">ثبت</button>
+    </div>
+</div>
+
+<script>
+    $("#search").click(function() {
+        let $this = $(this);
+        let duration = $("#time-select option:selected").val();
+        let searchURL = window.location.pathname + duration;
+        // show spinner
+        $("#loading").show();
+        $.get( searchURL, function (data) {
+            if (data.status == 'success') {
+                let $times_container = $("#order");
+                let result = data.result;
+                data.result.forEach(function (item) {
+                    $times_container.append(`<option value=${item.value}>${item.string}</option>`);
+                });
+                $this.remove();
+                $times_container.removeClass('d-none');
+                $("#go_to_result_page").removeClass('d-none');
+            } else {
+                toastr.remove();
+                toastr.warning(data.message);
+            }
+        }).always(function() {
+            // hide spinner
+            $("#loading").hide();
+        });
+    });
+    function GetResult() {
+        // show spinner
+        $("#loading").show();
+        let order = $("#order option:selected").val();
+        let resultURL = window.location.pathname + order
+        window.location   = resultURL
+    }
+</script>
+
+{% endblock %}

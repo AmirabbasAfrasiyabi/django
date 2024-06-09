@@ -1,0 +1,33 @@
+{% extends "wellness/base.html" %} {% block content %}
+<div class="container">
+    <div class="block">
+        <div class="block"> نتایج ارزیابی‌های پیشین</div>
+        <br />
+        <form action="" method="POST">
+        {% csrf_token %}
+           <input  type="hidden" value=" " name="dimension" id="dimension">
+           <input  class="normal-button"   value="مسئولیت پذیری در قبال خود و عشق"    type="submit" id="1">
+           <input  class="normal-button"   value="تنفس"                          type="submit" id="2">
+           <input  class="normal-button"   value="تغذیه"                          type="submit" id="3">
+           <input  class="normal-button"   value="حس کردن"                      type="submit" id="4">
+           <input  class="normal-button"   value="حرکت"                         type="submit" id="5">
+           <input  class="normal-button"   value="احساس کردن"                    type="submit"  id="6">
+           <input  class="normal-button"   value="فکر کردن"                      type="submit"  id="7">
+           <input  class="normal-button"   value="بازی کردن و کار کردن"             type="submit"  id="8"> 
+           <input  class="normal-button"   value="ارتباط برقرار کردن"                type="submit"  id="9">
+           <input  class="normal-button"   value="صمیمیت"                        type="submit" id="10">
+           <input  class="normal-button"   value="یافتن معنا"                       type="submit" id="11">
+           <input  class="normal-button"   value="ورا رفتن"                       type="submit" id="12">
+           <input  class="normal-button"   value="تمامی ابعاد"                      type="submit" id="13">
+        </form>
+    </div>
+</div>
+<script>
+  $('.normal-button').each(function(e){
+     $(this).click(function(){
+        var d = $(this).attr('id')
+        $('#dimension').attr('value', d)
+     });
+  });
+</script>
+{% endblock %}

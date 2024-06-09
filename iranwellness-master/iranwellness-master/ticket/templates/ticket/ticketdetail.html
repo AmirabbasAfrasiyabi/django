@@ -1,0 +1,172 @@
+{% extends "wellness/base.html" %} {% block content %}
+<style>
+    .flex-container-CloseTicket{
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .CloseTicket,
+    .Closed{
+        width: 20%!important;
+        font-size: 1.5vw;
+        color: #fff;
+        background-color: rgb(0,0,0,0.2);
+        border-color    : rgb(0,0,0,0.2);
+    }
+
+    .Closed{
+        margin: 2vmin;
+        padding: 0.5em;
+        width: 90%;
+        background: none;
+        border: 1px solid white;
+        border-radius: 1em;
+        color: white;
+        text-align: center;
+    box-shadow: 0px 0px 0.5em white;
+    font-size: small;
+    }
+    .CloseTicket:hover {
+            color: #fff;
+            box-shadow: 0px 0px 1em white;
+        }
+</style>
+    <div class="block justify-content-center">
+        <div class="block heading"> {{ticket.topic}} </div>
+        <table>
+            <tbody>
+              <tr>
+                <th>زمان ایجاد</th>
+                <th>آخرین به‌روزرسانی</th>
+                <th>وضعیت</th>
+                <th>درمورد بخش</th>
+              </tr>
+              <tr>
+                <td id="stime{{ticket.id}}">{{ticket.chats.first.jalali_create_date}} ({{ticket.chats.first.create_datetime|date:'H:i:s'}})</td>
+                <td id="etime{{ticket.id}}">{{ticket.chats.last.jalali_create_date}} ({{ticket.chats.last.create_datetime|date:'H:i:s'}})</td>
+                {% if ticket.status == 'closed' %}
+                <td>بسته‌شده</td>
+                {% elif ticket.status == 'open' %}
+                <td>باز</td>
+                {% endif %}
+                <td>{{ticket.service}}</td>
+              </tr>
+            </tbody>
+        </table>
+        <div class="mtb-1em" style="border: 1px solid #ddd;font-size: 1.7vw;">
+         {% for chat in ticket.chats.all %}
+         <div style="display: flex;background-color: rgb(0,0,0,0.2);padding-top: 1vw;padding-bottom: 1vw;">
+            <div style="width: 50%;text-align: right;padding-right: 2vw;">
+                {% if chat.user.is_staff %}
+                <i class="fa fa-certificate"></i>
+                {% else %}
+                <i class="fa fa-user"></i>
+                {% endif %}
+                {{chat.user.profiledb.firstname}} {{chat.user.profiledb.lastname}}
+            </div>
+            <div style="width: 50%;text-align: left;padding-left: 2vw;" id="time{{chat.id}}">{{chat.jalali_create_date}} ({{chat.create_datetime|date:'H:i:s'}})</div>
+         </div>
+         <div class="plr-1em text-justify" style="padding-top: 1vw;padding-bottom: 1vw;">
+             {{chat.message}}
+         </div>
+         {% if  chat.image %}
+         <div style="display: flex;justify-content: center;width: 100%;" >
+             <img class="m-2 rounded shadow-lg" style="width: 40%;object-fit:scale-down;" src="{{ chat.image.url }}" alt="">
+         </div>
+         {% endif %} 
+         {% endfor %}
+        </div>
+        {% if ticket.status == "open" %}
+        <div style="width: 100%;font-size:1.8vw;border: 1px solid #ddd;padding-top:2em;">
+            <form action="" method="POST" id="searchform" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="row" style="width: 100%;margin:0;">
+                <div class="col-2" style="padding-top: 2em;"> پاسخ: </div>
+                <div class="col-10">
+                  <textarea class="transparent" rows="10"  id="message" name="message" required></textarea>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2"></div>
+                <div class="col-10 justify-content-center">
+                    <input  type="file" id="uploadpicture-btn"  name="picture" accept="image/*">
+                    <label  class="normal-button w-50" for="uploadpicture-btn"> انتخاب فایل تصویر </label>
+                </div>
+              </div>
+              <div class="row" style="width: 100%;margin:0;">
+                <div class="col-2"></div>
+                <div class="col-10">
+                    <input class="normal-button w-75"   value="ارسال" type="submit">
+                </div>
+              </div>
+              
+            </form>
+        </div>
+
+        <div class="flex-container-CloseTicket" style="padding-top:1em;" >
+            <button class="normal-button CloseTicket">بستن تیکت</button>
+        </div>
+
+        {% else %}
+        <div class="flex-container-CloseTicket">
+            <span class="Closed"> بسته شده </span>
+        </div>
+        {% endif %}
+    </div>
+<script>
+$('[id*="time"]').each(function(){
+        var str = $(this).text();
+        const PersianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+        var rep = str.replace(/\d/g, x => PersianDigits[x]);
+        $(this).text(rep);
+});
+$('[id*="time"]').each(function(){
+        const PersianMonths = ['مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند', 'فروردین', 'اردیبهشت', 'خرداد', 'تیر','مرداد','شهریور'];
+        const EnglishMonths = ['Mehr','Aban','Azar','Dey','Bahman','Esfand','Farvardin','Ordibehesht','Khordad','Tir','Mordad','Shahrivar'];
+        for (let i =0; i < 12; i++){
+            var str = $(this).text();
+            var rep = str.replace(EnglishMonths[i] , PersianMonths[i]);
+            $(this).text(rep);
+            $(this).css("direction" , "rtl");
+        }
+});
+$("form").submit(function(e){
+      e.preventDefault();
+      var form = new FormData();
+      form.append("csrfmiddlewaretoken", $ ('input[name=csrfmiddlewaretoken]').val());
+      form.append("message", $("#message").val());
+      form.append("picture", document.getElementById("uploadpicture-btn").files[0]);
+      $.ajax({
+        method     : "POST",
+        url        : location.pathname,
+        data       : form,
+        mimeType   : "multipart/form-data",
+        processData: false,
+        contentType: false,
+        success    : function(response) {
+          $('.modal-body').html('<p>پیام شما با موفقیت ارسال شد.</p><p>حداکثر تا ۱۲ ساعت آینده متخصصین وِلْنِسی پاسخگوی پیام شما خواهند بود.</p><p>با تشکر از همراهی شما</p>');
+          $("#myModal").modal({
+              backdrop: 'static',
+              keyboard: false
+          });
+        }
+      });
+  });
+$(".CloseTicket").click(function(){
+    $.ajax({
+        method: 'GET',
+        url        : location.pathname+'closeticket',
+        success    : function(response) {
+          $('.modal-body').html("<p>وضعیت تیکت شما به حالت 'بسته‌شده' تغییر یافت.</p><p>امیدواریم پاسخ خود را به خوبی دریافت کرده باشید.</p>از همراهی شما صمیمانه سپاسگزاریم.<p>");
+          $("#myModal").modal({
+              backdrop: 'static',
+              keyboard: false
+          });
+        }
+    });
+})
+</script>
+<!-- The Modal -->
+{% include "ticket/TicketModal.html" %}
+
+{% endblock %}

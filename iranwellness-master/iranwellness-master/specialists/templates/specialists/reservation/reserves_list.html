@@ -1,0 +1,21 @@
+{% extends "manager/base.html" %} {% block content %}
+
+<table>
+    <tr>
+        <th class="w-1606">کد ولنسی</th>
+        <th class="w-1606">نام </th>
+        <th class="w-1606">نام خانوادگی</th>
+        <th class="w-1606">شماره همراه</th>
+        <th class="w-3306">زمان نوبت دهی</th>
+    </tr>
+    {% for reserve in reserves_list %}
+    <tr>
+        <td class="w-1606">{{reserve.user.profiledb.wellid}}</td>
+        <td class="w-1606">{{reserve.user.profiledb.firstname}}</td>
+        <td class="w-1606">{{reserve.user.profiledb.lastname}}</td>
+        <td class="w-1606">{{reserve.user.username}}</td>
+        <td class="w-3306">{{reserve.string}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

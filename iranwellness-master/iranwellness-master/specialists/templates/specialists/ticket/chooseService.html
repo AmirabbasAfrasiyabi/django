@@ -1,0 +1,13 @@
+{% extends "manager/base.html" %}{% block content %}
+<div class="container">
+  <div class="block">
+    <div class="block heading">پشتیبانی غیر حضوری</div>
+    <div class="py-5">
+      <p class="text-justify medium px-2 pb-5">مایل به بررسی پیام‌های مربوط به کدام خدمت می‌باشید؟</p>
+      {% for service in services %}
+        <button class="btn back-transparent w-80 my-3" onclick="location.href='/specialists/tickets/{{service.slug}}/' ">{{service.name}}</button>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock content %}

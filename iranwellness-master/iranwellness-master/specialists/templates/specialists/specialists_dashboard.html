@@ -1,0 +1,27 @@
+{% extends "manager/base.html" %}{% block content %}
+<div class="container">
+    <div class="block">
+        <div class="block heading"> پنل متخصص </div>
+        <div class="row justify-content-around">
+            <div class="square-button d-flex flex-column justify-content-around align-items-center" onclick="location.href='/specialists/tickets';">
+                <i class="fa fa-file fa-3x fa-fw" aria-hidden="true"></i>
+                <div>پشتیبانی غیرحضوری</div>
+            </div>
+            <div class="square-button d-flex flex-column justify-content-around align-items-center" onclick="location.href=`{% url 'specialists:users-list' %}`;">
+                <i class="fa fa-user fa-3x fa-fw" aria-hidden="true"></i>
+                <div>اطلاعات کاربران</div>
+            </div>
+        </div>
+        <div class="row justify-content-around">
+            <div class="square-button d-flex flex-column justify-content-around align-items-center" onclick="location.href='/specialists/reservasion/';">
+                <i class="fa fa-calendar fa-3x fa-fw" aria-hidden="true"></i>
+                <div>رزرواسیون</div>
+            </div>
+            <div class="square-button d-flex flex-column justify-content-around align-items-center" onclick="location.href='/specialists/analysis/';">
+                <i class="fa fa-signal fa-3x fa-fw" aria-hidden="true"></i>
+                <div>آنالیزها</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

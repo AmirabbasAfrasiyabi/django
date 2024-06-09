@@ -1,0 +1,199 @@
+{% extends "manager/base.html" %}
+{% block content %}
+<div class="block ">
+     <div class="block heading"> ایجاد فاکتور </div>
+     <div class="justify-content-center">
+          {% if notification == "Register" %}
+            <p> اطلاعات با موفقیت ثبت شد. </p><br>
+          {% endif %}
+          <form action="" method="POST">
+          {% csrf_token %}
+             <div class="flex-container">
+                  <div class="flexform" >
+                       <b style="font-size: large;"> نام </b><br>
+                       <input class="transparent" style="font-size: medium;" id="firstname" type="text" name="firstname" placeholder="اجباری"     required="required" oninvalid="this.setCustomValidity('این قسمت را پر کنید')" oninput="setCustomValidity('')">
+                  </div>
+                  <div class="flexform">
+                       <b style="font-size: large;"> نام خانوادگی </b><br>
+                       <input class="transparent" style="font-size: medium;" id="lastname"  type="text" name="lastname"  placeholder="اجباری"     required="required" oninvalid="this.setCustomValidity('این قسمت را پر کنید')" oninput="setCustomValidity('')">
+                  </div>
+                  <div class="flexform">
+                       <b style="font-size: large;"> شماره همراه </b><br>
+                       <input class="transparent" style="font-size: medium;"  id="phone"    type="tel"   name="phone"     placeholder="09XXXXXXXXXX" required="required" oninvalid="this.setCustomValidity('این قسمت را پر کنید')" oninput="setCustomValidity('')">
+                  </div>
+                  <div class="flexform">
+                       <b style="font-size: large;"> موضوع </b><br/>
+                       <input class="transparent" style="font-size: medium;" id="code"     type="text"  name="title"     placeholder="اجباری"     required="required" oninvalid="this.setCustomValidity('این قسمت را پر کنید')" oninput="setCustomValidity('')">
+                  </div>
+                  <div class="flexform">
+                       <b style="font-size: large;"> مبلغ </b><br/>
+                       <input class="transparent" style="font-size: medium;"  id="fee"      type="text"  name="fee"       placeholder="250000 تومان" required="required" oninvalid="this.setCustomValidity('این قسمت را پر کنید')" oninput="setCustomValidity('')">
+                  </div>
+             </div>
+             <div>
+                 <b style="font-size: medium;"> توضیحات:  </b>&nbsp;
+                 <textarea class="transparent" style="width:68%;"  name="explane"   placeholder="اختیاری"></textarea><br>
+                 <input type="hidden" value="0" name="determiner">
+                 <input class="normal-button"   value="ثبت"     type="submit" id="btn">
+             </div>
+          </form>
+          <form action="" method="POST">
+          <div class="block mt-4">
+          {% csrf_token %}
+             <div style="font-size: small;">
+                  <label for="NOReciepts"><b> تعداد </b></label>
+                  <input style="width: 10%;" class="transparent" id="NOReciepts"    type="number" name="NOReciepts" placeholder="1" min="1" value="4"> &nbsp;
+                  <b > فاکتور برای فردی با مشخصات زیر نمایش داده شود. </b>
+                  <input type="hidden" value="1" name="determiner">
+             </div>
+             <div class="flex-container" style="font-size:small;">
+                  <div class="flexform" >
+                     <b> نام </b><br>
+                     <br />
+                     <input class="transparent"  type="text"  name="firstname">
+                  </div>
+                  <div class="flexform">
+                     <b "> نام خانوادگی </b><br>
+                     <br />
+                     <input class="transparent""  type="text"  name="lastname">
+                  </div>
+                  <div class="flexform">
+                     <b> شماره همراه </b><br>
+                     <br />
+                     <input class="transparent" type="tel"   name="phone"     placeholder="09XXXXXXXXXX">
+                  </div>
+                  <div class="flexform">
+                     <input class="normal-button" value="مشاهده" type="submit" id="disbtn">
+                  </div>
+             </div>
+          </div>
+          </form>
+     </div>
+</div>
+<br />
+<div class="block">
+     <div class="block heading"> آخرین فاکتورهای ثبت شده </div>
+     <div class="justify-content-center" >
+     {%for Lastinf in lastinfo%}
+              <div class="block" >
+                  <form action=" " method="POST" id="information" >
+                  {% csrf_token %}
+                       <div class="flex-container">
+                            <div>   
+                                <b style="font-size: small;"> نام </b><br>
+                                <input class="transparent" style="font-size: x-small;"  id="firstname2"    type="text"                        value="{{ Lastinf.firstname}}" disabled>
+                            </div>
+                            <div>
+                                <b style="font-size: small;"> نام خانوادگی </b><br>
+                                <input class="transparent" style="font-size: x-small;"  id="lastname2"     type="text"                        value="{{ Lastinf.lastname}}" disabled>
+                            </div>
+                            <div>
+                                <b style="font-size: small;"> شماره همراه </b><br>
+                                <input class="transparent" style="font-size: x-small;" style="font-size: x-small;"  id="phone2"        type="text"      value="{{Lastinf.phone}}" disabled>
+                            </div>
+                            <div>
+                                <b style="font-size: small;"> موضوع </b><br>
+                                <input class="transparent" style="font-size: x-small;" id="title2"        type="text"                         value="{{ Lastinf.title}}" disabled>
+                            </div>
+                            <div>
+                                <b style="font-size: small;"> مبلغ </b><br>
+                                <input class="transparent" style="font-size: x-small;" id="fee2"          type="text"                         value="{{Lastinf.fee}} تومان" disabled>
+                            </div>
+                            <div>
+                                <b style="font-size: small;"> تاریخ ثبت  </b><br>
+                                <input class="transparent" style="font-size: x-small;" id="reg"           type="text"    name="reg"           value="{{Lastinf.j_date_created}}" disabled>
+                            </div>
+                            <div>
+                                <b style="font-size: small;"> ساعت ثبت  </b><br>
+                                <input class="transparent" style="font-size: x-small;" id="reg"           type="text"    name="reg"           value={{Lastinf.time_created|date:'H:i:s'}} disabled>
+                            </div>
+                            {%if Lastinf.time_paied %}
+                            <div>
+                                <b style="font-size: small;"> تاریخ پرداخت  </b><br>
+                                <input class="transparent" style="font-size: x-small;" id="cash"          type="text"    name="cash"          value="{{Lastinf.j_date_paied}}" disabled>
+                            </div>
+                            <div>
+                                <b style="font-size: small;"> ساعت پرداخت  </b><br>
+                                <input class="transparent" style="font-size: x-small;" id="cash"          type="text"    name="cash"          value={{Lastinf.time_paied|date:'H:i:s'}} disabled>
+                            </div>
+                            {%else%}
+                            <div>
+                                <b style="font-size: small;"> تاریخ پرداخت  </b><br>
+                                <input class="transparent" style="font-size: x-small;" id="cash"          type="text"    name="cash"          value="---" disabled>
+                            </div>
+                            <div>
+                                <b style="font-size: small;"> ساعت پرداخت  </b><br>
+                                <input class="transparent" style="font-size: x-small;" id="cash"          type="text"    name="cash"          value="---" disabled>
+                            </div>
+                            {%endif%}
+                       </div>
+                             <div style="font-size: small;">
+                             <br />
+                             <b > توضیحات: </b> &nbsp
+                             {% if Lastinf.time_paied %}
+                             <textarea  class="transparent" name="explane2"  value="{{Lastinf.explane}}" disabled>{{Lastinf.explane}}</textarea> 
+                             <br />
+                             {% else %}
+                             <textarea  class="transparent" name="explane2"  value="{{Lastinf.explane}}" disabled>{{Lastinf.explane}}</textarea> 
+                             <br />
+                             <input    style="width: 30%;" class="normal-button btndelete" type="submit"  id="paybtn{{Lastinf.pk}}"       value="ثبت پرداخت">
+                             {% endif %}
+                             <input    style="width: 30%;" class="normal-button btndelete" type="submit"  id="deletebtn{{Lastinf.pk}}"    value="حذف فاکتور">
+                             </div>
+                             <input type="hidden" value="{{Lastinf.firstname}}"           name="firstname2">
+                             <input type="hidden" value="{{Lastinf.lastname}}"            name="lastname2">
+                             <input type="hidden" value="{{Lastinf.title}}"              name="title2">
+                             <input type="hidden" value="{{Lastinf.fee}}"                name="fee2">
+                             <input type="hidden" value="{{Lastinf.phone}}"              name="phone2">
+                             <input type="hidden" value="{{Lastinf.explane}}"            name="explane2">
+                             <input type="hidden" value="" name="determiner" id="PayDeleteDeterminer{{Lastinf.pk}}">
+                             
+                             <input type="hidden" value="{{Lastinf.time_created.year}}"   name="YearBooked"   id="YearBooked"  >
+                             <input type="hidden" value="{{Lastinf.time_created.month}}"  name="MonthBooked"  id="MonthBooked" >
+                             <input type="hidden" value="{{Lastinf.time_created.day}}"    name="DayBooked"    id="DayBooked"   >
+                             <input type="hidden" value="{{Lastinf.time_created.hour}}"   name="HourBooked"   id="HourBooked"  >
+                             <input type="hidden" value="{{Lastinf.time_created.minute}}" name="MinuteBooked" id="MinuteBooked">
+                             <input type="hidden" value="{{Lastinf.time_created.second}}" name="SecondBooked" id="SecondBooked">
+                  </form>
+             </div>
+             <br />
+          {%endfor%}
+     </div>
+</div>
+<script>
+    $('#reg , #cash').each(function(){
+            const PersianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            var str = $(this).attr('value');
+                           
+            var rep = str.replace(/\d/g, x => PersianDigits[x]);
+            $(this).attr('value', rep);
+                           
+            const PersianMonths = ['مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند', 'فروردین', 'اردیبهشت', 'خرداد', 'تیر','مرداد','شهریور'];
+            const EnglishMonths = ['Mehr','Aban','Azar','Dey','Bahman','Esfand','Farvardin','Ordibehesht','Khordad','Tir','Mordad','Shahrivar'];
+            for (let i =0; i < 12; i++){
+                var str = $(this).attr('value');
+                var rep = str.replace(EnglishMonths[i] , PersianMonths[i]);
+                $(this).attr('value', rep);
+                $(this).css("direction" , "rtl");
+            }
+            if ($(this).attr('id')== "reg") {$(this).attr('id' , 'reg2')}
+            else if ($(this).attr('id')== "cash") {$(this).attr('id' ,'cash2')}
+    });
+</script>
+<script>
+$('[id*="paybtn"]').each(function(){
+   $(this).click(function(){
+     $('[id*="PayDeleteDeterminer"]').each(function(){
+        $(this).attr('value',"3")
+     });
+   });   
+});
+$('[id*="deletebtn"]').each(function(){
+   $(this).click(function(){
+     $('[id*="PayDeleteDeterminer"]').each(function(){
+        $(this).attr('value',"2")
+     });
+   });   
+});
+</script>
+{% endblock content %}

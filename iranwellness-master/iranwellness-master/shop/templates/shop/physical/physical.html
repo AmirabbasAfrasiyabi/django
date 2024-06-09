@@ -1,0 +1,40 @@
+{% extends "wellness/base.html" %}{% block content %}
+<div class="block" style="text-align: center;">
+     <div class="block">محصولات ولنس فیزیکی</div><br>
+      <div class=" flex-container2" style="width:100%;">
+         {% for ps in PS %}
+         <div class="shopbtn" style="width:45%;">
+              <form action=" " method="POST">
+              {% csrf_token %}
+                   <a href="/shop/physical/{{ps.Ename}}">
+                   <img class="w-50" src="/static/images/{{ps.Ename}}.jpg">
+                   </a>
+                   <h3 style="font-size: x-small;"> {{ps.Pname}} </h3>
+                   <div style="font-size: medium;"> ۱۰,۰۰۰ تومان </div>
+                   <input type="hidden" value="{{ps.Ename}}"    name="Name">
+                   <input type="hidden" value="{{ps.price}}"    name="fee">
+                   <input type="hidden" value="{{ps.Pname}}"    name="Pname">
+                   <div><input class="normal-button" style="font-size: x-small;" id="Reserve{{ps.Ename}}" value="افزودن به سبد خرید" type="submit"></div>
+                   {% if info %}
+                   {% for i in info %}
+                      {% if i.name == ps.Ename %}
+                         <script>
+                            $("#Reserve{{ps.Ename}}").remove()
+                         </script>
+                         {% if i.paid == False %}
+                            <input  class="normal-button" style="font-size: x-small;" type="button" id="Reserve{{ps.Ename}}" onclick="location.href='/cart/'"  value="مشاهده سبد خرید"/>
+                         {% elif i.paid == True %}
+                            <script>
+                              $("#Reserve{{ps.Ename}}").remove()
+                            </script>
+                            <input  class="normal-button" style="font-size: x-small;" type="button" id="Reserve{{ps.Ename}}" onclick=" location.href='/shop/physical/{{ps.Ename}}/YP' " value="مشاهده فایل"/>  
+                         {% endif %}
+                      {% endif %}
+                   {% endfor %}
+                   {% endif %}
+              </form>
+         </div>
+         {% endfor %}
+      </div>
+</div>
+{% endblock %}

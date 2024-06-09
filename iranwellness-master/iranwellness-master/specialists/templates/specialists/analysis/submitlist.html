@@ -1,0 +1,62 @@
+{% extends "manager/base.html" %}
+{% block content %}
+<div class="container">
+    <div class="block">
+        <div class="block heading"> آنالیزها </div>
+        <div class="my-5">
+            <p class="text-justify medium px-2 pb-5">به منظور بارگزاری فایل‌های نتیجه، بخش موردنظر خود را انتخاب کنید.</p>
+            <button class="btn back-transparent w-80 my-3" onclick="location.href='/specialists/analysis/quizResultRoutesItems/' "> ارزیابی مسیرهای ۱۲ گانه</button>
+            <button class="btn back-transparent w-80 my-3" onclick="location.href='/specialists/analysis/Health/' "> فایل‌های مراجعه‌کنندگان دستگاه هلث</button>
+            <button class="btn back-transparent w-80 my-3" onclick="location.href='/specialists/analysis/Resonance/' ">فایل‌های مراجعه‌کنندگان دستگاه EDS</button>
+        </div>
+    </div>
+</div>
+<!-- The Modal -->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header d-flex justify-content-between">
+                <div>
+                    <h4 class="modal-title">جهت اطلاع</h4>
+                </div>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body f-01em">
+               تعداد
+               {{Number12}}
+               آزمون تحلیل‌نشده در بخش ارزیابی ابعاد ۱۲گانه ثبت شده است.
+               <br />
+               <br />
+               تعداد
+               {{HNumber}}
+               نفر در انتظار دریافت فایل تحلیل خدمت عمومی (هلث) می‌باشند.
+               <br />
+               <br />
+               تعداد
+               {{RNumber}}
+             نفر در انتظار دریافت فایل تحلیل خدمت تخصصی (EDS) می‌باشند.
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <div >
+                    <button type="button" class="btn btn-success" data-dismiss="modal"> متوجه شدم. </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function(){
+    // Show the Modal on load
+    $("#myModal").modal({
+      backdrop: 'static',
+      keyboard: false
+    });
+});
+</script>
+{% endblock content %}

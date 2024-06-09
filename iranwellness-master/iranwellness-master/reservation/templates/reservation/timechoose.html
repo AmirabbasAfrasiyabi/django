@@ -1,0 +1,31 @@
+{% extends "wellness/base.html" %}{% block content %}
+
+<div class="container">
+    <div class="block">
+        <div class="block heading">انتخاب تایم حضور</div>
+        <div>
+            <select id="time-select" class="form-control" style="font-size:small;">
+                <option value="1" >تایم نیم ساعته</option>
+                <option value="2" >تایم یک ساعته</option>
+                <option value="3" >تایم یک و نیم ساعته</option>
+            </select>
+            <button class="normal-button" id="search">جستجو</button>
+            <div id="times"></div>
+        </div>
+       </div>
+    </div>
+</div>
+<script>
+    $("#search").click(function() {
+        var duration = $("#time-select option:selected").val();
+        var locationOfURL = window.location.pathname + duration;
+        $("#times").load(window.location.pathname + duration);
+    });
+    function display() {
+        var order = $("#order option:selected").val();
+        var locationOfURL = window.location.pathname + order
+        window.location   = locationOfURL
+    }
+</script>
+
+{% endblock %}

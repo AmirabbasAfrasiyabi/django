@@ -1,0 +1,54 @@
+{% extends "wellness/base.html" %} {% block content %}
+<div class="container">
+    <div class="block">
+        <div class="block">طرح نقره‌ای</div>
+        <div class="my-5">
+            <div class="text-justify">
+                <p>لطفاً خدمات ارائه‌شده را به طور کامل مطالعه کنید و سپس نسبت به تهیه‌ی اشتراک اقدام فرمایید.</p>
+                <div class="my-2em mx-md-5">
+                    <p>با عضویت در اشتراک نقره‌ای خدمات و مزایای زیر در اختیار شما قرار می‌گیرد:</p>
+                    <ul>
+                        <li class="my-1em">
+                            <div class="font-weight-bold">آزمون‌های ولنس:</div>
+                            <ul>
+                              <li >امکان انجام کلیه آزمون‌های ولنس</li>
+                              <li >تحلیل و ارزیابی هر آزمون متناسب با سبک زندگی فرد به همراه ارائه پیشنهادات تغذیه‌ای به صورت شخصی‌سازی‌شده</li>
+                            </ul>
+                        </li>
+                        <li class="my-1em">
+                            <div class="font-weight-bold">مشاوره:</div>
+                            <ul>
+                                <li>
+                                    <div>حضوری:</div>
+                                    <div class="text-center">۱. صحبت با متخصصین ۲. استفاده از سیستم‌های مرکز</div>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li>
+                                    <div>آنلاین:</div>
+                                    <div class="text-center">از طریق شبکه‌های اجتماعی، پشتیبانی بر خط سایت</div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="my-1em">
+                            <div class="font-weight-bold">ارزیابی هولوگرافیک:</div>
+                            <ul>
+                                <li>
+                                    <div>ارزیابی هولوگرافیک به صورت حضوری به همراه :</div>
+                                    <ul>
+                                        <li>ارائه‌ی نتایج ارزیابی و توضیح موارد</li>
+                                        <li>ارائه‌ی پیشنهادات تغذیه‌ای</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <form action="" method="POST">{% csrf_token %}
+                <input class="normal-button" id="submit" type="submit" value="دریافت طرح" disabled />
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

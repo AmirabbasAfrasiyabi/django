@@ -1,0 +1,317 @@
+{% extends "manager/base.html" %} {% block content %}
+<head>
+	<link rel="stylesheet" href="/static/css/dark-unica.css" type="text/css">
+	<script src="/static/js/highcharts.js"></script>
+	<script src="/static/js/highcharts-3d.js"></script>
+	<script src="/static/js/cylinder.js"></script>
+	<script src="/static/js/LimitFileUploadFormat/LimitFileUploadFormatImage.js"></script>
+	<script src="/static/js/LimitFileUploadFormat/LimitFileUploadFormatPdf.js"></script>
+	<script src="/static/js/LimitFileUploadFormat/LimitFileUploadFormatVideo.js"></script>
+	<script src="/static/js/LimitFileUploadFormat/LimitFileUploadFormatAudio.js"></script>
+</head>
+    <div class="block">
+        <div class="block heading"> {{dimensionName}} </div>
+        <br />
+        {% if successmessage %}
+           <br />
+           <div class="f-1em"> {{successmessage}} </div>
+        {% endif %}
+        {% if message %}
+           <div> {{message}} </div>
+        {% endif %}
+        {%if result %}
+           {% if dimensionName == 'نتیجه تمامی ابعاد' %}
+           <div class="block">
+            <div class="block">
+                <div style="font-size:small" id="date"> تاریخ انجام آزمون: &nbsp;
+                                                       {{ result.j_date_circle }} 
+                </div>
+                <div style="font-size:small" id="time{{result.pk}}"> ساعت انجام آزمون: &nbsp;
+                                                                     {{ result.date|date:'H:i:s' }} 
+                </div>
+                <div style="font-size:small" id="time{{result.pk}}"> شماره همراه آزمون‌دهنده: &nbsp;
+                                                                     {{ result.user.username }} 
+                </div>
+            </div>
+           <div id="PieChart{{result.pk}}" style="width:100%!important; height:100%!important;"></div>
+           <script type="text/javascript">
+           $('[id*="PieChart"]').each(function(){
+           var c = {{result.totalquiz}}
+           Highcharts.chart('PieChart{{result.pk}}', {
+                                         chart    : {
+                                         type     : 'pie',
+                                         options3d: {
+                                                     enabled  : true,
+                                                     alpha    : 45,
+                                                     beta     : 0
+                                                     }
+                                                     },
+                                        title: {
+                                                text: ''
+                                                },
+                                        tooltip: {
+                                                  pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                                                 },
+                                        plotOptions: {
+                                                    pie: {
+                                                    allowPointSelect : true,
+                                                    cursor           : 'pointer',
+                                                    depth            : 35,
+                                                    dataLabels: {
+                                                    enabled: true,
+                                                    format: '{point.name}'
+                                                                }
+                                                          }
+                                                       },
+                                                    series: [{
+                                                            type: 'pie',
+                                                            name: '',
+                                                            data: [
+                                                                    ['۱' ,  c[0]  ],
+                                                                    ['۲' ,  c[1]  ],
+                                                                    ['۳' ,  c[2]  ],
+                                                                    ['۴' ,  c[3]  ],
+                                                                    ['۵' ,  c[4]  ],
+                                                                    ['۶' ,  c[5]  ],
+			                                                        ['۷' ,  c[6]  ],
+			                                                        ['۸' ,  c[7]  ],
+			                                                        ['۹' ,  c[8]  ],
+			                                                        ['۱۰',  c[9]  ],
+			                                                        ['۱۱',  c[10] ],
+			                                                        ['۱۲',  c[11] ],
+                                                                   ]
+                                                             }]
+                                            })
+		   });
+		   </script>
+		       <div style="font-size:small; direction:rtl;"> تحلیل آزمون: </div>
+		   {% if result.result %}
+               <div style="font-size:small; direction:rtl;"> {{ result.result }} </div>
+            {% else %}
+               <form action="" method="POST" enctype="multipart/form-data">
+               {% csrf_token %}
+                 <input type="hidden" value="{{result.date.year}}"          name="Year"     id="Year  {{result.pk}}">
+                 <input type="hidden" value="{{result.date.month}}"         name="Month"    id="Month {{result.pk}}">
+                 <input type="hidden" value="{{result.date.day}}"           name="Day"      id="Day   {{result.pk}}">
+                 <input type="hidden" value="{{result.date.hour}}"          name="Hour"     id="Hour  {{result.pk}}">
+                 <input type="hidden" value="{{result.date.minute}}"        name="Minute"   id="Minute{{result.pk}}">
+                 <input type="hidden" value="{{result.date.second}}"        name="Second"   id="Second{{result.pk}}">
+                 <input type="hidden" value="{{result.user.username}}"      name="un"       id="un    {{result.pk}}">
+                 <input type="hidden" value="{{result.user.password}}"      name="pass"     id="pass  {{result.pk}}">
+                 <input type="hidden" value="all"                           name="quiztype" id="quiztype">
+                 <div class="justify-content-center">
+                      <input  onchange="upload_check()"  type="file" id="uploadpicture-btn"  name="picture" accept="image/*">
+                      <label  class="normal-button" for="uploadpicture-btn"> انتخاب فایل تصویر </label>
+                 </div>
+                 <div class="justify-content-center">
+                     <input type="file" id="uploadpdf-btn" name="pdfresult" accept=".pdf">
+		  	         <label  class="normal-button" for="uploadpdf-btn" > انتخاب فایل pdf </label>
+		  	     </div>
+		  	     <div class="justify-content-center">
+                     <input type="file" id="uploadv-btn" name="vresult" accept="video/*">
+		  	         <label  class="normal-button" for="uploadv-btn" > انتخاب فایل video </label>
+		  	     </div>
+		  	     <div class="justify-content-center">
+                     <input type="file" id="uploada-btn" name="aresult" accept="audio/*">
+		  	         <label  class="normal-button" for="uploada-btn" > انتخاب فایل audio </label>
+		  	     </div>
+                 <textarea class="transparent" rows="3" required="required" name="result"   id="result"></textarea>
+                 <br />
+                 <input type="hidden" value="submit" name="determiner"         id="determiner">
+                 <input class="normal-button"   value="ارسال"     type="submit"  id="submitall">
+               </form>
+            {% endif %}
+            </div>
+           
+           {% else %}
+           <div class="block">
+            <div class="block">
+                 <div style="font-size:small" id="date{{result.pk}}"> تاریخ انجام آزمون: &nbsp;
+                                                                      {{ result.j_date_submit }} 
+                 </div>
+                 <div style="font-size:small" id="time{{result.pk}}"> ساعت انجام آزمون: &nbsp;
+                                                                      {{ result.date|date:'H:i:s' }} 
+                 </div>
+                 <div style="font-size:small" id="phone{{result.pk}}"> شماره همراه آزمون‌دهنده: &nbsp;
+                                                                     {{ result.user.username }} 
+                 </div>
+            </div>
+            <div id="cylinder{{result.pk}}"></div>
+            <script>
+            $('[id*="cylinder"]').each(function(){
+             var r = {{result.response}}
+             Highcharts.chart('cylinder{{result.pk}}', {
+                             chart: {
+                                     type     : 'cylinder',
+                                     options3d: {
+                                                enabled     : true,
+                                                alpha       : 15,
+                                                beta        : 15,
+                                                depth       : 50,
+                                                viewDistance: 25
+                                                }
+                                    },
+                             scales: {
+                                     yAxis: [{
+                                             ticks: {
+                                             beginAtZero:true,
+                                             
+                                                    }
+                                             }]
+                                     },
+                             plotOptions: {
+                                          series: {
+                                          depth: 25,
+                                          colorByPoint: true
+
+                                                  }
+                                          },
+                             yAxis: {
+				                    categories: [0,100],
+				                    max:100
+		                            },
+		                            
+                             xAxis: {
+				                     categories: ['۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹', '۱۰']
+                                    },
+                             series: [{
+                                     data: [(r[0] *10), (r[1] *10), (r[2] *10),(r[3] *10), (r[4] *10), (r[5] *10), (r[6] *10), (r[7] *10), (r[8] *10), (r[9] *10)],
+                                     name: 'result',
+                                     showInLegend: false
+                                     }]
+                             });
+            });
+            </script>
+            
+            <b style="font-size:small; direction:rtl;"> تحلیل آزمون: </b>
+            <br />
+            {% if result.result %}  
+               <div style="font-size:small; direction:rtl;"> {{ result.result }} </div>
+            {% else %}
+               <form action="" method="POST" enctype="multipart/form-data">
+               {% csrf_token %}
+                 <input type="hidden" value="{{result.date.year}}"          name="Year"     id="Year  {{result.pk}}">
+                 <input type="hidden" value="{{result.date.month}}"         name="Month"    id="Month {{result.pk}}">
+                 <input type="hidden" value="{{result.date.day}}"           name="Day"      id="Day   {{result.pk}}">
+                 <input type="hidden" value="{{result.date.hour}}"          name="Hour"     id="Hour  {{result.pk}}">
+                 <input type="hidden" value="{{result.date.minute}}"        name="Minute"   id="Minute{{result.pk}}">
+                 <input type="hidden" value="{{result.date.second}}"        name="Second"   id="Second{{result.pk}}">
+                 <input type="hidden" value="{{result.number}}"             name="number"   id="number{{result.pk}}">
+                 <input type="hidden" value="{{result.user.username}}"      name="un"       id="un    {{result.pk}}">
+                 <input type="hidden" value="{{result.user.password}}"      name="pass"     id="pass  {{result.pk}}">
+                 <input type="hidden" value="onedimension"                  name="quiztype" id="quiztype">
+                 <div class="justify-content-center">
+                      <input  type="file" id="uploadpicture-btn"  name="picture" accept="image/*">
+                      <label  class="normal-button" for="uploadpicture-btn"> انتخاب فایل تصویر </label>
+                 </div>
+                 <div class="justify-content-center">
+                     <input type="file" id="uploadpdf-btn" name="pdfresult" accept=".pdf">
+		  	         <label  class="normal-button" for="uploadpdf-btn" > انتخاب فایل pdf </label>
+		  	     </div>
+		  	     <div class="justify-content-center">
+                     <input type="file" id="uploadv-btn" name="vresult" accept="video/*">
+		  	         <label  class="normal-button" for="uploadv-btn" > انتخاب فایل video </label>
+		  	     </div>
+		  	     <div class="justify-content-center">
+                     <input type="file" id="uploada-btn" name="aresult" accept="audio/*">
+		  	         <label  class="normal-button" for="uploada-btn" > انتخاب فایل audio </label>
+		  	     </div>
+                 <textarea   class="transparent" rows="5" required="required"   name="result"   id="result"></textarea>
+                 <br />
+                 <input type="hidden" value="submit" name="determiner" id="determiner">
+                 <input class="normal-button"   value="ارسال"     type="submit" id="submitone">
+               </form>
+            {% endif %}
+            </div>
+           {% endif %}
+        {% endif %}
+        <br />
+    </div>
+<script>
+  $('[id*="date"] , [id*="time"] , [id*="phone"]').each(function(){
+         const PersianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+         var str = $(this).html()
+                           
+         var rep = str.replace(/\d/g, x => PersianDigits[x]);
+         $(this).html (rep)
+                           
+         const PersianMonths = ['مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند', 'فروردین', 'اردیبهشت', 'خرداد', 'تیر','مرداد','شهریور'];
+         const EnglishMonths = ['Mehr','Aban','Azar','Dey','Bahman','Esfand','Farvardin','Ordibehesht','Khordad','Tir','Mordad','Shahrivar'];
+         for (let i =0; i < 12; i++){
+               var str = $(this).html()
+               var rep = str.replace(EnglishMonths[i] , PersianMonths[i]);
+               $(this).html (rep)
+               $(this).css("direction" , "rtl");
+              }
+  });
+  $("#uploadpicture-btn").change(function() {
+        var picid = '#uploadpicture-btn';
+        var Imagevalidation = LimitFileUploadFormatImage (picid);
+        if (Imagevalidation == "invalid"){
+            $("#myModal").modal({
+                            backdrop: 'static',
+                            keyboard: false
+            });
+        }
+  });
+  $("#uploadpdf-btn").change(function() {
+        var pdfid = '#uploadpdf-btn';
+        var pdfvalidation = LimitFileUploadFormatpdf (pdfid);
+        if (pdfvalidation == "invalid"){
+            $("#myModal").modal({
+                            backdrop: 'static',
+                            keyboard: false
+            });
+        }
+  });
+  $("#uploadv-btn").change(function() {
+        var videoid = '#uploadv-btn';
+        var videovalidation = LimitFileUploadFormatvideo (videoid)
+        if (videovalidation == "invalid"){
+            $("#myModal").modal({
+                            backdrop: 'static',
+                            keyboard: false
+            });
+        }
+  });
+  $("#uploada-btn").change(function() {
+        var audioid = '#uploada-btn';
+        var audiovalidation = LimitFileUploadFormatAudio (audioid)
+        if (videovalidation == "invalid"){
+            $("#myModal").modal({
+                            backdrop: 'static',
+                            keyboard: false
+            });
+        }
+  });
+</script>
+
+<!-- The Modal for Limit File format-->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header d-flex justify-content-between">
+                <div>
+                    <h4 class="modal-title">جهت اطلاع</h4>
+                </div>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body f-01em">
+                به علت عدم همخوانی فرمت فایل آپلودشده با فرمت مجاز، آپلود نخواهد شد.
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <div >
+                    <button type="button" class="btn btn-success" data-dismiss="modal"> متوجه شدم. </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

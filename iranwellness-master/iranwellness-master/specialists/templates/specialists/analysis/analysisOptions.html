@@ -1,0 +1,12 @@
+{% extends "manager/base.html" %}
+{% block content %}
+<div class="container">
+  <div class="block">
+    <div class="block heading">فایل‌های مراجعه‌کنندگان {{type}}</div>
+    <div class="py-5">
+      <button class="btn back-transparent w-80 my-3" onclick="location.href='/specialists/analysis/{{type}}/submitAnalysis/' ">ارسال فایل</button>
+      <button class="btn back-transparent w-80 my-3" onclick="location.href='/specialists/analysis/{{type}}/editAnalysis/chooseUser/' ">مشاهده و ویرایش فایل‌های پیشین</button>
+    </div>
+  </div>
+</div>
+{% endblock content %}

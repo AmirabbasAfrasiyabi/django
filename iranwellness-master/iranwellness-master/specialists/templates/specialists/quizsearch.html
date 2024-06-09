@@ -1,0 +1,29 @@
+{% extends "manager/base.html" %} {% block content %}
+<div class="container">
+    <div class="block">
+        <div class="block heading"> ارزیابی مسیرهای ۱۲گانه </div>
+        <form action="" method="POST" id="searchform">
+            {% csrf_token %}
+            <b style="font-size: medium;"> آزمون </b><br>
+            <select class="transparent" name="quiznumber" form="searchform" id="quiznumber">
+                <option value="1" > مسئولیت پذیری در قبال خود و عشق</option>
+                <option value="2" > تنفس</option>
+                <option value="3" > تغذیه</option>
+                <option value="4" > حس کردن</option>
+                <option value="5" > حرکت</option>
+                <option value="6" > احساس کردن</option>
+                <option value="7" > فکر کردن</option>
+                <option value="8" > بازی کردن و کار کردن</option>
+                <option value="9" > ارتباط برقرار کردن</option>
+                <option value="10"> صمیمیت</option>
+                <option value="11"> یافتن معنا</option>
+                <option value="12"> ورا رفتن</option>
+                <option value="13"> تمامی مسیرها </option>
+            </select>
+            <br />
+            <input type="hidden" value="search" name="determiner">
+            <div><input class="normal-button" value="جستجو" type="submit"></div>
+        </form>
+    </div>
+</div>
+{% endblock %}

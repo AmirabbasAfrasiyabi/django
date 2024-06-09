@@ -1,0 +1,50 @@
+{% extends "wellness/base.html" %} {% block content %}
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link href="/static/css/quizintroduction.css" rel="stylesheet">
+</head>
+
+<div class="container p-2">
+  <div class="block text-right" dir="rtl" lang="fa">
+  <small>
+   <div class="block mb-5">معرفی مسیر حرکت</div>
+   <div class="my-scroll" dir="rtl">
+   <div class="pl-105">
+    <div>
+      <audio class="mp3" controls >
+        <source src="/static/audio/QuizIntroduction/moving.mp3">
+      </audio>
+    </div>
+    <p>همه چیز در درون ما در حال حرکت است؛ قلب می‌تپد، خون جریان دارد، ریه‌ها باز  و بسته می‌شوند، چشم‌ها می‌چرخند و پرده‌های گوش می‌لرزند. زنده بودن، حرکت کردن است.</p>
+    <p>اگر از حرکت خودداری کنید، بیماری ایجاد می‌شود. بنابراین سعی کنید از حرکت خودداری نکنید و وِلْنِسْ را درک کنید. به خاطر این حرکت، همه چیز لحظه به لحظه در حال تغییر است؛ در نتیجه جلوگیری از حرکت برابر با جلوگیری از تغییر است. آب بی‌حرکت تبدیل به استخر راکد می‌شود و رودخانه‌ی در حال حرکت خود را تمیز می‌کند. بدن بی‌حرکت نیز خانه‌ای برای عفونت و افسردگی می‌شود و بدن در حال حرکت آزادانه انرژی زندگی را  به جریان می‌اندازد.</p>
+    <p>چشمان خود را برای لحظه‌ای ببندید و یک تصویر ذهنی از یک فرد ناسالم بسازید. تصویر شما ممکن است به این شکل باشد: چهره‌ای افتاده و بی‌رنگ، بدنی با اضافه‌وزن که احتمالاً روی یک صندلی نشسته است یا از بالا رفتن از پله‌های یک طبقه خسته شده است و با گذراندن هر پله نفس نفس می‌زند.</p>
+    <p>حال تصویری متضاد را تصور کنید؛ یک فرد را در قله‌ی سلامت ببینید. احتمالاً شما پوستی با گونه‌های صورتی‌رنگ، بدنی با تناسب اندام بالا و  در حال حرکت و دویدن یا پریدن با دست‌های رو به بالا یا در حال شادی و رقص می‌بینید. رقصیدن تشبیه خوبی برای زندگی و  بودن در هارمونی است؛ چرا که رقصیدن، یکی شدن فرد با جهان هستی است. فردی که می‌رقصد، کاملاً زنده است و با جهان یکی است.</p>
+    <p>بدون حرکت، شما رقص، کار و بازی ندارید. حرکت، دنیای درون و بیرون را تغییر می‌دهد؛ حرکت باعث رشد می‌شود. در این بخش این مسئله که چگونه انرژی در یک فرایند پیوسته‌ی دایره‌ای -یک رقص دائم- انرژی تولید می‌کند، بررسی می‌شود.</p>
+    </div>
+   </div>
+   <button class="normal-button">انجام آزمون</button>
+ </small>
+ </div>
+</div>
+
+<script>
+    $('.normal-button').each(function(index){
+        $(this).click(function(){
+            var num  = "{{number}}"
+            var stat = "{{status}}"
+            if (stat == "invalid") {
+                $('.modal-body').text('به دلایل ولنسی شما تا {{RD}} روز دیگر مجاز به انجام ارزیابی جدید نمی‌باشید.');
+                $(this).attr('data-toggle',"modal");
+                $(this).attr('data-target', "#myModal");
+            }
+            else if (stat == "WithoutResult") {
+                $('.modal-body').text('به علت وجود آزمون تحلیل‌نشده مجاز به انجام ارزیابی جدید نمی‌باشید.');
+                $(this).attr('data-toggle',"modal");
+                $(this).attr('data-target', "#myModal");
+            }
+            else if (stat == "valid")         { window.location.href = '/dashboard/evaluation/quiz/'+ num; }
+        });   
+    });
+</script>
+
+{% include "QuizIntroduction/QuizModal.html" %}
+{% endblock %}

@@ -1,0 +1,42 @@
+﻿{% extends "wellness/base.html" %} {% block content %}
+<script src="/static/js/ConvertNumbers.js"></script>
+<div class="container">
+    <div class="block">
+        <div class="block"> ورود به پنل کاربری</div>
+        <img class="avatar-img my-3" src="/static/avatar.svg">
+        <form action="" method="post" id="LoginForm">
+            {% csrf_token %}
+            <div class="justify-content-center">
+                <div>شماره همراه</div>
+                <div><input class="transparent" type="tel" maxlength="11" name="username" id="username" placeholder="09XXXXXXXXX"></div>
+                <div>رمز عبور</div>
+                <div><input class="transparent" type="password" name="password" id="password"></div>
+                <div style="margin-bottom: 5vmin;"><a href="/phoneverification/">رمز عبور خود را فراموش کرده اید؟</a></div>
+                <div><input class="normal-button" type="submit" value="ورود"/></div>
+                <div><input class="normal-button" onclick="location.href='/phoneverification/'" value="عضویت" /></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+$(document).ready(function(){
+    if ("{{error}}"){toastr.error('{{error}}')}
+    $("#username").on("input", function () {
+        ConvertToEnglish('#username')
+    });
+    $("form").submit(function( event ) {
+        toastr.remove()
+        if (!/^09[0-9]{9}/.test($("#username").val())){
+            toastr.error('شماره همراه را به درستی وارد کنید!');
+            event.preventDefault();
+        }
+        if ($("[type=password]").val().length == 0){
+            toastr.error('ورود کلمه عبور ضروری است!')
+            event.preventDefault();
+        }
+    });
+});
+</script>
+
+{% endblock %}

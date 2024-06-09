@@ -1,0 +1,11 @@
+{% extends "wellness/base.html" %} {% block content %}
+<div class="container">
+    <div class="block text-center">
+        <div class="block">{{title.Pname}}</div>
+
+        {% for inf in info %}
+            <button class="normal-button" onclick="location.href='/dashboard/shop/products/{{title.Ename}}/{{inf.Ename}}/';">{{inf.Pname}}</button>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends "manager/base.html" %} {% block content %}
+
+<table>
+        <tr>
+            <th>کد ولنسی</th>
+            <th>نام </th>
+            <th>نام خانوادگی</th>
+            <th>شماره همراه</th>
+            <th>زمان نوبت دهی</th>
+            <th>نام دستگاه</th>
+            <th>وضعیت</th>
+        </tr>
+        {% for item in items %}
+        <div style="display:none;" id="Device{{item.pk}}">{{item.device2}}</div>
+        {% csrf_token %}
+         <tr id="reserve{{item.pk}}">
+            <p class="d-none" id="order{{item.pk}}">{{item.order}}</p>
+            <td id="code{{item.pk}}"   >{{item.code}}       </td>
+            <td id="FN{{item.pk}}"     >{{item.firstname}}  </td>
+            <td id="LN{{item.pk}}"     >{{item.lastname}}   </td>
+            <td id="PhN{{item.pk}}"    >{{item.phonenumber}}</td>
+            <td id="st{{item.pk}}"     >{{item.string}}     </td>
+            <td                        >{{item.device}}     </td>
+            <td id="status{{item.pk}}" >
+                {% if item.paid == True %}
+                   پرداخت‌شده
+                   {% if item.visit == False %}
+                      <button class="reservation-manager-button w-40"  id="visitbtn{{item.pk}}">مراجعه</button>
+                    {% else %}
+                    &nbsp;&nbsp; مراجعه نموده
+                    {% endif %}
+                {% else %}
+                  <div id=pm{{item.pk}}>رزرو شده
+                    <button class="reservation-manager-button w-20"  id="paybtn{{item.pk}}">ثبت پرداخت</button>
+                    <button class="reservation-manager-button w-20"  id="cancelbtn{{item.pk}}">لغو رزرو</button>
+                  </div>
+                    <button class="reservation-manager-button w-40"  style="display:none;"  id="visitbtn{{item.pk}}">مراجعه</button>
+                {% endif %}
+            </td>
+         </tr>
+        {% endfor %}
+</table>
+<script>   
+    $('[id*="paybtn"]').each(function(){
+        $(this).click(function(){
+            var Str     = $(this).attr('id');
+            var res     = Str.replace("paybtn", "");
+            $.ajax({
+                type: 'POST',
+                url : '/manager/services/searchreserve/'+"{{year}}"+'/'+"{{month}}"+'/'+"{{day}}"+'/',
+                data: {
+                     username           : $("#PhN"+res)      .text(),
+                     device             : $("#Device"+res)   .text(),
+                     order              : $("#order"+res).text(),
+                     operation          : "pay",
+                     csrfmiddlewaretoken: $ ('input[name=csrfmiddlewaretoken]').val()
+                },
+               success: function(){ }
+             }); 
+            $("#pm"+res).remove();
+            $("#visitbtn"+res).css('display','block');
+        });
+    });
+    
+    $('[id*="cancelbtn"]').each(function(){
+        $(this).click(function(){
+            var Str     = $(this).attr('id');
+            var res     = Str.replace("cancelbtn", "");
+            $.ajax({
+                type: 'POST',
+                url : '/manager/services/searchreserve/'+"{{year}}"+'/'+"{{month}}"+'/'+"{{day}}"+'/',
+                data: {
+                     username           : $("#PhN"+res)      .text(),
+                     device             : $("#Device"+res)   .text(),
+                     order              : $("#order"+res).text(),
+                     operation          : "cancel",
+                     csrfmiddlewaretoken: $ ('input[name=csrfmiddlewaretoken]').val()
+                },
+               success: function(){ }
+             }); 
+            $("#reserve"+res).remove()
+        });
+    });
+    
+    $('[id*="visitbtn"]').each(function(){
+        $(this).click(function(){
+            var Str     = $(this).attr('id');
+            var res     = Str.replace("visitbtn", "");
+            $.ajax({
+                type: 'POST',
+                url : '/manager/services/searchreserve/'+"{{year}}"+'/'+"{{month}}"+'/'+"{{day}}"+'/',
+                data: {
+                     username           : $("#PhN"+res)      .text(),
+                     device             : $("#Device"+res)   .text(),
+                     order              : $("#order"+res).text(),
+                     operation          : "visit",
+                     csrfmiddlewaretoken: $ ('input[name=csrfmiddlewaretoken]').val()
+                },
+               success: function(){ }
+             }); 
+            $("#status"+res).html('مراجعه نموده');
+        });
+    });
+</script>
+{% endblock %}

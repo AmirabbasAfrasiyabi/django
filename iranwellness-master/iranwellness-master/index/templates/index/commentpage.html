@@ -1,0 +1,90 @@
+{% extends "wellness/base.html" %}{% block content %}
+<div class="container">
+<div class="block ">
+      <div class="block heading"> ارسال پیام برای بخش انتقادها و پیشنهادها </div>
+      <div class="block">
+      <br />
+      <form action="" method="POST">
+      {% csrf_token %}
+      <div class="row">
+      <div class="col-2 p-0"><b class="f-07"> موضوع:  </b></div>
+      <div class="col-4 p-0">
+        <select class="transparent" name="subject" id="subject">
+            <option value="1" >مرکز خدمات</option>
+            <option value="2" >وب اپلیکیشن</option>
+        </select>
+      </div>
+      <div class="col-1 p-0"><b class="f-07"> بخش:  </b></div>
+      <div class="col-5 p-0" id="branch-list1" style="display:none;">
+        <select class="transparent" id="list1">
+            <option value="1" >پروفایل</option>
+            <option value="2" >پشتیبانی حضوری</option>
+            <option value="3" >ارزیابی‌ها</option>
+            <option value="4" >پیگیری‌ها</option>
+            <option value="5" >فروشگاه</option>
+            <option value="6" >پرداخت‌ها</option>
+            <option value="7" >معرفی ولنس</option>
+        </select>
+       </div>
+       <div class="col-5 p-0" id="branch-list2">
+        <select class="transparent" id="list2" >
+            <option value="8" >خدمت عمومی</option>
+            <option value="9" >خدمت تخصصی</option>
+        </select>
+      </div>
+      </div>
+      <br />
+      <div class="row" >
+          <div class="col-2 p-0"><b class="f-07"> متن پیام:  </b></div>
+          <div class="col-10 plr-105">
+            <textarea id="comment" rows="5" class="transparent w-100"></textarea>
+          </div>
+      </div>
+      <input class="normal-button"   value="ارسال"     type="submit" id="send">
+      </form>
+      <br />
+      <div id="status" class="pt-1"></div>
+      </div>
+</div>
+</div>
+<script>
+    $(document).ready(function(){
+        $("#subject").change(function(){
+           var subject= $(this).val();
+           var Id = "#branch-list" + subject
+           $(Id).css('display','none');
+           for (i = 1; i < 3; i++) {
+               if ( i != subject){ 
+                    var NewId = "#branch-list" + i
+                    $(NewId).css('display','block');
+                }
+           }
+        });
+    });
+    
+    $('#send').click(function(event){
+        event.preventDefault();
+        var subject = $("#subject option:selected").val();
+        if ( subject == "1" ){
+            var branch = $("#list2").val();
+        }
+        else {
+            var branch = $("#list1").val();
+        }
+        $.ajax({
+            type: 'POST',
+            url : '/dashboard/comments',
+            data: {
+                subject: subject,
+                branch : branch,
+                comment: $("#comment").val(),
+                csrfmiddlewaretoken: $ ('input[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(){
+                $("#status").html('پیام شما با موفقیت ارسال شد.')
+            }
+        });
+        
+    });
+</script>
+{% endblock %}

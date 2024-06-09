@@ -1,0 +1,280 @@
+{% extends "manager/base.html" %} {% block content %}
+<head>
+	<link rel="stylesheet" href="/static/css/dark-unica.css" type="text/css">
+	<script src="/static/js/highcharts.js"></script>
+	<script src="/static/js/highcharts-3d.js"></script>
+	<script src="/static/js/cylinder.js"></script>
+	<script src="/static/js/LimitFileUploadFormat/LimitFileUploadFormatImage.js"></script>
+	<script src="/static/js/LimitFileUploadFormat/LimitFileUploadFormatPdf.js"></script>
+	<script src="/static/js/LimitFileUploadFormat/LimitFileUploadFormatVideo.js"></script>
+	<script src="/static/js/LimitFileUploadFormat/LimitFileUploadFormatAudio.js"></script>
+</head>
+    <div class="block">
+        <div class="block heading"> {{title}} </div>
+        <br />
+        {% if successmessage %}
+            <br />
+            <div class="f-1em pb-3">{{successmessage}}</div>
+            <div class="row justify-content-center pt-3">
+                <button class="col-8 col-sm-5 col-md-3 mx-md-5 fs-small normal-button" id="BackToWaitingList">{{title}}</button>
+                <button class="col-8 col-sm-5 col-md-3 mx-md-5 fs-small normal-button" id="BackTo12D">مسیرهای ۱۲گانه</button>
+            </div>
+            <script>
+                // Back to the waiting list button url
+                $(document).ready(function(){
+                    const CurrentLocation = window.location.pathname
+                    const address1 = CurrentLocation.replace((CurrentLocation.split('/').reverse()[1]+'/'),'')
+                    const address2 = address1.replace((CurrentLocation.split('/').reverse()[2]+'/'),'')
+                    $('#BackToWaitingList').attr('onclick','location.href='+"'"+address1+"'")
+                    $('#BackTo12D').attr('onclick','location.href='+"'"+address2+"'")
+                })
+            </script>
+        {% endif %}
+        {% if info %}
+           <div class="block">
+            <div class="block">
+                {% if dimensionName == 'نتیجه تمامی ابعاد' %}
+                <div style="font-size:small" id="date{{info.pk}}"> تاریخ انجام آزمون: &nbsp;
+                    {{ info.j_date_circle }} 
+                </div>
+                {% else %}
+                <div style="font-size:small" id="date{{info.pk}}"> تاریخ انجام آزمون: &nbsp;
+                    {{ info.j_date_submit }} 
+                </div>
+                {% endif %}
+                <div style="font-size:small" id="time{{info.pk}}"> ساعت انجام آزمون: &nbsp;
+                                                                    {{ info.date|date:'H:i:s'}}
+                </div>
+                <div style="font-size:small" id="time{{info.pk}}"> شماره همراه آزمون‌دهنده: &nbsp;
+                                                                     {{ info.user.username }} 
+                </div>
+                <div style="font-size:small" id="time{{info.pk}}"> نام و نام خانوادگی آزمون‌دهنده: &nbsp;
+                    {{ info.user.profiledb.firstname }} {{info.user.profiledb.lastname}} 
+                </div>
+            </div>
+            {% if dimensionName == 'نتیجه تمامی ابعاد' %}
+           <div id="PieChart{{info.pk}}" style="width:100%!important; height:100%!important;"></div>
+           <script type="text/javascript">
+           $('[id*="PieChart"]').each(function(){
+           var c = {{info.totalquiz}}
+           Highcharts.chart('PieChart{{info.pk}}', {
+                                         chart    : {
+                                         type     : 'pie',
+                                         options3d: {
+                                                     enabled  : true,
+                                                     alpha    : 45,
+                                                     beta     : 0
+                                                     }
+                                                     },
+                                        title: {
+                                                text: ''
+                                                },
+                                        tooltip: {
+                                                  pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                                                 },
+                                        plotOptions: {
+                                                    pie: {
+                                                    allowPointSelect : true,
+                                                    cursor           : 'pointer',
+                                                    depth            : 35,
+                                                    dataLabels: {
+                                                    enabled: true,
+                                                    format: '{point.name}'
+                                                                }
+                                                          }
+                                                       },
+                                                    series: [{
+                                                            type: 'pie',
+                                                            name: '',
+                                                            data: [
+                                                                    ['۱' ,  c[0]  ],
+                                                                    ['۲' ,  c[1]  ],
+                                                                    ['۳' ,  c[2]  ],
+                                                                    ['۴' ,  c[3]  ],
+                                                                    ['۵' ,  c[4]  ],
+                                                                    ['۶' ,  c[5]  ],
+			                                                        ['۷' ,  c[6]  ],
+			                                                        ['۸' ,  c[7]  ],
+			                                                        ['۹' ,  c[8]  ],
+			                                                        ['۱۰',  c[9]  ],
+			                                                        ['۱۱',  c[10] ],
+			                                                        ['۱۲',  c[11] ],
+                                                                   ]
+                                                             }]
+                                            })
+		   });
+           </script>
+            {% else %}
+            <div id="cylinder{{info.pk}}"></div>
+            <script>
+                $('[id*="cylinder"]').each(function(){
+                var r = {{info.response}}
+                Highcharts.chart('cylinder{{info.pk}}', {
+                                 chart: {
+                                         type     : 'cylinder',
+                                         options3d: {
+                                                    enabled     : true,
+                                                    alpha       : 15,
+                                                    beta        : 15,
+                                                    depth       : 50,
+                                                    viewDistance: 25
+                                                    }
+                                        },
+                                 scales: {
+                                         yAxis: [{
+                                                 ticks: {
+                                                 beginAtZero:true,
+                                                 
+                                                        }
+                                                 }]
+                                         },
+                                 plotOptions: {
+                                              series: {
+                                              depth: 25,
+                                              colorByPoint: true
+    
+                                                      }
+                                              },
+                                 yAxis: {
+                                        categories: [0,100],
+                                        max:100
+                                        },
+                                        
+                                 xAxis: {
+                                         categories: ['۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹', '۱۰']
+                                        },
+                                 series: [{
+                                         data: [(r[0] *10), (r[1] *10), (r[2] *10),(r[3] *10), (r[4] *10), (r[5] *10), (r[6] *10), (r[7] *10), (r[8] *10), (r[9] *10)],
+                                         name: 'info',
+                                         showInLegend: false
+                                         }]
+                                 });
+                });
+            </script>
+            {% endif %}
+		       <div style="font-size:small; direction:rtl;"> تحلیل آزمون: </div>
+               <form action="" method="POST" enctype="multipart/form-data">
+               {% csrf_token %}
+                {% if dimensionName == 'نتیجه تمامی ابعاد' %}
+                   <input type="hidden" value="all" name="quiztype" id="quiztype">
+                {% else %}
+                   <input type="hidden" value="onedimension" name="quiztype" id="quiztype">
+                {% endif %}
+                 <div class="justify-content-center">
+                      <input  onchange="upload_check()"  type="file" id="uploadpicture-btn"  name="picture" accept="image/*">
+                      <label  class="normal-button" for="uploadpicture-btn"> انتخاب فایل تصویر </label>
+                      <div id="picName" style="font-size: small;direction: ltr;"></div>
+                 </div>
+                 <div class="justify-content-center">
+                     <input type="file" id="uploadpdf-btn" name="pdfresult" accept=".pdf">
+                       <label  class="normal-button" for="uploadpdf-btn" > انتخاب فایل pdf </label>
+                       <div id="pdfName" style="font-size: small;direction: ltr;"></div>
+		  	     </div>
+		  	     <div class="justify-content-center">
+                     <input type="file" id="uploadv-btn" name="vresult" accept="video/*">
+                       <label  class="normal-button" for="uploadv-btn" > انتخاب فایل video </label>
+                       <div id="videoName" style="font-size: small;direction: ltr;"></div>
+		  	     </div>
+		  	     <div class="justify-content-center">
+                    <input type="file" id="uploada-btn" name="aresult" accept="audio/*">
+                    <label  class="normal-button" for="uploada-btn" > انتخاب فایل audio </label>
+                    <div id="audioName" style="font-size: small;direction: ltr;"></div>
+		  	     </div>
+                 <textarea class="transparent my-3" rows="3" required="required" name="result"   id="result"></textarea>
+                 <br />
+                 <input class="normal-button"  value="ارسال"  type="submit">
+               </form>
+           </div>
+        <br />
+        {% endif %}
+    </div>
+<script>
+$('[id*="date"] , [id*="time"] , [id*="phone"]').each(function(){
+    const PersianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    var str = $(this).text()                       
+    var rep = str.replace(/\d/g, x => PersianDigits[x]);
+    $(this).text(rep)                       
+    const PersianMonths = ['مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند', 'فروردین', 'اردیبهشت', 'خرداد', 'تیر','مرداد','شهریور'];
+    const EnglishMonths = ['Mehr','Aban','Azar','Dey','Bahman','Esfand','Farvardin','Ordibehesht','Khordad','Tir','Mordad','Shahrivar'];
+    for (let i =0; i < 12; i++){
+        var str = $(this).text()
+        var rep = str.replace(EnglishMonths[i] , PersianMonths[i]);
+        $(this).text(rep)
+        $(this).css("direction" , "rtl");
+    }
+});
+$("#uploadpicture-btn").change(function() {
+    var picid = '#uploadpicture-btn';
+    var Imagevalidation = LimitFileUploadFormatImage (picid);
+    if (Imagevalidation == "invalid"){
+        $("#myModal").modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+    }
+    else {$("#picName").text($(picid)[0].files[0].name)}
+});
+$("#uploadpdf-btn").change(function() {
+    var pdfid = '#uploadpdf-btn';
+    var pdfvalidation = LimitFileUploadFormatpdf(pdfid);
+    if (pdfvalidation == "invalid"){
+        $("#myModal").modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+    }
+    else {$("#pdfName").text($(pdfid)[0].files[0].name)}
+});
+$("#uploadv-btn").change(function(){
+    var videoid = '#uploadv-btn';
+    var videovalidation = LimitFileUploadFormatvideo (videoid)
+    if (videovalidation == "invalid"){
+        $("#myModal").modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+    }
+    else {$("#videoName").text($(videoid)[0].files[0].name)}
+});
+$("#uploada-btn").change(function() {
+    var audioid = '#uploada-btn';
+    var audiovalidation = LimitFileUploadFormatAudio (audioid)
+    if (audiovalidation == "invalid"){
+         $("#myModal").modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+    }
+    else {$("#audioName").text($(audioid)[0].files[0].name)}
+});
+</script>
+
+<!-- The Modal for Limit File format-->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header d-flex justify-content-between">
+                <div>
+                    <h4 class="modal-title">جهت اطلاع</h4>
+                </div>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body f-01em">
+                به علت عدم همخوانی فرمت فایل آپلودشده با فرمت مجاز، آپلود نخواهد شد.
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <div >
+                    <button type="button" class="btn btn-success" data-dismiss="modal"> متوجه شدم. </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

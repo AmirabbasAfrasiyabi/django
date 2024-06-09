@@ -1,0 +1,91 @@
+{% extends "wellness/base.html" %} {% block content %}
+<style>
+    .flex-container-btn{
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .flex-btn{
+        width: 20%!important;
+        font-size: 1.4vw;
+    }
+</style>
+<div class="container">
+      <div class="block justify-content-center">
+          <div class="block heading"> پشتیبانی غیرحضوری </div>
+          <form action="" method="POST" id="searchform">
+             {% csrf_token %}
+             <div id="search-results"></div>
+          </form>
+          <div class="flex-container-btn">
+            <button type="button" class="normal-button flex-btn" onclick="location.href='/dashboard/ticket/newticket/';"><i class="fa fa-pencil"></i> ایجاد پیام جدید</button>
+          </div>
+          {% if tickets %}
+             <table>
+              <tbody>
+                <tr>
+                    <th>درمورد بخش</th>
+                    <th>موضوع</th>
+                    <th>تاریخ ایجاد</th>
+                    <th>وضعیت</th>
+                </tr>
+                {% for ticket in tickets %}
+                <tr class="pointer" data-ticketid="{{ticket.id}}">
+                    <td>{{ticket.service}}</td>
+                    <td>{{ticket.topic}}</td>
+                    <td id="date{{ticket.id}}">{{ticket.chats.first.jalali_create_date}}</td>
+                    {% if ticket.status == 'closed' %}
+                    <td>بسته‌شده</td>
+                    {% elif ticket.status == 'open' %}
+                    <td>باز</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+              </tbody>
+             </table>
+          {% endif %}          
+      </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $("#searchform").submit(function(e){
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url : window.location,
+                data: {
+                    csrfmiddlewaretoken: $ ('input[name=csrfmiddlewaretoken]').val()
+                },
+                success: searchSuccess,
+                dataType: 'html'
+            });
+        });
+    });
+    
+function searchSuccess(data,textStatus, jqXHR){
+   $("#search-results").html(data);
+}
+
+$('[id*="date"]').each(function(){
+        var str = $(this).text();
+        const PersianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+        var rep = str.replace(/\d/g, x => PersianDigits[x]);
+        $(this).text(rep);
+});
+$('[id*="date"]').each(function(){
+        const PersianMonths = ['مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند', 'فروردین', 'اردیبهشت', 'خرداد', 'تیر','مرداد','شهریور'];
+        const EnglishMonths = ['Mehr','Aban','Azar','Dey','Bahman','Esfand','Farvardin','Ordibehesht','Khordad','Tir','Mordad','Shahrivar'];
+        for (let i =0; i < 12; i++){
+            var str = $(this).text();
+            var rep = str.replace(EnglishMonths[i] , PersianMonths[i]);
+            $(this).text(rep);
+            $(this).css("direction" , "rtl");
+        }
+});
+$("[data-ticketid]").click(function () {
+    var ticketid = $(this).data('ticketid')
+    window.location.assign(ticketid);
+})
+</script>
+{% endblock %}

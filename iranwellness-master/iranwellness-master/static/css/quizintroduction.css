@@ -1,0 +1,42 @@
+.mp3 {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin: 0.5px;
+      padding: 40px;
+      width: 100%;
+      height: 100px;
+    }
+.block {
+        padding: 1em;
+        font-size: 4vmin;
+        background-color: rgba(0, 0, 0, 0.1);
+        border: none;
+        border-radius: 1em;
+        box-shadow: 0px 0px 0.5em white;
+        justify-content: center;
+        height: 100%;
+        display: flex;
+        align-items: center;
+
+   }
+        
+.my-scroll {
+            scrollbar-width: thin;
+            margin-right:0.5em;
+            margin-left:0.5em;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            height: 60vh;
+            text-align: justify;
+            text-justify: inter-word;
+            scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+    }
+        
+.my-scroll::-webkit-scrollbar {
+           width: 0.3em;
+    }
+    
+.my-scroll::-webkit-scrollbar-thumb {
+          background: rgba(0, 0, 0, 0.2);
+    }

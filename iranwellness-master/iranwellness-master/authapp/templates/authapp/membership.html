@@ -1,0 +1,20 @@
+{% extends "wellness/base.html" %} {% block content %}
+<div class="container">
+    <div class="block">
+      <div class="block">عضویت ویژه</div>
+      <div style="margin-top:2em;">
+      {% if status == "valid" %} 
+        <span>سطح کاربری شما</apan>
+         <b>{{membershipType}} </b>
+         <span>است.</span>
+      {% else %}
+        <span>به علت عدم تکمیل فرم پروفایل، هیچگونه عضویتی برای شما ثبت نشده است.</span>
+      {% endif %}
+      </div>
+      <br />
+      <p>برای آگاهی از جزئیات طرح‌های موجود و یا تغییر نوع عضویت خود می‌توانید وارد صفحه "<b>طرح‌های عضویت ویژه</b>" شوید.</p>
+      <br/>
+      <div><button class="normal-button w-45" onclick="window.location.href='/membership/plans/'">طرح‌های عضویت ویژه</button></div>
+    </div>
+</div>
+{% endblock %}

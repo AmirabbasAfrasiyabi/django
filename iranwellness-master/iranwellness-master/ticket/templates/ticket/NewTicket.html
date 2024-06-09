@@ -1,0 +1,72 @@
+{% extends "wellness/base.html" %} {% block content %}
+<div class="container">
+  <div class="block justify-content-center" style="width:100%;">
+      <div class="block heading">ارسال پیام</div>
+      <div style="width: 100%;font-size:0.9em;">
+        <form action="" method="POST" id="ticketform" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row" style="width: 100%;margin:0;">
+            <div class="col-2"> بخش: </div>
+            <div class="col-10">
+                <select class="transparent" name="service" id="service">
+                  {% for service in services %}
+                  <option value="{{service.name}}" >{{service.name}}</option>
+                  {% endfor %}
+                </select>
+            </div>
+          </div>
+          <div class="row" style="width: 100%;margin:0;">
+            <div class="col-2"> موضوع:</div>
+            <div class="col-10">
+              <input class="transparent"  id="topic"     type="text"  name="topic"     placeholder="اجباری"     required="required" oninvalid="this.setCustomValidity('این قسمت را پر کنید')" oninput="setCustomValidity('')">
+            </div>
+          </div>
+          <div class="row" style="width: 100%;margin:0;">
+            <div class="col-2"> پیام: </div>
+            <div class="col-10">
+              <textarea class="transparent" rows="10"  id="message" name="message" required></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-2"></div>
+            <div class="col-10 justify-content-center">
+                <input  type="file" id="uploadpicture-btn"  name="picture" accept="image/*">
+                <label  class="normal-button w-75" for="uploadpicture-btn"> انتخاب فایل تصویر </label>
+            </div>
+          </div>
+          <input class="normal-button"   value="ارسال"     type="submit" id="btn">
+        </form>
+      </div>
+  </div>
+</div>
+
+<script>
+  $("form").submit(function(e){
+      e.preventDefault();
+      var form = new FormData();
+      form.append("csrfmiddlewaretoken", $ ('input[name=csrfmiddlewaretoken]').val());
+      form.append("service", $("#service").children("option:selected").val());
+      form.append("topic", $("#topic").val());
+      form.append("message", $("#message").val());
+      form.append("picture", document.getElementById("uploadpicture-btn").files[0]);
+      $.ajax({
+        method     : "POST",
+        url        : location.pathname,
+        data       : form,
+        mimeType   : "multipart/form-data",
+        processData: false,
+        contentType: false,
+        success    : function(response) {
+          $('.modal-body').html('<p>پیام شما با موفقیت ارسال شد.</p><p>حداکثر تا ۱۲ ساعت آینده متخصصین وِلْنِسی پاسخگوی پیام شما خواهند بود.</p><p>پیشاپیش از همراهی شما صمیمانه سپاسگزاریم.</p>');
+          $("#myModal").modal({
+              backdrop: 'static',
+              keyboard: false
+          });
+        }
+      });
+  });
+</script>
+<!-- The Modal -->
+{% include "ticket/TicketModal.html" %}
+
+{% endblock %}

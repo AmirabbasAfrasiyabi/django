@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>ایران ولنس</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content='#23B375' />
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
+    <link rel="manifest" href="/static/manifest.json">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+    <link rel="stylesheet" href="/static/includes/bootstrap/bootstrap.min.css">
+    <link href="/static/css/fontma.css" rel="stylesheet">
+    <script src="/static/includes/jquery/jquery.min.js"></script>
+    <script src="/static/includes/bootstrap/bootstrap.min.js"></script>
+    <style>
+        html {
+            min-height: 100vh;
+            width: 100%;
+            overflow-y: scroll;
+        }
+        
+        body {
+            font-family: RANSans;
+            text-align: center;
+            background: linear-gradient(70deg, #24AEDF 5%, #23B375 80%);
+            height: 100%;
+            width: 100%;
+            background-repeat: no-repeat;
+            background-size: cover;
+            color: white;
+        }
+        
+        .container {
+            margin: 1em auto;
+        }
+        
+        .heading {
+            margin-bottom: 1em;
+        }
+        
+        .transparent {
+            background: none;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 0.5em;
+            width: 80%;
+            direction: ltr;
+            text-align: center;
+            padding: 0.5em;
+            margin-bottom: 1em;
+        }
+        
+        .normal-button {
+            margin: 2vmin;
+            padding: 0.5em;
+            width: 90%;
+            background: none;
+            border: 1px solid white;
+            border-radius: 1em;
+            color: white;
+            text-align: center;
+            box-shadow: 0px 0px 0.5em white;
+            cursor: pointer;
+        }
+        
+        .square-button {
+            margin: 1em;
+            padding: 1em;
+            width: 30vmin;
+            height: 30vmin;
+            background: none;
+            border: 1px solid white;
+            border-radius: 1em;
+            color: white;
+            box-shadow: 0px 0px 0.5em white;
+            cursor: pointer;
+        }
+        
+        .normal-button:hover {
+            color: white;
+            box-shadow: 0px 0px 1em white;
+        }
+        
+        .square-button:hover {
+            color: white;
+            box-shadow: 0px 0px 1em white;
+        }
+        
+        a,
+        a:hover,
+        a:active,
+        a:visited,
+        a:focus {
+            text-decoration: none;
+            border: none;
+            color: white;
+        }
+        
+        .block {
+            padding: 1em;
+            font-size: 4vmin;
+            background-color: rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 1em;
+            box-shadow: 0px 0px 0.5em white;
+        }
+        
+        img {
+            width: 35vmin;
+            margin: 1em;
+        }
+        
+        .button-icon {
+            font-size: 10vmin;
+        }
+        
+        .calendar {
+            width: 80%;
+            background: white;
+            border-radius: 1em;
+            padding-bottom: 1em;
+            direction: rtl;
+        }
+        
+        .calendar-head {
+            background: #0a2239;
+            border-top-left-radius: 1em;
+            border-top-right-radius: 1em;
+            height: 2em;
+            padding: 0.5em;
+            margin-bottom: 1em;
+        }
+        
+        .week {
+            margin-top: 1em;
+        }
+        
+        .weekdays,
+        .weekdays:active,
+        .weekdays:visited,
+        .weekdays:focus {
+            margin-top: 0.5em;
+            color: black;
+            width: 2em;
+            height: 2em;
+            font-size: small;
+            border-radius: 0.5em;
+            box-shadow: 0px 0px 0.2em #C1C1C1;
+            margin: auto;
+        }
+        
+        .day-off {
+            background-color: red;
+            color: white;
+        }
+        
+        .unavailible {
+            color: grey;
+        }
+        
+        .modal {
+            color: black;
+        }
+        
+        .my-scroll {
+            scrollbar-width: thin;
+            margin-right:0.5em;
+            margin-left:0.5em;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            text-align: justify;
+            scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+        }
+        
+        .my-scroll::-webkit-scrollbar {
+           width: 0.3em;
+        }
+    
+        .my-scroll::-webkit-scrollbar-thumb {
+           background: rgba(0, 0, 0, 0.2);
+        }
+        .mp3 {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin: 0.5px;
+            padding: 40px;
+            width: 100%;
+            height: 100px;
+        }
+        .prl-1{
+            padding-right:1em;
+            padding-left:1em;
+        }
+        .f-1055em{
+            font-size:1.55em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container p-2">
+        <div class="block text-right">
+            <small>
+                {% block content %}{% endblock %}
+            </small>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+{% extends "manager/base.html" %} {% block content %}
+
+<div class="block">
+    <div class="block heading"> پشتیبانی غیر حضوری {{serviceName}} </div>
+    {% if tickets %}
+        <table>
+            <tr>
+                <th>موضوع</th>
+                <th>تاریخ ایجاد</th>
+                <th>تاریخ به روز رسانی </th>
+            </tr>
+            {% for ticket in tickets %}
+                <tr class="pointer" data-ticketid="{{ticket.id}}">
+                    <td>{{ticket.topic}}</td>
+                    <td class="fa-numbers" id="date{{ticket.id}}">{{ticket.chats.first.jalali_create_date}}</td>
+                    <td class="fa-numbers" id="date{{ticket.id}}">{{ticket.chats.last.jalali_create_date}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}          
+</div>
+<script>
+$('.fa-numbers').each(function(){
+        var str = $(this).text();
+        const PersianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+        var rep = str.replace(/\d/g, x => PersianDigits[x]);
+        $(this).text(rep);
+});
+$('[id*="date"]').each(function(){
+        const PersianMonths = ['مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند', 'فروردین', 'اردیبهشت', 'خرداد', 'تیر','مرداد','شهریور'];
+        const EnglishMonths = ['Mehr','Aban','Azar','Dey','Bahman','Esfand','Farvardin','Ordibehesht','Khordad','Tir','Mordad','Shahrivar'];
+        for (let i =0; i < 12; i++){
+            var str = $(this).text();
+            var rep = str.replace(EnglishMonths[i] , PersianMonths[i]);
+            $(this).text(rep);
+            $(this).css("direction" , "rtl");
+        }
+});
+$("[data-ticketid]").click(function () {
+    var ticketid = $(this).data('ticketid')
+    window.location.assign(ticketid);
+})
+/** search 
+function searchSuccess(data,textStatus, jqXHR){
+   $("#search-results").html(data);
+}
+**/
+</script>
+{% endblock %}

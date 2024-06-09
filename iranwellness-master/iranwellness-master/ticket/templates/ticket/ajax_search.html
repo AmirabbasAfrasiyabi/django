@@ -1,0 +1,10 @@
+{% if chats.count >0 %}
+    {% for chat in chats %}
+          <div>
+             <span>{{chat.topic}} </span>
+             <span>{{chat.chats.last.create_datetime|date:'H:i:s'}}</span>
+          </div>
+    {% endfor %}
+{% else %}
+<p>نتیجه‌ای یافت نشد!</p>
+{% endif %}

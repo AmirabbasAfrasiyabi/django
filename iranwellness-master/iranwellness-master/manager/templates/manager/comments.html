@@ -1,0 +1,17 @@
+{% extends "manager/base.html" %} {% block content %}
+<div class="container">
+    <div class="block justify-content-center">
+        <div class="block heading"> انتقادها و پیشنهادها </div>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="CommentType" value="center"> 
+            <div><input class="normal-button f-06" value="مشاهده نظرهای کاربران به مرکز خدمات" type="submit"></div>
+        </form>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="CommentType" value="WebApp"> 
+            <div><input class="normal-button f-06" value="مشاهده نظرهای کاربران به وب‌اپ ایران‌ولنس" type="submit"></div>
+        </form>
+    </div>
+</div>
+{% endblock %}

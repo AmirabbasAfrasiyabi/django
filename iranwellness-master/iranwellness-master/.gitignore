@@ -1,0 +1,11 @@
+# ignore py-cache files
+*.pyc
+*/*/*/__pycache__/
+*/*/__pycache__/
+*/__pycache__/
+/venv
+# cpanel files
+passenger_wsgi.py
+stderr.log
+wellness/.vs
+tmp/

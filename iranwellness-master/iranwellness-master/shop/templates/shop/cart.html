@@ -1,0 +1,50 @@
+{% extends "wellness/base.html" %}
+{% block content %}
+<div class="block" style="text-align: center;">
+     <div class="block">سبد خرید</div><br>
+     <div class="justify-content" >
+          {% if message %}
+          <p>{{message}}</p>
+          <div><input class="normal-button"    type="button" onclick="location.href= '/shop/' " value="بازگشت به فروشگاه"/></div>
+          {% endif %}
+          {% if info %}
+          {%for inf in info%}
+          <div class="block">
+          <form class="flex-container" action=" " method="POST" id="shopform">
+          {% csrf_token %}
+                <div class="box2">
+                         <b style="font-size: small;"> نام محصول </b><br>
+                         <br />
+                         <textarea class="transparent" style="font-size: x-small;"  rows="3" disabled>{{inf.Pname}}</textarea>
+                         <br /><br />
+                </div>
+                <div class="box2">
+                         <b style="font-size: small;"> قیمت </b>
+                         <br /><br />
+                         <textarea class="transparent" style="font-size: x-small;" rows="2" disabled> {{inf.price}} تومان</textarea>
+                     </div>
+                     <input type="hidden" value="{{ inf.name}}"     name="name"  >
+                     <input type="hidden" value="{{ inf.price}}"    name="price" >
+                <div class="box2">
+                   <div style="padding-top: 20%;" >
+                     <input style="width:80%;font-size: x-small;" id="1"    class="normal-button" type="submit"     value="پرداخت">
+                     <br />
+                     <input style="width:80%;font-size: x-small;" id="2"    class="normal-button" type="submit"     value="حذف">
+                   </div>
+                </div>
+          </form>
+          </div>
+          <br />
+          {% endfor %}
+          {% endif %}
+     </div>
+</div>
+<script>
+    $(".normal-button").click(function(e){
+      var stat= $(this).attr("id");
+      if (stat == "1"){
+      $('form').attr("action", "/sendcartRequest/");
+      };
+    });
+</script>
+{% endblock %}

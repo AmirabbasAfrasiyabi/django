@@ -1,0 +1,33 @@
+{% extends "wellness/base.html" %} {% block content %}
+<div class="container">
+    <div class="block" style="text-align: center;">
+        <div class="block">فروشگاه</div>
+        <span class="fa fa-shopping-bag m-5" style="font-size: 15vmin;"></span>
+        <br>
+        {% if status == "valid" %}
+        <button class="normal-button">محصولات ولنس غیر فیزیکی</button>
+        <button class="normal-button">محصولات ولنس فیزیکی </button>
+        <button class="normal-button">محصولات ولنس سبک زندگی</button>
+        <button class="normal-button">محصولات ولنس مواد غذایی</button>    
+    </div>
+    {% else %}
+    <div class="block" id="pop-up">
+        <p class="small-fontsize"> به دلیل عدم تکمیل اطلاعات پروفایل، شما مجاز به استفاده از این بخش نیستید.</p>
+        <p class="small-fontsize"> ابتدا با فشردن دکمه زیر اطلاعات خود را تکمیل نموده و سپس وارد فروشگاه شوید.</p>
+        <button class="normal-button btn-lg" id="profilemodal">پروفایل</button>
+    </div>
+    </div>
+
+<!-- The Modal -->
+{% include "wellness/ProfilePopUp.html" %}
+{% endif %}
+</div>
+<script>
+    $('#profilemodal').click(function(){
+        $("#myModal").modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+    });
+</script>
+{% endblock %}

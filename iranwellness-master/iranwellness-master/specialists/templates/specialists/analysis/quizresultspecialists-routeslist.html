@@ -1,0 +1,59 @@
+{% extends "manager/base.html" %} {% block content %}
+<div class="container">
+    <div class="block">
+      <div class="block heading mb-5">ارزیابی مسیرهای ۱۲گانه</div>
+        <button class="btn back-transparent w-80 my-3" onclick="location.href='/specialists/analysis/quizResultRoutesItems/1/' ">مسئولیت‌پذیری در قبال خود و عشق</button>
+        <button class="btn back-transparent w-80 my-3" onclick="location.href='/specialists/analysis/quizResultRoutesItems/2/' ">تنفس</button>
+        <button class="btn back-transparent w-80 my-3" onclick="location.href='/specialists/analysis/quizResultRoutesItems/3/' ">تغذیه</button>
+        <button class="btn back-transparent w-80 my-3" onclick="location.href='/specialists/analysis/quizResultRoutesItems/4/' ">حس کردن</button>
+        <button class="btn back-transparent w-80 my-3" onclick="location.href='/specialists/analysis/quizResultRoutesItems/5/' ">حرکت</button>
+        <button class="btn back-transparent w-80 my-3" onclick="location.href='/specialists/analysis/quizResultRoutesItems/6/' ">احساس کردن</button>
+        <button class="btn back-transparent w-80 my-3" onclick="location.href='/specialists/analysis/quizResultRoutesItems/7/' ">فکر کردن</button>
+        <button class="btn back-transparent w-80 my-3" onclick="location.href='/specialists/analysis/quizResultRoutesItems/8/' ">بازی کردن و کار کردن</button>
+        <button class="btn back-transparent w-80 my-3" onclick="location.href='/specialists/analysis/quizResultRoutesItems/9/' ">ارتباط برقرار کردن</button>
+        <button class="btn back-transparent w-80 my-3" onclick="location.href='/specialists/analysis/quizResultRoutesItems/10/' ">صمیمیت</button>
+        <button class="btn back-transparent w-80 my-3" onclick="location.href='/specialists/analysis/quizResultRoutesItems/11/' ">یافتن معنا</button>
+        <button class="btn back-transparent w-80 my-3" onclick="location.href='/specialists/analysis/quizResultRoutesItems/12/' ">ورا رفتن</button>
+    </div>
+</div>
+<!-- The Modal -->
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header d-flex justify-content-between">
+            <div>
+              <h4 class="modal-title">جهت اطلاع</h4>
+            </div>
+          </div>
+          <!-- Modal body -->
+          <div class="modal-body f-01em">
+            {% if info %}
+              {% for inf in info %}
+                {% if inf.value %}
+                   <p>تعداد {{inf.value}} آزمون تحلیل‌نشده برای <b>{{inf.title}}</b> وجود دارد.</p>
+                {% endif %}
+              {% endfor %}
+            {% else %}
+              <p>آزمون تحلیل‌نشده ای وجود ندارد.</p>
+            {% endif %}
+          </div>
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <div >
+              <button type="button" class="btn btn-success" data-dismiss="modal"> متوجه شدم. </button>
+            </div>
+        </div>
+      </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function(){
+      // Show the Modal on load
+      $("#myModal").modal({
+        backdrop: 'static',
+        keyboard: false
+      });
+  });
+  </script>
+{% endblock %}

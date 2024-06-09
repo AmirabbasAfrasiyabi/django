@@ -1,0 +1,48 @@
+{% extends "wellness/base.html" %} {% block content %}
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link href="/static/css/quizintroduction.css" rel="stylesheet">
+</head>
+
+<div class="container p-2">
+  <div class="block text-right" dir="rtl" lang="fa">
+  <small>
+   <div class="block mb-5">معرفی مسیر یافتن معنا</div>
+   <div class="my-scroll" dir="rtl">
+   <div class="pl-105">
+    <div>
+      <audio class="mp3" controls >
+        <source src="/static/audio/QuizIntroduction/finding meaning.mp3">
+      </audio>
+    </div>
+    <p>یافتن معنا یکی از نیازهای خاص انسان است. این مسئله یکی از پیچیده‌ترین موارد استفاده‌ی انرژی است که شامل تقریباً تمامی اشکال قبلی انرژی می‌شود.</p>
+    <p >از ابتدای آفرینش، فیلسوفان این سوالات پایه‌ای را پرسیده‌اند: من که هستم؟ چرا من اینجا هستم؟ به کجا می‌روم؟ چه می‌خواهم؟ چه چیزی واقعی است؟ چه چیزی حقیقت دارد؟</p>
+    <p> جدا از این مسئله که این سؤالات در خودآگاه یا ناخودآگاه انسان پاسخ داده شده‌اند یا خیر، تمام فعالیت‌های زندگی ما و صورت‌های انرژی با پاسخ‌های ما (یا عدم پاسخ) به این سؤالات پایه‌ای شکل می‌گیرند. فکر کردن به این سؤالات و زندگی کردن با آن‌ها یک دستاورد بزرگ است. اینگونه تفکرات می‌توانند معنای عمیق‌تری به اعمال و فعالیت‌های ما در زندگی روزانه بدهند. با یادگیری و تجربه‌ی عمیق‌تر اینکه ما که هستیم و چه چیزی در زندگی ما معنادار و مهم است، قادر خواهیم بود زندگی غنی‌تری به عنوان یک انسان داشته باشیم. این بخش شما را تشویق می‌کند معنای عمیق‌تری در زندگی خود بیابید و شما را برای هدایت انرژی زندگی کمک می‌کند.</p>
+</div>
+   </div>
+   <button class="normal-button">انجام آزمون</button>
+ </small>
+ </div>
+</div>
+
+<script>
+    $('.normal-button').each(function(index){
+        $(this).click(function(){
+            var num  = "{{number}}"
+            var stat = "{{status}}"
+            if (stat == "invalid") {
+                $('.modal-body').text('به دلایل ولنسی شما تا {{RD}} روز دیگر مجاز به انجام ارزیابی جدید نمی‌باشید.');
+                $(this).attr('data-toggle',"modal");
+                $(this).attr('data-target', "#myModal");
+            }
+            else if (stat == "WithoutResult") {
+                $('.modal-body').text('به علت وجود آزمون تحلیل‌نشده مجاز به انجام ارزیابی جدید نمی‌باشید.');
+                $(this).attr('data-toggle',"modal");
+                $(this).attr('data-target', "#myModal");
+            }
+            else if (stat == "valid")         { window.location.href = '/dashboard/evaluation/quiz/'+ num; }
+        });   
+    });
+</script>
+
+{% include "QuizIntroduction/QuizModal.html" %}
+{% endblock %}

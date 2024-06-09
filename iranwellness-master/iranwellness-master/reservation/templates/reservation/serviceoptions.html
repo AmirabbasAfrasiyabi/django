@@ -1,0 +1,10 @@
+{% extends "wellness/base.html" %} {% block content %}
+<div class="container">
+    <div class="block justify-content-center">
+        <div class="block">پشتیبانی و مشاوره {{service.name}} </div>
+        <img class="avatar-img my-3" src="/static/health.svg">
+        <button class="normal-button" onclick="location.href='/dashboard/services/{{service.slug}}/reserve';">رزرو پشتیبانی و مشاوره حضوری </button>
+        <button class="normal-button" onclick="location.href='/dashboard/services/{{service.slug}}/results';">دریافت فایل‌های مراجعه‌های پیشین </button>
+    </div>
+</div>
+{% endblock %}

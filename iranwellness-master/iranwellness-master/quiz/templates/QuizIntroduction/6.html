@@ -1,0 +1,49 @@
+{% extends "wellness/base.html" %} {% block content %}
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link href="/static/css/quizintroduction.css" rel="stylesheet">
+</head>
+
+<div class="container p-2">
+  <div class="block text-right" dir="rtl" lang="fa">
+  <small>
+   <div class="block mb-5">معرفی مسیر احساس کردن</div>
+   <div class="my-scroll" dir="rtl">
+   <div class="pl-105">
+    <div>
+      <audio class="mp3" controls >
+        <source src="/static/audio/QuizIntroduction/feeling.mp3">
+      </audio>
+    </div>
+    <p>ما احساسات را قبل از تولد تجربه می‌کنیم. احساسات می‌توانند شدید، ترسناک یا شگفت‌انگیز باشند. احساسات هدیه‌هایی هستند که ما بیش از هر چیز دیگری در مورد آن‌ها دچار سوء تفاهم هستیم و با آن‌ها بد برخورد می‌کنیم. ما آن‌ها را داوری می‌کنیم، سرکوب می‌کنیم، تخفیف می‌دهیم، خاموششان می‌کنیم، می‌پرستیم و از احساس کردن آن‌ها فرار می‌کنیم اما زندگی بدون آن‌ها خسته‌کننده است. زندگی کامل، آن است که پر از احساسات باشد.</p>
+    <p>تجربه‌ی فیزیکی گرما و سرما یا گرسنگی حس‌هایی هستند که توسط حواس ما دریافت می‌شوند. احساسات شبیه افکار نیستند اگرچه اغلب می‌شنویم که به جای یکدیگر استفاده می‌شوند؛ در واقع فکر کردن و احساس کردن در نواحی متفاوتی از مغز انجام می‌شوند. سیستم "لیمبیک" که در عمق مغز است، منبع احساسات است و افکار در قشر خاکستری مغز که در سطح مغز است و جزء مراحل رشد جدید در تکوین پستانداران است، رخ می‌دهند.</p>
+    <p>ما با احساس کردن و فکر کردن به هر واقعه‌ای پاسخ می‌دهیم اما اکثر افراد ارجحیت را به چیزی که فکر می‌کنند، می‌دهند و احساسات خود را نادیده می‌گیرند.</p>
+    <p>ما برای هر وضعیت جدید آنی احساسات جدیدی داریم حتی اگر ما یاد گرفته باشیم آن‌ها را سرکوب کنیم. این بخش در مورد آگاه شدن از هدیه‌ی فوق‌العاده‌ی احساسات است.</p>
+   </div>
+   </div>
+   <button class="normal-button">انجام آزمون</button>
+  </small>
+  </div>
+</div>
+
+<script>
+    $('.normal-button').each(function(index){
+        $(this).click(function(){
+            var num  = "{{number}}"
+            var stat = "{{status}}"
+            if (stat == "invalid") {
+                $('.modal-body').text('به دلایل ولنسی شما تا {{RD}} روز دیگر مجاز به انجام ارزیابی جدید نمی‌باشید.');
+                $(this).attr('data-toggle',"modal");
+                $(this).attr('data-target', "#myModal");
+            }
+            else if (stat == "WithoutResult") {
+                $('.modal-body').text('به علت وجود آزمون تحلیل‌نشده مجاز به انجام ارزیابی جدید نمی‌باشید.');
+                $(this).attr('data-toggle',"modal");
+                $(this).attr('data-target', "#myModal");
+            }
+            else if (stat == "valid")         { window.location.href = '/dashboard/evaluation/quiz/'+ num; }
+        });   
+    });
+</script>
+
+{% include "QuizIntroduction/QuizModal.html" %}
+{% endblock %}

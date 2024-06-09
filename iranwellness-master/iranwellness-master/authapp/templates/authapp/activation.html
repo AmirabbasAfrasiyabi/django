@@ -1,0 +1,78 @@
+{% extends "wellness/base.html" %} {% block content %}
+<script src="/static/js/ConvertNumbers.js"></script>
+<div class="container">
+    <div class="block">
+        <div class="block"> ورود به پنل کاربری</div>
+        <img class="avatar-img my-3" src="/static/sms.svg">
+        <form action="" method="POST">{% csrf_token %}
+            <div class="justify-content-center">
+                <div>لطفاً کد فعال‌سازی را وارد نمایید:</div>
+                <div><input class="transparent" maxlength="4" type="tel" name="key" placeholder="XXXX" id="key"></div>
+                <div class="d-flex justify-content-center">
+                    <div id="time" class="w-50 text-center" style="font-size: 2.5vmin;"></div>
+                </div>
+                <div style="margin-top:5%">رمز عبور دلخواه:</div>
+                <div> <input class="transparent" type="password" id="type"   name="password" placeholder="برای مثال 7854X9eW"></div>
+                <div>تکرار رمز عبور:</div>
+                <div> <input class="transparent" type="password" id="retype" name="repass"   placeholder="برای مثال 7854X9eW"></div>
+                <div> <input class="normal-button" onclick="location.href='/phoneverification/'" type="button" value="ارسال مجدد کد فعال‌سازی"></div>
+                <div> <input class="normal-button" id="submit" type="submit" value="تایید کد فعال‌سازی" /></div>
+                <script>
+                    function toFarsiNumber(n) {
+                        const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+                        return n
+                            .toString()
+                            .replace(/\d/g, x => farsiDigits[x]);
+                    }
+
+                    function startTimer(duration, display) {
+                        var timer = duration,
+                            minutes, seconds;
+                        setInterval(function() {
+                            minutes = parseInt(timer / 60);
+                            seconds = parseInt(timer % 60);
+                            minutes = minutes < 10 ? toFarsiNumber(0) + toFarsiNumber(minutes) : minutes;
+                            seconds = seconds < 10 ? toFarsiNumber(0) + toFarsiNumber(seconds) : seconds;
+                            display.textContent = toFarsiNumber(minutes) + ":" + toFarsiNumber(seconds) + "  زمان باقیمانده تا معتبر بودن کد فعال‌سازی";
+                            if (--timer < 0) {
+                                display.textContent = toFarsiNumber(0) + toFarsiNumber(0) + ":" + toFarsiNumber(0) + toFarsiNumber(0) + "\xa0\xa0\xa0" + "    لطفاً مجدداً برای ارسال کد فعال‌سازی اقدام نمایید.   ";
+                                document.getElementById("key").disabled    = true;
+                                document.getElementById("type").disabled   = true;
+                                document.getElementById("retype").disabled = true;
+                                document.getElementById("submit").disabled = true;
+                            }
+                        }, 1000);
+                    }
+                    window.onload = function() {
+                        var duration = 3 * 60;
+                        display = document.querySelector('#time');
+                        startTimer(duration, display);
+                    };
+                </script>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        if ("{{error}}"){toastr.error('{{error}}')}
+        $("#key").on("input", function () {
+            ConvertToEnglish('#username')
+        });
+        $("form").submit(function( event ) {
+            toastr.remove()
+            if ($("#key").val().length < 4){
+                if (!$("#key").val()){toastr.error('لطفاً کد فعال‌سازی را وارد نمایید!')}
+                else {toastr.error('کد فعال‌سازی 4 رقمی است!')}
+                event.preventDefault();
+            }
+            if ((!$("#type").val()) || (!$("#retype").val()) || ($("#type").val().length != $("#retype").val().length)){
+                if (!$("#type").val() || !$("#retype").val()){toastr.error('ورود رمز عبور و تکرار آن ضروری است!')}
+                else {toastr.error('رمز عبور و تکرار آن برابر نیستند. لطفاً بیشتر دقت کنید!')}
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+{% endblock %}

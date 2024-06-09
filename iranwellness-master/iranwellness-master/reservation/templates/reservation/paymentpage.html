@@ -1,0 +1,14 @@
+{% extends "wellness/base.html" %}
+{% block content %}
+<div class="container">
+    <div class="block">
+        <div class="block heading">پرداخت از طریق زرین پال</div>
+		<form action="/send_request/" method="POST">
+		{% csrf_token %}
+		   <b style="font-size: large;"> مبلغ: </b>
+		   <input class="transparent" style="font-size: medium;"  id="fee"      type="text"  name="fee"       placeholder="۲۵۰۰۰۰ تومان" required="required" oninvalid="this.setCustomValidity('این قسمت را پر کنید')" oninput="setCustomValidity('')">
+		   <div><input class="normal-button" value="پرداخت"        type="submit" id="btn"></div>
+		</form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,462 @@
+{% extends "wellness/base.html" %}{% block content %}
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="/static/js/GetJalaliDateTime.js"> </script>
+	<script src="/static/js/GetReserveTime.js">  </script>
+</head>
+
+<div class="block ">
+    <div class="block heading"> پرداخت ها </div>
+
+{% if message %}
+<div class="block">
+   <div class="block heading"> پشتیبانی و مشاوره‌های حضوری </div>
+   <div> {{message}} </div>
+</div>
+<br/>
+{% endif %}
+
+{% if HealthInfo %}
+    <br />
+    <div class="block">
+         <div class="block heading"> پشتیبانی و مشاوره حضوری عمومی </div>
+         <div class="justify-content-center">
+              <div class="flex-container">
+                 <div class="box2" style="font-size:small;"><b>اطلاعات نوبت رزرو شده</b></div>
+                 <div class="box2" style="font-size:small;"><b>وضعیت پرداخت</b></div>
+              </div>
+              {% for Hinf in HealthInfo %}
+              <div class="flex-container">
+                 <div class="box2" style="font-size:medium;">
+                    <div style="padding:5%;" >
+                     {{ Hinf.string }}
+                    </div>
+                 </div>
+                 {% if Hinf.paid == True %}
+                 <div class="box2" style="font-size: x-small;">
+                    <div style="padding:5%;" >
+                         پرداخت شده
+                    </div>
+                    <form style="font-size: xx-small; display:none;" action=" " method="POST" id="paidserviceform{{Hinf.pk}}">
+                        {% csrf_token %}
+                                <input id="Pay{{Hinf.pk}}"   type="hidden" value="True"                    name="Pay">
+                                <input id="Year{{Hinf.pk}}"  type="hidden" value="{{ Hinf.year }}"         name="Year">
+                                <input id="Month{{Hinf.pk}}" type="hidden" value="{{ Hinf.month }}"        name="Month">
+                                <input id="Day{{Hinf.pk}}"   type="hidden" value="{{ Hinf.day }}"          name="Day">
+                                <input id="Order{{Hinf.pk}}" type="hidden" value="{{ Hinf.order }}"        name="Order">
+                                <input                       type="hidden" value="queueHealth"             name="Device">
+                                <input                       type="hidden" value="{{ Hinf.duration }}"     name="Duration">
+                                <input                       type="hidden" value="service"                 name="determiner" >
+                                <input class="normal-button-payments" type="submit" id="delete"    value="حذف رزرو">
+                    </form>
+                 </div>
+                 
+                 {% elif Hinf.paid == False %}
+                 <form class="box2" style="font-size: xx-small;" action=" " method="POST" id="serviceform">
+                     {% csrf_token %}
+                     <input  id="Pay{{Hinf.pk}}"   type="hidden" value="False"                   name="Pay">
+                     <input  id="Year{{Hinf.pk}}"  type="hidden" value="{{ Hinf.year }}"         name="Year">
+                     <input  id="Month{{Hinf.pk}}" type="hidden" value="{{ Hinf.month }}"        name="Month">
+                     <input  id="Day{{Hinf.pk}}"   type="hidden" value="{{ Hinf.day }}"          name="Day">
+                     <input  id="Order{{Hinf.pk}}" type="hidden" value="{{ Hinf.order }}"        name="Order">
+                     <input                        type="hidden" value="queueHealth"             name="Device">
+                     <input                        type="hidden" value="{{ Hinf.duration }}"     name="Duration">
+                     <input                        type="hidden" value="service"                 name="determiner" >
+                     <input class="normal-button-payments" type="submit" id="p{{Hinf.pk}}"         value="پرداخت"><br/>
+                     <input class="normal-button-payments" type="submit" id="cancel{{Hinf.pk}}"    value="لغو رزرو"  style="display:none;">
+                     <input class="normal-button-payments" type="submit" id="delete{{Hinf.pk}}"    value="حذف رزرو" style="display:none;">
+                     
+                 </form>
+                 {% endif %}
+                 <script>
+                    setInterval(function(){
+                            
+                            var currentdate = GetJalaliDateTime();
+                            var yearNow     = currentdate[0]
+                            var monthNow    = currentdate[1]
+                            var dayNow      = currentdate[2]
+                            var HourNow     = currentdate[3]
+                            var MinuteNow   = currentdate[4]
+                            
+                            if  ( $("#Year{{Hinf.pk}}").val()     == yearNow) {
+                                if  ($("#Month{{Hinf.pk}}").val() == monthNow){
+                                    if (dayNow < $("#Day{{Hinf.pk}}").val()){
+                                        if ( ($("#Day{{Hinf.pk}}").val() - dayNow) == 1){
+                                            if ( ((GetReserveTime($("#Order{{Hinf.pk}}").val())[1] +(60*GetReserveTime($("#Order{{Hinf.pk}}").val())[0]))+(1440-(MinuteNow+(60*HourNow)))) >1440 ){$("#cancel{{Hinf.pk}}").css('display','block')}
+                                        }
+                                        else if (($("#Day{{Hinf.pk}}").val() - dayNow) > 1){$("#cancel{{Hinf.pk}}").css('display','block')}
+                                    }
+                                    else if (dayNow > $("#Day{{Hinf.pk}}").val()){
+                                        if ($("#Pay{{Hinf.pk}}").val() == "True"){ $("#paidserviceform{{Hinf.pk}}").css('display','block')  }
+                                        else {
+                                            $("#p{{Hinf.pk}}").css('display','none')
+                                            $("#delete{{Hinf.pk}}").css('display','block')
+                                        }
+                                    }
+                                    else if ($("#Day{{Hinf.pk}}").val() == dayNow){
+                                        if (HourNow > GetReserveTime($("#Order{{Hinf.pk}}").val())[0]){
+                                            if ($("#Pay{{Hinf.pk}}").val() == "True"){$("#paidserviceform{{Hinf.pk}}").css('display','block')}
+                                            else {
+                                               $("#p{{Hinf.pk}}").css('display','none')
+                                               $("#delete{{Hinf.pk}}").css('display','block')
+                                            }
+                                        }
+                                        else if (HourNow == GetReserveTime($("#Order{{Hinf.pk}}").val())[0]){
+                                            if (MinuteNow > GetReserveTime($("#Order{{Hinf.pk}}").val())[1]){
+                                               if ($("#Pay{{Hinf.pk}}").val() == "True"){$("#paidserviceform{{Hinf.pk}}").css('display','block')}
+                                               else {
+                                                  $("#p{{Hinf.pk}}").css('display','none')
+                                                  $("#delete{{Hinf.pk}}").css('display','block')
+                                                } 
+                                            }
+                                        }
+                                    }
+                                }
+                                else if ($("#Month{{Hinf.pk}}").val() != monthNow){
+                                    if  ($("#Month{{Hinf.pk}}").val() > monthNow){
+                                        if (($("#Month{{Hinf.pk}}").val() - monthNow) > 1){
+                                            $("#cancel{{Hinf.pk}}").css('display','block')
+                                        }
+                                        else if (($("#Month{{Hinf.pk}}").val() - monthNow) == 1){
+                                            if ( $("#Day{{Hinf.pk}}").val() == 1){
+                                                if ( (monthNow == 1) || (monthNow == 2) || (monthNow == 3) || (monthNow == 4) || (monthNow == 5) || (monthNow == 6) ){
+                                                    if ( dayNow == 31 ){
+                                                        if ( ((GetReserveTime($("#Order{{Hinf.pk}}").val())[1] +(60*GetReserveTime($("#Order{{Hinf.pk}}").val())[0]))+(1440-(MinuteNow+(60*HourNow)))) >1440 ){$("#cancel{{Hinf.pk}}").css('display','block')}
+                                                    
+                                                    }
+                                                    else { $("#cancel{{Hinf.pk}}").css('display','block') }
+                                                }
+                                                else if ( (monthNow == 7) || (monthNow == 8) || (monthNow == 9) || (monthNow == 10) || (monthNow == 11) ){
+                                                    if ( dayNow == 30 ){
+                                                        if ( ((GetReserveTime($("#Order{{Hinf.pk}}").val())[1] +(60*GetReserveTime($("#Order{{Hinf.pk}}").val())[0]))+(1440-(MinuteNow+(60*HourNow)))) >1440 ){$("#cancel{{Hinf.pk}}").css('display','block')}
+                                                    }
+                                                    else { $("#cancel{{Hinf.pk}}").css('display','block') }
+                                                }
+                                            }
+                                            else { $("#cancel{{Hinf.pk}}").css('display','block') }
+                                        }
+                                    }
+                                    else if  ($("#Month{{Hinf.pk}}").val() < monthNow){
+                                         if ($("#Pay{{Hinf.pk}}").val() == "True"){$("#paidserviceform{{Hinf.pk}}").css('display','block')}
+                                         else {
+                                            $("#p{{Hinf.pk}}").css('display','none')
+                                            $("#delete{{Hinf.pk}}").css('display','block')
+                                         }
+                                    }
+                                }
+                            }
+                                
+                            else if ($("#Year{{Hinf.pk}}").val() != yearNow) { 
+                                if  ( $("#Year{{Hinf.pk}}").val() > yearNow ) {
+                                    $("#cancel{{Hinf.pk}}").css('display','block')
+                                }
+                                else if ($("#Year{{Hinf.pk}}").val() < yearNow){
+                                    if ( $("#Pay{{Hinf.pk}}").val() == "True"){$("#paidserviceform{{Hinf.pk}}").css('display','block')}
+                                    else {
+                                        $("#p{{Hinf.pk}}").css('display','none')
+                                        $("#delete{{Hinf.pk}}").css('display','block')
+                                    }
+                                }
+                            }
+                        }, 100)
+                 </script>
+                 
+              </div>
+              {% endfor %}
+         </div>
+    </div>
+    <br />
+{% endif %}
+{% if ResonanceInfo %}
+   <div class="block">
+        <div class="block heading"> پشتیبانی و مشاوره حضوری تخصصی </div>
+        <div class="justify-content-center">
+            <div class="flex-container">
+                 <div class="box2" style="font-size:small;"><b>اطلاعات نوبت رزرو شده</b></div>
+                 <div class="box2" style="font-size:small;"><b>وضعیت پرداخت</b></div>
+            </div>
+            {% for inf in ResonanceInfo %}
+              <div class="flex-container">
+                 <div class="box2" style="font-size:medium;">
+                    <div style="padding:5%;" >
+                     {{ inf.string }}
+                    </div>
+                 </div>
+                 {% if inf.paid == True %}
+                 <div class="box2" style="font-size: x-small;">
+                    <div style="padding:5%;" >
+                         پرداخت شده
+                    </div>
+                    <form style="font-size: xx-small; display:none;" action=" " method="POST" id="paidserviceform2{{inf.pk}}">
+                        {% csrf_token %}
+                                <input id="Pay2{{inf.pk}}"   type="hidden" value="True"                   name="Pay">
+                                <input id="Year2{{inf.pk}}"  type="hidden" value="{{ inf.year }}"         name="Year">
+                                <input id="Month2{{inf.pk}}" type="hidden" value="{{ inf.month }}"        name="Month">
+                                <input id="Day2{{inf.pk}}"   type="hidden" value="{{ inf.day }}"          name="Day">
+                                <input id="Order2{{inf.pk}}" type="hidden" value="{{ inf.order }}"        name="Order">
+                                <input                       type="hidden" value="queueResonance"         name="Device">
+                                <input                       type="hidden" value="{{ inf.duration }}"     name="Duration">
+                                <input                       type="hidden" value="service"                name="determiner" >
+                                <input class="normal-button-payments" type="submit" id="delete"    value="حذف رزرو">
+                    </form>
+                 </div>
+                 
+                 {% elif inf.paid == False %}
+                 <form class="box2" style="font-size: xx-small;" action=" " method="POST" id="serviceform">
+                     {% csrf_token %}
+                     <input  id="Pay2{{inf.pk}}"   type="hidden" value="False"                    name="Pay">
+                     <input  id="Year2{{inf.pk}}"  type="hidden" value="{{ inf.year }}"           name="Year">
+                     <input  id="Month2{{inf.pk}}" type="hidden" value="{{ inf.month }}"          name="Month">
+                     <input  id="Day2{{inf.pk}}"   type="hidden" value="{{ inf.day }}"            name="Day">
+                     <input  id="Order2{{inf.pk}}" type="hidden" value="{{ inf.order }}"          name="Order">
+                     <input                        type="hidden" value="queueResonance"           name="Device">
+                     <input                        type="hidden" value="{{ inf.duration }}"       name="Duration">
+                     <input                        type="hidden" value="service"                  name="determiner" >
+                     <input class="normal-button-payments" type="submit" id="b{{inf.pk}}"         value="پرداخت"><br/>
+                     <input class="normal-button-payments" type="submit" id="cancel2{{inf.pk}}"   value="لغو رزرو"  style="display:none;">
+                     <input class="normal-button-payments" type="submit" id="delete2{{inf.pk}}"   value="حذف رزرو" style="display:none;">
+                     
+                 </form>
+                 {% endif %}
+                 <script>
+                    setInterval(function(){
+                            
+                            var currentdate = GetJalaliDateTime();
+                            var yearNow     = currentdate[0]
+                            var monthNow    = currentdate[1]
+                            var dayNow      = currentdate[2]
+                            var HourNow     = currentdate[3]
+                            var MinuteNow   = currentdate[4]
+                            
+                            if  ( $("#Year2{{inf.pk}}").val()     == yearNow) {
+                                if  ($("#Month2{{inf.pk}}").val() == monthNow){
+                                    if (dayNow < $("#Day2{{inf.pk}}").val()){
+                                        if ( ($("#Day2{{inf.pk}}").val() - dayNow) == 1){
+                                            if ( ((GetReserveTime($("#Order2{{inf.pk}}").val())[1] +(60*GetReserveTime($("#Order2{{inf.pk}}").val())[0]))+(1440-(MinuteNow+(60*HourNow)))) >1440 ){$("#cancel{{inf.pk}}").css('display','block')}
+                                        }
+                                        else if (($("#Day2{{inf.pk}}").val() - dayNow) > 1){$("#cancel2{{inf.pk}}").css('display','block')}
+                                    }
+                                    else if (dayNow > $("#Day2{{inf.pk}}").val()){
+                                        if ($("#Pay2{{inf.pk}}").val() == "True"){ $("#paidserviceform2{{inf.pk}}").css('display','block')  }
+                                        else {
+                                            $("#b{{inf.pk}}").css('display','none')
+                                            $("#delete2{{inf.pk}}").css('display','block')
+                                        }
+                                    }
+                                    else if ($("#Day2{{inf.pk}}").val() == dayNow){
+                                        if (HourNow > GetReserveTime($("#Order2{{inf.pk}}").val())[0]){
+                                            if ($("#Pay2{{inf.pk}}").val() == "True"){$("#paidserviceform2{{inf.pk}}").css('display','block')}
+                                            else {
+                                               $("#b{{inf.pk}}").css('display','none')
+                                               $("#delete2{{inf.pk}}").css('display','block')
+                                            }
+                                        }
+                                        else if (HourNow == GetReserveTime($("#Order2{{inf.pk}}").val())[0]){
+                                            if (MinuteNow > GetReserveTime($("#Order2{{inf.pk}}").val())[1]){
+                                               if ($("#Pay2{{inf.pk}}").val() == "True"){$("#paidserviceform2{{inf.pk}}").css('display','block')}
+                                               else {
+                                                  $("#b{{inf.pk}}").css('display','none')
+                                                  $("#delete2{{inf.pk}}").css('display','block')
+                                                } 
+                                            }
+                                        }
+                                    }
+                                }
+                                else if ($("#Month{{inf.pk}}").val() != monthNow){
+                                    if  ($("#Month{{inf.pk}}").val() > monthNow){
+                                        if (($("#Month{{inf.pk}}").val() - monthNow) > 1){
+                                            $("#cancel2{{inf.pk}}").css('display','block')
+                                        }
+                                        else if (($("#Month2{{inf.pk}}").val() - monthNow) == 1){
+                                            if ( $("#Day2{{inf.pk}}").val() == 1){
+                                                if ( (monthNow == 1) || (monthNow == 2) || (monthNow == 3) || (monthNow == 4) || (monthNow == 5) || (monthNow == 6) ){
+                                                    if ( dayNow == 31 ){
+                                                        if ( ((GetReserveTime($("#Order2{{inf.pk}}").val())[1] +(60*GetReserveTime($("#Order2{{inf.pk}}").val())[0]))+(1440-(MinuteNow+(60*HourNow)))) >1440 ){$("#cancel2{{inf.pk}}").css('display','block')}
+                                                    
+                                                    }
+                                                    else { $("#cancel2{{inf.pk}}").css('display','block') }
+                                                }
+                                                else if ( (monthNow == 7) || (monthNow == 8) || (monthNow == 9) || (monthNow == 10) || (monthNow == 11) ){
+                                                    if ( dayNow == 30 ){
+                                                        if ( ((GetReserveTime($("#Order2{{inf.pk}}").val())[1] +(60*GetReserveTime($("#Order2{{inf.pk}}").val())[0]))+(1440-(MinuteNow+(60*HourNow)))) >1440 ){$("#cancel2{{inf.pk}}").css('display','block')}
+                                                    }
+                                                    else { $("#cancel2{{inf.pk}}").css('display','block') }
+                                                }
+                                            }
+                                            else { $("#cancel2{{inf.pk}}").css('display','block') }
+                                        }
+                                    }
+                                    else if  ($("#Month2{{inf.pk}}").val() < monthNow){
+                                         if ($("#Pay2{{inf.pk}}").val() == "True"){$("#paidserviceform2{{inf.pk}}").css('display','block')}
+                                         else {
+                                            $("#b{{inf.pk}}").css('display','none')
+                                            $("#delete2{{inf.pk}}").css('display','block')
+                                         }
+                                    }
+                                }
+                            }
+                                
+                            else if ($("#Year2{{inf.pk}}").val() != yearNow) { 
+                                if  ( $("#Year2{{inf.pk}}").val() > yearNow ) {
+                                    $("#cancel2{{inf.pk}}").css('display','block')
+                                }
+                                else if ($("#Year2{{inf.pk}}").val() < yearNow){
+                                    if ( $("#Pay2{{inf.pk}}").val() == "True"){$("#paidserviceform2{{inf.pk}}").css('display','block')}
+                                    else {
+                                        $("#b{{inf.pk}}").css('display','none')
+                                        $("#delete2{{inf.pk}}").css('display','block')
+                                    }
+                                }
+                            }
+                        }, 100)
+                 </script>
+                 
+              </div>
+            {% endfor %}
+        </div>
+   </div>
+   <br />
+{% endif %}
+{% if QuickInfo %}
+<div class="block">
+     <div class="block heading"> فاکتورهای ثبت‌شده در پرداخت سریع </div>
+     <div class="justify-content-center" >
+          {%for Inf in QuickInfo%}
+              <div class="block" >
+                  <form action="/send_Quickrequest/" method="POST" id="information" >
+                  {% csrf_token %}
+                       <div class="flex-container">
+                            <div style="font-size: xx-small;">
+                                <b > نام </b><br>
+                                <textarea class="transparent transparent-payment"  id="firstname"   name="firstname" disabled>{{ Inf.firstname}}</textarea>
+                            </div>
+                            <div style="font-size: xx-small;">
+                                <b > نام خانوادگی </b><br>
+                                <textarea class="transparent transparent-payment"  id="lastname"    name="lastname"  disabled>{{ Inf.lastname}}</textarea>
+                            </div>
+                            <div class="transparent-payment" style="font-size: xx-small;">
+                                <b > شماره همراه </b><br>
+                                <textarea class="transparent transparent-payment"  id="phone"    name="phone"    disabled>{{Inf.phone}}</textarea>
+                            </div>
+                            
+                        </div>
+                        <div class="flex-container">
+                            <div style="font-size: xx-small;">
+                                <b > موضوع </b><br>
+                                <textarea class="transparent transparent-payment"  id="title"       name="title"     disabled>{{ Inf.title}}</textarea>
+                            </div>
+                            <div style="font-size: xx-small;">
+                                <b> مبلغ </b><br />
+                                <textarea class="transparent transparent-payment" style="direction: rtl;"  id="fee"         name="fee"  disabled> {{Inf.fee}} تومان </textarea>
+                            </div>
+                        </div>
+                        <div class="flex-container">    
+                            <div style="font-size: xx-small;">
+                                <b > تاریخ ثبت فاکتور </b><br>
+                                <input class="transparent transparent-payment"  id="reg"           type="text"    name="reg"           value="{{Inf.j_date_created}}" disabled>
+                            </div>
+                            <div style="font-size: xx-small;">
+                                <b > ساعت ثبت فاکتور </b><br>
+                                <input class="transparent transparent-payment"  id="reg"           type="text"    name="reg"           value={{Inf.time_created|date:'H:i:s'}} disabled>
+                            </div>
+                       </div>
+                             <div style="font-size: xx-small;">
+                                <b > توضیحات: </b> &nbsp
+                                <textarea style="width: 50%;" class="transparent" name="explane2"   rows="3"  value="{{Inf.explane}}" disabled>{{Inf.explane}}</textarea>
+                                <input style="width: 20%;font-size: xx-small;" class="normal-button btndelete" type="submit"     value="پرداخت">
+                             </div>
+                             <input type="hidden" value="{{Inf.fee}}"                 name="Amount"     >
+                             <input type="hidden" value="{{Inf.firstname}}"           name="Firstname"  >
+                             <input type="hidden" value="{{Inf.lastname}}"            name="Lastname"   >
+                             <input type="hidden" value="{{Inf.time_created.year}}"   name="YearBooked"   id="YearBooked"  >
+                             <input type="hidden" value="{{Inf.time_created.month}}"  name="MonthBooked"  id="MonthBooked" >
+                             <input type="hidden" value="{{Inf.time_created.day}}"    name="DayBooked"    id="DayBooked"   >
+                             <input type="hidden" value="{{Inf.time_created.hour}}"   name="HourBooked"   id="HourBooked"  >
+                             <input type="hidden" value="{{Inf.time_created.minute}}" name="MinuteBooked" id="MinuteBooked">
+                             <input type="hidden" value="{{Inf.time_created.second}}" name="SecondBooked" id="SecondBooked">
+                  </form>
+             </div>
+                   
+             <script>
+                       $('#reg , #cash').each(function(){
+                           const PersianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+                           var str = $(this).attr('value');
+                           
+                           var rep = str.replace(/\d/g, x => PersianDigits[x]);
+                           $(this).attr('value', rep);
+                           
+                           const PersianMonths = ['مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند', 'فروردین', 'اردیبهشت', 'خرداد', 'تیر','مرداد','شهریور'];
+                           const EnglishMonths = ['Mehr','Aban','Azar','Dey','Bahman','Esfand','Farvardin','Ordibehesht','Khordad','Tir','Mordad','Shahrivar'];
+                           for (let i =0; i < 12; i++){
+                                 var str = $(this).attr('value');
+                                 var rep = str.replace(EnglishMonths[i] , PersianMonths[i]);
+                                 $(this).attr('value', rep);
+                                 $(this).css("direction" , "rtl");
+                                 }
+                            if ($(this).attr('id')== "reg") {$(this).attr('id' , 'reg2')}
+                            else if ($(this).attr('id')== "cash") {$(this).attr('id' ,'cash2')}
+                      });
+             </script>
+          {%endfor%}
+     </div>
+</div>
+<br />
+{% endif %}
+
+{% if ShoppingInfo %}
+<div class="block" style="text-align: center;">
+     <div class="block">سبد خرید فروشگاه</div><br>
+     <div class="justify-content" >
+          {%for inf in ShoppingInfo%}
+          <form class="flex-container" action=" " method="POST" id="shopform">
+             {% csrf_token %}
+                     <div class="box2">
+                         <b style="font-size: small;"> نام محصول </b><br>
+                         <br />
+                         <textarea class="transparent" style="font-size: x-small;"  rows="3" disabled>{{inf.Pname}}</textarea>
+                         <br /><br />
+                     </div>
+                     <div class="box2">
+                         <b style="font-size: small;"> قیمت </b>
+                         <br /><br />
+                         <textarea class="transparent" style="font-size: x-small;" rows="2" disabled> {{inf.price}} تومان</textarea>
+                     </div>
+                     <input type="hidden" value="{{ inf.name}}"     name="name"  >
+                     <input type="hidden" value="{{ inf.price}}"    name="price" >
+                     <input type="hidden" value="shop"              name="determiner" >
+                     <div class="box2">
+                     <div style="padding-top: 20%;" >
+                     <input style="width:80%;font-size: x-small;" id="2"    class="normal-button" type="submit"     value="پرداخت">
+                     <br />
+                     <input style="width:80%;font-size: x-small;" id="3"    class="normal-button" type="submit"     value="حذف">
+                     </div>
+                     </div>
+          </form>
+          <br />
+          {% endfor %}
+     </div>
+</div> 
+{% endif %}
+
+<script>
+$('[id*="p"]').each(function(){
+   $(this).click(function(){
+      $('#serviceform').attr("action", "/send_request/") 
+   });
+});
+
+$('[id*="b"]').each(function(){
+   $(this).click(function(){
+      $('#serviceform').attr("action", "/send_request/") 
+   });
+});
+
+$(".normal-button").each(function(){
+    $(this).click(function(e){
+      var stat= $(this).attr("id");
+      if (stat == "2") {$('#shopform')   .attr("action", "/sendcartRequest/")}
+    });
+});
+</script>
+</div>
+{% endblock %}

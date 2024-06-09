@@ -1,0 +1,192 @@
+{% extends "wellness/base.html" %} {% block content %}
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    
+	<link rel="stylesheet" href="/static/css/dark-unica.css" type="text/css">
+	<script src="/static/js/highcharts.js"></script>
+	<script src="/static/js/highcharts-3d.js"></script>
+	<script src="/static/js/cylinder.js"></script>
+</head>
+    <div class="block">
+        <div class="block"> {{dimensionName}} </div>
+        <br />
+        {% if message %}
+        <div> {{message}} </div>
+        {% endif %}
+        {%if results %}
+           {% for result in results %}
+           {% if dimensionName == 'نتیجه تمامی ابعاد' %}
+           <div class="block">
+           <div class="small-fontsize" id="date{{result.pk}}"> تاریخ انجام آزمون: &nbsp;
+            {{ result.j_date_circle }} 
+            </div>
+            <div class="small-fontsize" id="time{{result.pk}}"> ساعت انجام آزمون: &nbsp;
+            {{ result.date|date:'H:i:s' }} 
+            </div>
+           <div id="PieChart" class="w-100"></div>
+           <script type="text/javascript">
+           var c = {{result.totalquiz}}
+           
+           Highcharts.chart('PieChart', {
+                                         chart    : {
+                                         type     : 'pie',
+                                         options3d: {
+                                                     enabled  : true,
+                                                     alpha    : 45,
+                                                     beta     : 0
+                                                     }
+                                                     },
+                                        title: {
+                                                text: ''
+                                                },
+                                        tooltip: {
+                                                  pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                                                 },
+                                        plotOptions: {
+                                                    pie: {
+                                                    allowPointSelect : true,
+                                                    cursor           : 'pointer',
+                                                    depth            : 35,
+                                                    dataLabels: {
+                                                    enabled: true,
+                                                    format: '{point.name}'
+                                                                }
+                                                          }
+                                                       },
+                                                    series: [{
+                                                            type: 'pie',
+                                                            name: '',
+                                                            data: [
+                                                                    ['۱' ,  c[0]  ],
+                                                                    ['۲' ,  c[1]  ],
+                                                                    ['۳' ,  c[2]  ],
+                                                                    ['۴' ,  c[3]  ],
+                                                                    ['۵' ,  c[4]  ],
+                                                                    ['۶' ,  c[5]  ],
+			                                                        ['۷' ,  c[6]  ],
+			                                                        ['۸' ,  c[7]  ],
+			                                                        ['۹' ,  c[8]  ],
+			                                                        ['۱۰',  c[9]  ],
+			                                                        ['۱۱',  c[10] ],
+			                                                        ['۱۲',  c[11] ],
+                                                                   ]
+                                                             }]
+                                            });
+		   </script>
+
+           {% else %}
+            <div class="block">
+            <div style="font-size:small" id="date{{result.pk}}"> تاریخ انجام آزمون: &nbsp;
+            {{ result.j_date_submit }} 
+            </div>
+            <div style="font-size:small" id="time{{result.pk}}"> ساعت انجام آزمون: &nbsp;
+            {{ result.date|date:'H:i:s' }} 
+            </div>
+            <div style="padding-left: 0px;" id="cylinder{{result.pk}}"></div>
+            <script>
+            $('[id*="cylinder"]').each(function(){
+             var r = {{result.response}}
+             Highcharts.chart('cylinder{{result.pk}}', {
+                             chart: {
+                                     type     : 'cylinder',
+                                     options3d: {
+                                                enabled     : true,
+                                                alpha       : 15,
+                                                beta        : 15,
+                                                depth       : 50,
+                                                viewDistance: 50,
+                                                }
+                                    },
+                             scales: {
+                                     yAxis: [{
+                                             ticks: {
+                                             beginAtZero:true,
+                                                    }
+                                             }]
+                                     },
+                             plotOptions: {
+                                          series: {
+                                          depth: 25,
+                                          colorByPoint: true
+
+                                                  }
+                                          },
+                             yAxis: {
+				                    categories: [0,100],
+				                    max:100
+		                            },
+		                            
+                             xAxis: {
+				                     categories: ['۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹', '۱۰'],
+				                     
+                                    },
+                             series: [{
+                                     data: [(r[0] *10), (r[1] *10), (r[2] *10),(r[3] *10), (r[4] *10), (r[5] *10), (r[6] *10), (r[7] *10), (r[8] *10), (r[9] *10)],
+                                     name: 'result',
+                                     showInLegend: false
+                                     }]
+                             });
+            });
+            </script>
+            {% endif %}
+            <br />
+            <div class="block">
+            <div style="font-size:small; direction:rtl;"> تحلیل آزمون </div>
+            <br />
+            {% if result.result %}
+               {% if result.imageresult %}
+                  <input type="image" class="w-60 h-60p" src="{{ result.imageresult.url }}" accept="image/*" disabled>
+               {% endif %}
+               
+               {% if result.videoresult %}
+               <video class="w-90" controls>
+                   <source src="{{result.videoresult.url}}">
+               </video>
+               {% endif %}
+               
+               {% if result.audioresult %}
+                  <br />
+                  <script>
+                      var Name= "{{result.audioresult.name}}"
+                      var T   = Name.split(".")[1]
+                      if (T == "mp3") {}
+                  </script>
+                <audio class="w-90 h-40" controls>
+                    <source src="{{result.audioresult.url}}">
+                </audio>
+               {% endif %}
+               {% if result.pdfresult %}
+                  <a class="btn normal-button f-2em" href="{{ result.pdfresult.url }}"> دریافت فایل pdf </a>
+               {% endif %}
+               <div class="transparent-quizmanager" style="font-size:small;"> {{ result.result }} </div>
+            {% else %}
+            <div class="transparent-quizmanager" > در دست تحلیل </div>
+            {% endif %}
+            </div>
+            </div>
+            <br />
+           
+           {% endfor %}
+           
+        {% endif %}
+        <br />
+    </div>
+
+<script>
+               $('[id*="date"] , [id*="time"]').each(function(){
+                                      const PersianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+                                      var str = $(this).html()
+                           
+                                      var rep = str.replace(/\d/g, x => PersianDigits[x]);
+                                      $(this).html (rep)
+                           
+                                      const PersianMonths = ['مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند', 'فروردین', 'اردیبهشت', 'خرداد', 'تیر','مرداد','شهریور'];
+                                      const EnglishMonths = ['Mehr','Aban','Azar','Dey','Bahman','Esfand','Farvardin','Ordibehesht','Khordad','Tir','Mordad','Shahrivar'];
+                                      for (let i =0; i < 12; i++){
+                                                                 var str = $(this).html()
+                                                                 var rep = str.replace(EnglishMonths[i] , PersianMonths[i]);
+                                                                 $(this).html (rep)
+                                                                 $(this).css("direction" , "rtl");
+                                                                 }
+                                      });
+</script>
+{% endblock %}

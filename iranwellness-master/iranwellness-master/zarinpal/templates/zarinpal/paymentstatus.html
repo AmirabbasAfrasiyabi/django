@@ -1,0 +1,17 @@
+{% extends "wellness/base.html" %}
+{% block content %}
+<div class="container">
+     <div class="block">
+        <div class="block heading">وضعیت پرداخت</div>
+       <p>{{message}}</p>
+       <p>{{code}}</p>
+       {% if St == "Quick" %}
+       <div><input class="normal-button"    type="button" onclick="location.href= r' ' " value="بازگشت به صفحه ابتدایی"/></div>
+       {% elif St == "Cart" %}
+       <div><input class="normal-button"    type="button" onclick="location.href= '/shop/' " value="بازگشت به فروشگاه"/></div>
+       {% else %}
+       <div><input class="normal-button"    type="button" onclick="location.href='/dashboard/'" value="بازگشت به پنل کاربری"/></div>
+       {% endif %}
+     </div>
+</div>
+{% endblock %}

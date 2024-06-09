@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>ایران ولنس</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#23B375" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/static/icons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/static/icons/favicon-16x16.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/static/icons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="96x96"
+      href="/static/icons/favicon-96x96.png"
+    />
+    <link
+      rel="manifest"
+      href="/static/manifest.json"
+    />
+    <link
+      rel="stylesheet"
+      href="/static/includes/bootstrap/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="/static/includes/font-awesome.min.css"
+    />
+    <script src="/static/includes/jquery/jquery.min.js"></script>
+    <script src="/static/includes/bootstrap/bootstrap.min.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="/static/css/fontma.css"
+    />
+    <link 
+      rel="stylesheet"
+      href="/static/css/style.css"
+    />
+    <link
+      rel="stylesheet"
+      href="/static/css/base.css"
+    />
+  </head>
+  <body>
+    <!-- navbar -->
+    <div class="w-100 sticky-top">
+      <nav class="navbar back-dark-blue">
+        <div class="inner-navbar">
+          <a href="/dashboard/">
+            <img width="35px" src="/static/logo.svg" />
+          </a>
+          <div class="hamburger" id="hamburger">
+              <span class="bar bar1"></span>
+              <span class="bar bar2"></span>
+              <span class="bar bar3"></span>
+          </div>
+          <div class="navbar-links back-dark-blue" id="navigationSlide">
+            <ul>
+              <li><a href="/dashboard/">پنل کاربری</a></li>
+              <li><a href="/contact/">ارتباط با ما</a></li>
+              <li><a href="/membership/">عضویت ویژه</a></li>
+              <li><a href="/news/COVID-19/">اخبار کروناویروس</a></li>
+            </ul>
+            <ul>
+              <li>
+                <a class="d-flex align-items-center px-2 py-1" style="border: 1px solid white; border-radius: 20px;" href="tel:02122644609">
+                  <span class="px-2">۰۲۱-۲۲۶۴۴۶۰۹</span>
+                  <i class="fa fa-phone"></i>
+                </a>
+              </li>
+              <li>{% if user.is_authenticated %}<a href="/logout/">خروج</a>{% else %}<a href="/login/">ورود</a>{% endif %} </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <script>
+        /* open and close mobile-navbar */
+        $('#hamburger').click(function () {
+            $("#navigationSlide").toggleClass("slide-down");
+            $('#hamburger').toggleClass("hamburger-active");
+        });
+        $(document).click(function(e) {
+            var container = $(".navbar");
+            if (!container.is(e.target) && container.has(e.target).length === 0 ) {
+                $("#navigationSlide").removeClass("slide-down");
+                $('#hamburger').removeClass("hamburger-active");
+            }
+        });
+        const pn = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
+        const en = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+        const an = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+        String.prototype.toPersianDigit = function () {
+          let cache = this;
+          for (let i = 0; i < 10; i++) {
+            let regex_en = new RegExp(en[i], "g");
+            let regex_ar = new RegExp(an[i], "g");
+            cache = cache.replace(regex_en, pn[i]);
+            cache = cache.replace(regex_ar, pn[i]);
+          }
+          cache = cache.replace(/[^۰-۹\.]+/g, "");
+          return cache;
+        };
+        String.prototype.toPersianText = function () {
+          let cache = this;
+          for (let i = 0; i < 10; i++) {
+            let regex_en = new RegExp(en[i], "g");
+            let regex_ar = new RegExp(an[i], "g");
+            cache = cache.replace(regex_en, pn[i]);
+            cache = cache.replace(regex_ar, pn[i]);
+          }
+          return cache;
+        };
+        String.prototype.toEnglishDigit = function () {
+          let cache = this;
+          for (var i = 0; i < 10; i++) {
+            let regex_pn = new RegExp(pn[i], "g");
+            let regex_ar = new RegExp(an[i], "g");
+            cache = cache.replace(regex_pn, en[i]);
+            cache = cache.replace(regex_ar, en[i]);
+          }
+          cache = cache.replace(/[^0-9\.]+/g, "");
+          return cache;
+        };
+        $(document).ready(function() {
+          $('.fa-text').each(function(){
+            $(this).text($(this).text().toPersianText())
+          });
+          $('input.fa-number').each(function(){
+            $(this).val($(this).val().toPersianDigit())
+          });
+        });
+      </script>
+    </div>
+    <!--end navbar-->
+    <div>{% block content %}{% endblock %}</div>
+    <!-- Loading -->
+    <div id="loading">
+      <div class="w-100 h-100 center">
+        <i class="fa fa-spinner fa-spin fa-4x fa-fw"></i>
+      </div>
+    </div>
+    <!-- end Loading -->
+    <!-- notification setting  -->
+    <script src="/static/includes/toastr/toastr.min.js"></script>
+    <link rel="stylesheet" href="/static/includes/toastr/toastr.min.css" />
+    <!--BEGIN RAYCHAT CODE-->
+    <script type="text/javascript">
+      if (location.hostname.match("iranwellness.co")) {
+        let phonenumber = "{{user.username}}";
+        let fullname = "{{user.first_name}}" + " " + "{{user.last_name}}";
+        let email_address = "{{user.email}}";
+        if (!email_address) {
+            email_address = "user-email@gmail.com";
+        }
+        window.addEventListener("raychat_ready", function (ets) {
+          window.Raychat.animate(
+            "shake"
+          ); /*ANIMATIONS: bounce, wobble, tada, shake, rubberBand, swing, jello, rotateIn*/
+          window.Raychat.setUser({
+            name: fullname,
+            phone: phonenumber,
+            email: email_address,
+          });
+        });
+
+        !(function () {
+          function t() {
+            var t = document.createElement("script");
+            (t.type = "text/javascript"),
+              (t.async = !0),
+              localStorage.getItem("rayToken")
+                ? (t.src =
+                    "https://app.raychat.io/scripts/js/" +
+                    o +
+                    "?rid=" +
+                    localStorage.getItem("rayToken") +
+                    "&href=" +
+                    window.location.href)
+                : (t.src = "https://app.raychat.io/scripts/js/" + o);
+            var e = document.getElementsByTagName("script")[0];
+            e.parentNode.insertBefore(t, e);
+          }
+          var e = document,
+            a = window,
+            o = "487e3601-e413-405a-ad4b-514fcc6b3214";
+          "complete" == e.readyState
+            ? t()
+            : a.attachEvent
+            ? a.attachEvent("onload", t)
+            : a.addEventListener("load", t, !1);
+        })();
+      }
+    </script>
+    <!--END RAYCHAT CODE-->
+  </body>
+</html>

@@ -1,0 +1,35 @@
+{% extends "manager/base.html" %} {% block content %}
+
+<div class="container">
+  <div class="block">
+    <div class="block heading">لیست انتظار دریافت فایل‌های ارزیابی {{name}}</div>
+    <table class="w-100">
+      <tbody>
+        <tr>
+          <th>نام </th>
+          <th>نام خانوادگی</th>
+          <th>شماره همراه</th>
+          <th>زمان مراجعه </th>
+        </tr>
+        {% for inf in info %}
+        <tr id="Tag-a{{inf.pk}}">
+          <td>{{inf.user.profiledb.firstname}}</td>
+          <td>{{inf.user.profiledb.lastname}}</td>
+          <td>{{inf.user.username}}</td>
+          <td>{{inf.string}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+   </table>
+  </div>
+</div>
+<script>
+  $('[id*="Tag-a"]').each(function(){
+    $(this).click(function(){
+      var ReservationPK = $(this).attr('id').replace("Tag-a", "");
+      var address= window.location.pathname + ReservationPK+'/'
+      window.location.replace(address)
+    })
+  })
+</script>
+{% endblock %}

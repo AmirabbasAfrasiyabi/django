@@ -1,0 +1,12 @@
+{% extends "wellness/base.html" %} {% block content %}
+<div class="container">
+    <div class="block text-center">
+        <div class="block">دسته‌بندی محصولات فروشگاه</div>
+        <span class="fa fa-shopping-bag m-5" style="font-size: 10vmin;"></span><br>
+
+        {% for inf in info %}
+            <button class="normal-button" onclick="location.href='/dashboard/shop/products/{{inf.Ename}}/';">{{inf.Pname}}</button>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

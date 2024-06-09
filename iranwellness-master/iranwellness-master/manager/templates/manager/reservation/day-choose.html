@@ -1,0 +1,68 @@
+{% extends "manager/base.html" %} {% block content %}
+<div class="container">
+    <div class="block">
+        <div class="block heading">انتخاب تاریخ</div>
+        <div class="calendar m-auto">
+            <div class="calendar-head d-flex justify-content-around">
+                <a id="previousmonth" href='#' class=""><i class="fa fa-chevron-right"></i></a>
+                <div id="date"></div>
+                <a id="nextmonth" href='#' class=""><i class="fa fa-chevron-left"></i></a>
+            </div>
+            <div class="d-flex justify-content-center" id="weekdays"></div>
+            <div id="days"></div>
+        </div>
+    </div>
+    <script>
+        $("document").ready(function() {
+            var type = '{{type}}'
+            var weekdays = ['ش', 'ی', 'د', 'س', 'چ', 'پ'];
+            var months   = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد','شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+            var text = '';
+            var idx = 0;
+            var month = {{month}};
+            var year  = {{year}};
+            for (i = 0; i < weekdays.length; i++) {
+                text = text + '<div class="weekdays">' + weekdays[i] + '</div>';
+            }
+            text = text + '<div class="weekdays day-off">ج</div>';
+            $("#weekdays").html(text);
+
+            $("#days").load('/manager/monthinfo/0','URLbeforeDate=' + window.location.pathname);
+
+            var date = months[month - 1] +" "+ year
+            $("#date").html(date)
+            
+            $("#nextmonth").click(function() {
+                if (idx < 7 ){
+                    idx+=1
+                    if (month == 12) { 
+                       month = 1 
+                       year = year + 1
+                    } else {
+                        month = month + 1
+                    }
+                    $("#days").load('/manager/monthinfo/' + idx,'URLbeforeDate=' + window.location.pathname);
+                    var date = months[month - 1] +" "+ year
+                    $("#date").html(date)
+                }
+            });
+
+            $("#previousmonth").click(function() {
+                if (idx > 0){
+                    idx-=1
+                    if (month == 1) {
+                        month = 12
+                        year = year - 1
+                    } else {
+                        month=month-1
+                    }
+                    $("#days").load('/manager/monthinfo/' + idx, 'URLbeforeDate=' + window.location.pathname);
+                    var date = months[month - 1] +" "+ year
+                    $("#date").html(date)    
+                }
+            });
+        });
+    </script>
+
+</div>
+{% endblock %}

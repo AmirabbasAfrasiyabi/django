@@ -1,0 +1,111 @@
+{% extends "wellness/base.html" %} {% block content %}
+{% load custom_file_field_tags %}
+<style>
+    table {
+        border-collapse: collapse;
+        border-spacing: 0;
+        width: 100%;
+        border: 1px solid #ddd;
+        font-size:1.5vw;
+        text-align:center!important;
+        }
+</style>
+<div class="container">
+    <div class="block justify-content-center">
+      {% if name == "queueHealth" %}
+        <div class="block heading">فایل‌های نتیجه ارزیابی ولنسی </div>
+      {% elif name == "queueResonance" %}
+        <div class="block heading">فایل‌های نتیجه ارتقاء ولنسی </div>
+      {% endif %}
+        <br />
+        {% if info %}
+        <form action="" method="POST" id="searchform">
+          {% csrf_token %}
+          <select class="transparent ptb-1em" name="PK"> 
+          {% for inf in info %}
+            <option class="transparent ptb-1em" value="{{inf.pk}}" > {{inf.string}} </option>
+          {% endfor %}
+          </select>
+          <div><input class="normal-button" value="دریافت فایل" type="submit"></div>
+        </form>
+        {% elif message %}
+            {{message}}
+        {% elif result %}
+            <table>
+                <tbody>
+                    <tr>
+                        <th>نام </th>
+                        <th>نام خانوادگی</th>
+                        <th>زمان مراجعه </th>
+                    </tr>
+                    <tr>
+                        <td>{{uinfo.firstname}}</td>
+                        <td>{{uinfo.lastname}}</td>
+                        <td class="fa-text">{{result.string}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br />
+
+            <!-- RESULT-FILES -->
+            <div class="row no-gutters">
+
+              {% if name == "queueResonance" and result.result or result.result2 or result.result3 %}
+              <div class="col-md-4 col-sm-6 my-2">
+                <a href="/static/guide-files/eds/test-result-guide-sheet.pdf" target="_blank" class="h-100 px-2 py-1 mx-auto d-flex align-items-center border border-white rounded" style="width: 90%;font-size: 15px;">
+                  <div class="fa fa-file-pdf-o" style="font-size: 2.5rem;"></div>
+                  <div class="px-3 px-md-2 center">
+                    <div>راهنمای نتیجه</div>
+                  </div>
+                </a>
+              </div>
+              {% endif %}
+
+              {% if result.result %}
+              <div class="col-md-4 col-sm-6 my-2">
+                <a href="{{result.result.url}}" target="_blank" class="h-100 px-2 py-1 mx-auto d-flex align-items-center border border-white rounded" style="width: 90%;font-size: 15px;">
+                  <div class="fa fa-file-pdf-o" style="font-size: 2.5rem;"></div>
+                  <div class="px-3 px-md-2">
+                    <div>{{result.result|get_file_name}}</div>
+                    <div class="fa-text text-right">{{result.result.size}} بایت</div>
+                  </div>
+                </a>
+              </div>
+              {% endif %}
+
+              {% if result.result2 %}
+              <div class="col-md-4 col-sm-6 my-2">
+                <a href="{{result.result2.url}}" target="_blank" class="h-100 px-2 py-1 mx-auto d-flex align-items-center border border-white rounded" style="width: 90%;font-size: 15px;">
+                  <div class="fa fa-file-pdf-o" style="font-size: 2.5rem;"></div>
+                  <div class="px-3 px-md-2">
+                    <div>{{result.result2|get_file_name}}</div>
+                    <div class="fa-text text-right">{{result.result2.size}} بایت</div>
+                  </div>
+                </a>
+              </div>
+              {% endif %}
+
+              {% if result.result3 %}
+              <div class="col-md-4 col-sm-6 my-2">
+                <a href="{{result.result3.url}}" target="_blank" class="h-100 px-2 py-1 mx-auto d-flex align-items-center border border-white rounded" style="width: 90%;font-size: 15px;">
+                  <div class="fa fa-file-pdf-o" style="font-size: 2.5rem;"></div>
+                  <div class="px-3 px-md-2">
+                    <div>{{result.result3|get_file_name}}</div>
+                    <div class="fa-text text-right">{{result.result3.size}} بایت</div>
+                  </div>
+                </a>
+              </div>
+              {% endif %}
+            
+            </div>
+
+            {% if not result.result and not result.result2 and not result.result3 %}
+            <p class="f-2em"> فایلی ارسال نشده است. </p>
+            {% endif %}
+        {% endif %}
+        
+        
+        
+	</div>
+</div>
+{% endblock %}

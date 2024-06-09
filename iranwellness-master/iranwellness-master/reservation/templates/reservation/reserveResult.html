@@ -1,0 +1,52 @@
+{% extends "wellness/base.html" %} {% block content %}
+<div class="block">
+  <div class="block heading">نتیجه رزرو </div>
+    <div class="justify-content-center" >
+     <div class="flex-container" style="font-size:small;">
+        <div class="box2" style="font-size:small;"><b>تاریخ </b></div>
+        <div class="box2"><b>ساعت</b></div>
+        <div class="box2" style="font-size:x-small;"><b>نوع خدمت</b></div>
+     </div>
+     <div class="flex-container" style="font-size:x-small;">
+        <div class="box2" style="font-size:xx-small; direction: ltr;">{{ Date }}</div>
+        <div class="box2" >{{ ETime }} {{STime}}</div>
+        <div class="box2">  {{ type }}</div>
+     </div>
+    </div>
+    {% if message %}
+    <p class="f-075 pt-3"> {{message}} </p>
+    {% else %}
+    <form action="/send_request/" method="POST">
+      {% csrf_token %}
+         <input type="hidden" value="{{ Year }}"      name="Year">
+         <input type="hidden" value="{{ Month }}"     name="Month">
+         <input type="hidden" value="{{ Day }}"       name="Day">
+         <input type="hidden" value="{{ Order }}"     name="Order">
+         <input type="hidden" value="{{ Device }}"    name="Device">
+         <input type="hidden" value="{{ Duration }}"  name="Duration">
+         <br />
+         {% if permission %}
+           <input class="normal-button" type="submit" style="font-size: small;" id="paybtn"   value="پرداخت">
+           {% if permission == "valid" %}
+            <input class="normal-button" type="submit" style="font-size: small;" id="2"   value="رزرو">
+            <script>
+             $(".normal-button").click(function(){
+             var stat= $(this).attr("id");
+             if (stat == "2"){
+             $('form').attr("action", "/dashboard/services/{{ Device}}/reserve/{{ Year }}/{{Month}}/{{Day}}/{{Duration}}/{{ Order }}");
+                };
+             });
+           </script>
+           {% endif %}
+         {% endif %}
+      </form>
+      {% endif %}
+</div>
+<script>
+    $("#paybtn").click(function(e){
+      e.preventDefault();
+      toastr.remove()
+      toastr.info("در حال حاضر امکان پرداخت آنلاین وجود ندارد. در آینده این امکان فراهم خواهد شد.")
+    });
+</script>
+{% endblock %}

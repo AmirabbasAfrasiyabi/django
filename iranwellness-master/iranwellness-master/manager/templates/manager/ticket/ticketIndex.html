@@ -1,0 +1,52 @@
+{% extends "manager/base.html" %} {% block content %}
+<style>
+    .flex-container-btn{
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .flex-btn{
+        width: 20%!important;
+        font-size: 1.4vw;
+    }
+</style>
+      <div class="block justify-content-center">
+          <div class="block heading"> پشتیبانی غیرحضوری </div>
+            <table>
+                <tr>
+                    <th>درمورد بخش</th>
+                    <th>موضوع</th>
+                    <th>تاریخ به روز رسانی </th>
+                    <th>وضعیت</th>
+                </tr>
+                {% for chat in chats %}
+                    <tr class="pointer" onclick=window.location="{% url 'manager:ticket-detail' chat.id %}";>
+                          <td>{{chat.service}}</td>
+                          <td id="topic{{chat.pk}}">{{chat.topic}}</td>
+                          <td id="date{{chat.pk}}">{{chat.chats.last.jalali_create_date}}</td>
+                          {% if chat.status == 'closed' %}
+                          <td>بسته‌شده</td>
+                          {% elif chat.status == 'open' %}
+                          <td>باز</td>
+                          {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+      </div>
+<script>
+$('[id*="date"]').each(function(){
+        var str = $(this).text();
+        const PersianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+        const PersianMonths = ['مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند', 'فروردین', 'اردیبهشت', 'خرداد', 'تیر','مرداد','شهریور'];
+        const EnglishMonths = ['Mehr','Aban','Azar','Dey','Bahman','Esfand','Farvardin','Ordibehesht','Khordad','Tir','Mordad','Shahrivar'];
+        var rep = str.replace(/\d/g, x => PersianDigits[x]);
+        $(this).text(rep);
+        for (let i =0; i < 12; i++){
+            var str = $(this).text();
+            var rep = str.replace(EnglishMonths[i] , PersianMonths[i]);
+            $(this).text(rep);
+            $(this).css("direction" , "rtl");
+        }
+});
+</script>
+{% endblock %}

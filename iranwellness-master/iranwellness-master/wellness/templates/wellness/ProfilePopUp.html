@@ -1,0 +1,119 @@
+<script src="/static/js/ConvertNumbers.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+<div class="modal modal-profile fade background-modal" id="myModal" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content background-modal-content" >
+
+            <!-- Modal Header -->
+            <div class="modal-header d-flex justify-content-between">
+                  <h4 class="modal-title">مشخصات کاربر</h4>
+                  <button type="button" class="closemodal" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <br />
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form class="form" id="formGetinfo" method="POST" action="/dashboard/profile/">
+                    {%csrf_token%}
+                        <div class="form-row xsmall-fontsize">
+                              <div class="col-3">نام</div>
+                              <div class="col"><input type="text" class="transparent" name="firstname" placeholder="اجباری"></div>
+                        </div>
+                        <div class="form-row xsmall-fontsize">
+                              <div class="col-3">نام خانوادگی</div>
+                              <div class="col"><input type="text" class="transparent" name="lastname" placeholder="اجباری"></div>
+                        </div>
+                        <div class="form-row xsmall-fontsize">
+                              <div class="col-3">ایمیل</div>
+                              <div class="col"><input type="email" class="transparent" name="email"  placeholder="اختیاری" ></div>
+                        </div>
+                        <div class="form-row xsmall-fontsize">
+                              <div class="col-3">شغل</div>
+                              <div class="col"><input type="text" class="transparent"  name="job"  placeholder="اختیاری" ></div>
+                        </div>
+                        <div class="form-row xsmall-fontsize">
+                              <div class="col-3">آدرس منزل</div>
+                              <div class="col"><textarea type="text" rows="3" class="transparent" name="address1" placeholder="اختیاری" ></textarea></div>
+                        </div>
+                        <div class="form-row xsmall-fontsize">
+                              <div class="col-3">تلفن ثابت</div>
+                              <div class="col"><input type="tel" maxlength="11" class="transparent"  name="phone1" id="phone1"  placeholder="اجباری"></div>
+                        </div>
+                        <div class="form-row xsmall-fontsize">
+                              <div class="col-3">آدرس حدودی محل کار</div>
+                              <div class="col"><textarea type="text" rows="2" class="transparent" name="address2" placeholder="اختیاری" ></textarea></div>
+                        </div>
+                        <div class="form-row xxsmall-fontsize">
+                              <div class="col-3">شماره شبکه‌های اجتماعی</div>
+                              <div class="col"><input type="tel" maxlength="11" class="transparent" name="phone3" id="phone3" placeholder="اختیاری"></div>
+                        </div>
+                        
+                        <p>اطلاعات شما به صورت محرمانه ذخیره خواهد شد.</p>
+                        <br />
+                        <input type="hidden" name="winpath" id="winpath" value="">
+                        <button type="submit"  class="btn btn-success" id="btnGetOffer">ثبت اطلاعات</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+$('[id*="phone"]').on("input keypress", function () {
+      ConvertToEnglish('#'+ $(this).attr('id'))
+});
+$.validator.addMethod("regex",function(value, element, regexp) {
+      var re = new RegExp(regexp);
+      return this.optional(element) || re.test(value);
+});
+$("form#formGetinfo").validate({
+      rules: {
+            firstname: {
+                required: true,
+                regex: /^[\u0600-\u06FF\s]+$/
+            },
+            lastname: {
+                required: true,
+                regex: /^[\u0600-\u06FF\s]+$/
+            },
+            phone1: {
+                required: true,
+                regex: /^0[0-9]{10}$/
+            },
+            email: "email",
+            phone3: {regex: /^09[0-9]{9}$/},
+            job: {regex: /^[\u0600-\u06FF\s]+$/},
+            address1: {regex: /^[-،\u0600-\u06FF\s]+$/},
+            address2: {regex: /^[-،\u0600-\u06FF\s]+$/}
+      },
+      messages: {
+            firstname: {
+                required: "ورود نام ضروری است!",
+                regex: "نام را با حروف فارسی وارد نمایید!"
+            },
+            lastname: {
+                required: "ورود نام خانوادگی ضروری است!",
+                regex: "نام خانوادگی را با حروف فارسی وارد نمایید!"
+            },
+            phone1: {
+                required: "ورود شماره ثابت ضروری است!",
+                regex: "شماره ثابت خود را به درستی و همراه با پیش‌شماره وارد نمایید."
+            },
+            email: "لطفاً آدرس ایمیل معتبر وارد نمایید!",
+            phone3: {regex: "لطفاً شماره شبکه‌های اجتماعی خود را به درستی وارد نمایید!"},
+            job: {regex: "لطفاً شغل خود را با حروف فارسی وارد نمایید!"},
+            address1: {regex: "لطفاً آدرس منزل خود را با حروف فارسی وارد نمایید!" },
+            address2: {regex: "لطفاً آدرس حدودی محل کار خود را با حروف فارسی وارد نمایید!"}
+      },
+      errorPlacement: function(error,element) {},
+      highlight: function (element,errorClass,validClass) {},
+      invalidHandler: function(e, validation){
+            toastr.remove()
+            $.each(validation.errorMap,function(index,value){toastr.error(value)})
+      },
+      submitHandler: function(form) {
+            $('#winpath').attr('value', location.pathname)
+            form.submit();
+      }
+});
+
+</script>

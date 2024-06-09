@@ -1,0 +1,18 @@
+{% extends "wellness/base.html" %} {% block content %}
+<div class="container">
+    <div class="block">
+        <div class="block heading justify-content-center greenback">{{info.first.subject.Pname}} </div>
+        <div class="text-right py-4 px-2">
+            <p></p>
+            <ul>
+              {% for subject in info %}
+                <a href="/news/{{info.first.subject.new.Ename}}/{{info.first.subject.Ename}}/{{subject.Ename}}/" id={{subject.Ename}}><li class="pointer p-1">{{ subject.Pname }}</li></a>
+              {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    $('#coveid19').remove()
+</script>
+{% endblock %}

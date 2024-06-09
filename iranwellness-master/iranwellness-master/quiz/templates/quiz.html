@@ -1,0 +1,184 @@
+{% extends "wellness/base.html" %} {% block content %}
+<style>
+    .bar {
+        direction: rtl;
+        width: 20em;
+        height: 2em;
+        background-color: white;
+        margin: auto;
+        border-radius: 1em;
+        box-shadow: 0px 0px 5px black;
+    }
+    
+    .item {
+        height: 100%;
+        width: 10em;
+        background: #0a2239;
+        min-width: 2em;
+        border-radius: 5vmin;
+        text-align: center;
+        color: white;
+    }
+    
+    .score {
+        font-size: 4vmin;
+    }
+    
+    .info {
+        direction: rtl;
+        background: rgb(0, 0, 0, 0.2);
+        margin: 2em;
+        padding: 1em;
+        border-radius: 1em;
+        text-align: justify;
+    }
+    
+    a {
+        background-color: #0a2239;
+    }
+    
+    .tab {
+        display: block;
+    }
+</style>
+<div class="container">
+    <div class="block" id="tabs">
+        <form method="POST" id="answers">
+            {% csrf_token %}
+            <div class="block mb-5" id="title"></div>
+            <div class="tab-content"></div>
+        </form>
+    </div>
+</div>
+<script>
+    var num = $(location).attr('href').split("/").pop();
+    $.getJSON("/static/json/quiz_" + num + ".json").done(function(data) {
+        $("#title").html(data.fa_title);
+        $.each(data['fa_q'], function(i, item) {
+            str = ''
+            if (i == 0) {
+                str = "active show";
+            }
+            var txt = "<div class='tab-pane fade ";
+            txt += str;
+            txt += "'><div class = 'justify-text Item'>" + (i + 1);
+            txt += ". " + item + "</div><div class='score mt-5'>۵</div>";
+            txt += "<div class = 'bar'><div class = 'item'></div></div>";
+            txt += "<input type='hidden' value='5' name='q" + i + "'>";
+            txt += '<div class="info"><small>' + data['fa_more'][i] + '<a href="/quiz/article/' + num + '/' + (i + 1) + '" target="_blank">ادامه مطلب ...</a></small></div>'
+            txt += "<div class='row text-center'>";
+            txt += "<div class='col-5 normal-button m-auto' id='" + (i + 2) + "'>بعدی</div>";
+            txt += "<div class='col-5 normal-button m-auto' id='" + i + "'>قبلی</div></div></div>";
+            $(".tab-content").append(txt);
+        });
+        
+        $("#0").hide();
+        $("#11").html("ارسال پاسخ ها");
+        $("#11").attr('data-target', "#myModal");
+        $("#11").attr('data-toggle',"modal");
+        $("#11").attr('data-backdrop', "static");
+        $("#11").attr('data-keyboard', "false");
+        
+        $(".Item").each(function(){
+            var str = $(this).text();
+            const PersianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            var rep = str.replace(/\d/g, x => PersianDigits[x]);
+            $(this).text(rep);
+        });
+        
+        var scores = [];
+        var pressed = [];
+        $(".bar").each(function() {
+            scores.push(5)
+            pressed.push(false)
+        });
+
+        const maximumw = $(".bar").width();
+        $(".bar").on("mousedown", function() {
+            pressed[$(".bar").index(this)] = true;
+        });
+        $(document).on("mouseup", function() {
+            $(".bar").each(function(index) {
+                pressed[index] = false;
+            });
+        });
+        $(".bar").on("mousemove", function(event) {
+            if (pressed[$(".bar").index(this)] == true) {
+                var move = -event.pageX + $(this).offset().left + maximumw;
+                move = Math.min(maximumw, move);
+                move = Math.max(0, move);
+                score = Math.ceil(move * 10 / maximumw);
+                scores[$(".bar").index(this)] = score;
+                $(this).find('.item').width(move);
+                $(this).parent().find('.score').html(score);
+                $(this).parent().find('input').val(score);
+            }
+            $(".score").each(function(){
+               var EN = $(this).text();
+               const PersianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+               var PN = EN.replace(/\d/g, x => PersianDigits[x]);
+               $(this).text(PN);
+            });
+        });
+        
+        
+        
+
+        $(".bar").on("touchmove", function(event) {
+            var move = $(this).offset().left + $(this).width() - event.originalEvent.touches[0].pageX;
+            move  = Math.min(maximumw, move);
+            move  = Math.max(0, move);
+            score = Math.ceil(move * 10 / maximumw);
+            scores[$(".bar").index(this)] = score;
+            $(this).find('.item').width(move);
+            $(this).parent().find('.score').html(score);
+            $(this).parent().find('input').val(score);
+            $(".score").each(function(){
+               var EN = $(this).text();
+               const PersianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+               var PN = EN.replace(/\d/g, x => PersianDigits[x]);
+               $(this).text(PN);
+            });
+        });
+        $(".normal-button").click(function() {
+            var k = $(this).attr('id');
+            if (k > 0 && k <= $(".tab-pane").length) {
+                $(".tab-pane").removeClass("active show");
+                $(".tab-pane:eq(" + (k - 1) + ")").tab('show');
+            };
+        });
+        $("#11").click(function() {
+            $("#answers").submit();
+        });
+        
+    });
+</script>
+<!-- The Modal -->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header d-flex justify-content-between">
+                <div>
+                    <h4 class="modal-title text-dark">ارسال پاسخ‌ها</h4>
+                </div>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body text-dark">
+                پاسخ‌ها با موفقیت ارسال شد.
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <div >
+                    <button class="btn btn-success" onclick="location.href='/dashboard/evaluation/quiz/'"> ارزیابی جدید </button>
+                    <button class="btn btn-success" onclick="location.href='/dashboard/evaluation/quizresult/'"> تحلیل ارزیابی‌های پیشین </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

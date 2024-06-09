@@ -1,0 +1,215 @@
+{% extends "wellness/base.html" %} {% block content %}
+<script src="/static/js/ConvertNumbers.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+<style>
+    .WellId{
+        background-color: #008080;
+        border-radius: 1em;
+    }
+    .ID{
+        background:transparent;
+        border:none;
+        color:white;
+        text-align:center;
+        width:100%;
+    }
+</style>
+<div class="container">
+    <div class="block justify-content-center">
+        <div class="block heading">مشخصات کاربر</div>
+        <form method="POST" enctype="multipart/form-data">
+            {%csrf_token%}
+            <div class="form-row">
+                <div class="col-4"></div>
+                {% if data.image %}
+                   <div class="col"><input style="border-radius:4px;display:box;" type="image" src="{{ data.image.url }}"  width="80" height="80" accept="image/*" disabled></div>
+                {% else %}
+                   <div class="col"><input style="border-radius:4px;display:box;" type="image" src="/static/avatar.svg"    width="80" height="80" disabled></div>
+                {% endif %}
+            </div>
+            <div class="form-row">
+                <div class="col-4"></div>
+                <div class="col justify-content-center">
+                    <input  onchange="upload_check()"  type="file" id="uploadpicture-btn"  name="picture" accept="image/*">
+                    <label  class="normal-button w-75" for="uploadpicture-btn"> انتخاب فایل تصویر </label>
+                </div>
+            </div>
+            <div class="form-row small-fontsize">
+                <div class="col-4">نام</div>
+                <div class="col">
+                    <input type="text" class="transparent" name="firstname" value="{{data.firstname}}" placeholder="اجباری">
+                </div>
+            </div>
+            <div class="form-row small-fontsize">
+                <div class="col-4">نام خانوادگی</div>
+                <div class="col">
+                    <input type="text" class="transparent" name="lastname" value="{{data.lastname}}" placeholder="اجباری">
+                </div>
+            </div>
+            <div class="form-row small-fontsize">
+                <div class="col-4">ایمیل</div>
+                <div class="col">
+                    <input type="email" class="transparent" name="email" value="{{data.Email}}" placeholder="اختیاری" >
+                </div>
+            </div>
+            <div class="form-row small-fontsize">
+                <div class="col-4">شغل</div>
+                <div class="col">
+                    <input type="text" class="transparent"  name="job" value="{{data.job}}" placeholder="اختیاری" >
+                </div>
+            </div>
+            <div class="form-row small-fontsize">
+                <div class="col-4">آدرس منزل</div>
+                <div class="col">
+                    <textarea type="text" rows="3" class="transparent" name="address1" placeholder="اختیاری" >{{data.address1}}</textarea>
+                </div>
+            </div>
+            <div class="form-row small-fontsize">
+                <div class="col-4">تلفن ثابت</div>
+                <div class="col">
+                    <input type="tel" maxlength="11" class="transparent fa-number" style="direction: ltr;" name="phone1" value="{{data.phone1}}" id="phone1" placeholder="اجباری">
+                </div>
+            </div>
+            <div class="form-row small-fontsize">
+                <div class="col-4">آدرس حدودی محل کار</div>
+                <div class="col">
+                    <textarea type="text" rows="2" class="transparent" name="address2" placeholder="اختیاری" >{{data.address2}}</textarea>
+                </div>
+            </div>
+            <div class="form-row small-fontsize">
+                <div class="col-4">شماره شبکه‌های اجتماعی</div>
+                <div class="col">
+                    <input type="tel" maxlength="11" class="transparent fa-number" style="direction: ltr;" name="phone3" value="{{data.phone3}}" id="phone3" placeholder="اختیاری">
+                </div>
+            </div>
+            <br />
+           
+            <div class="form-row small-fontsize" style="margin-top:2em;">
+                <div class="col-1"></div>
+                <div class="col-10 WellId">
+                    <div class="row ptb-1">
+                        <div class="col-6">کد ولنسی شما:</div>
+                        <div class="col-6">
+                            {% if data.wellid %}
+                               <div class="col"><input class="ID" type="tel" value="{{data.wellid}}" id="membershipType" disabled></div>
+                            {% else %}
+                               <div class="col"><input class="ID" type="text" value="نامشخص" disabled></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="col-1"></div>
+            </div>
+            <br />
+            <div class="form-row justify-content-center small-fontsize">
+                <p>اطلاعات شما به صورت محرمانه ذخیره خواهد شد.</p>
+            </div>
+            <div>
+                <button type="submit" class="normal-button" id="subbtn">ثبت اطلاعات</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content text-dark">
+            <div class="modal-header d-flex justify-content-between">
+                 <h4 class="modal-title">ثبت اطلاعات</h4>
+            </div>
+            <div class="modal-body">ثبت اطلاعات با موفقیت انجام شد.</div>
+            <div class="modal-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-success" onclick="location.href='/dashboard/'">بازگشت به منو اصلی</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- The Modal of Limit the size of an image file upload -->
+<div class="modal fade" id="limiter">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header d-flex justify-content-between">
+                <h4 class="modal-title">خطا در میزان حجم فایل آپلودی</h4>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">حجم فایل عکس باید کمتر از ۳۰۰ کیلوبایت باشد!</div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal"> متوجه شدم. </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    if ("{{message}}") {$("#myModal").modal({show: true, keyboard: false,backdrop: 'static'});}
+    $('[id*="phone"]').on("input keypress", function () {
+        ConvertToPersian('#'+ $(this).attr('id'))
+    });
+    function upload_check(){
+        if($("#uploadpicture-btn").prop('files')[0].size > 30){
+            $("#limiter").modal("show");
+            $("#uploadpicture-btn").val("");
+        }
+    };
+    $.validator.addMethod("regex",function(value, element, regexp) {
+        var re = new RegExp(regexp);
+        return this.optional(element) || re.test(value);
+    });
+    $("form").validate({
+        rules: {
+            firstname: {
+                required: true,
+                regex: /^[\u0600-\u06FF\s]+$/
+            },
+            lastname: {
+                required: true,
+                regex: /^[\u0600-\u06FF\s]+$/
+            },
+            phone1: {
+                required: true,
+                regex: /^۰[۰-۹]{10}$/
+            },
+            email: {regex: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/},
+            phone3: {regex: /^۰۹[۰-۹]{9}$/},
+            job: {regex: /^[\u0600-\u06FF\s]+$/},
+            address1: {regex: /^[-،\u0600-\u06FF\s]+$/},
+            address2: {regex: /^[-،\u0600-\u06FF\s]+$/}
+        },
+        messages: {
+            firstname: {
+                required: "ورود نام ضروری است!",
+                regex: "نام را با حروف فارسی وارد نمایید!"
+            },
+            lastname: {
+                required: "ورود نام خانوادگی ضروری است!",
+                regex: "نام خانوادگی را با حروف فارسی وارد نمایید!"
+            },
+            phone1: {
+                required: "ورود شماره ثابت ضروری است!",
+                regex: "شماره ثابت خود را به درستی و همراه با پیش‌شماره وارد نمایید."
+            },
+            email: "لطفاً آدرس ایمیل معتبر وارد نمایید!",
+            phone3: {regex: "لطفاً شماره شبکه‌های اجتماعی خود را به درستی وارد نمایید!"},
+            job: {regex: "لطفاً شغل خود را با حروف فارسی وارد نمایید!"},
+            address1: {regex: "لطفاً آدرس منزل خود را با حروف فارسی وارد نمایید!"},
+            address2: {regex: "لطفاً آدرس حدودی محل کار خود را با حروف فارسی وارد نمایید!"}
+        },
+        submitHandler: function(form) {
+            form.submit();
+        },
+        errorPlacement: function(error,element) {},
+        highlight: function (element,errorClass,validClass) {},
+        invalidHandler: function(e, validation){
+            toastr.remove()
+            $.each(validation.errorMap,function(index,value){toastr.error(value)})
+        }
+    });
+});
+</script>
+{% endblock %}
