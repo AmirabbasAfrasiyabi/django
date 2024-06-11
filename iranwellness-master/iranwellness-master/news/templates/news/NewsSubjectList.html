@@ -6,7 +6,7 @@
             <p>در این بخش می توانید با انتخاب هر یک از موارد زیر به اطلاعاتی از دیدگاه ولنسی دست یابید:</p>
             <ul>
               {% for subject in info %}
-                <a href="/news/{{info.first.new.Ename}}/{{subject.Ename}}/" id={{subject.Ename}}><li class="pointer p-1">{{ subject.Pname }}</li></a>
+                <a href="/blog/{{info.first.new.Ename}}/{{subject.Ename}}/" id={{subject.Ename}}><li class="pointer p-1">{{ subject.Pname }}</li></a>
               {% endfor %}
             </ul>
         </div>

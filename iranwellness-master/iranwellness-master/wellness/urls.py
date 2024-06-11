@@ -70,8 +70,8 @@ urlpatterns = [
     path(r'introduction/', TemplateView.as_view(template_name="index/introduction.html"), name="introduction"),
     
     ## اخبار ولنسی
-    path('news/', include('news.urls')),
-
+    path('blog/', include('news.urls')),
+    # path('news/blog/', include('news.urls')),
     ## عضویت ویژه
     path(r'membership/',membership, name="membership"),
     path(r'membership/plans/', login_required(TemplateView.as_view(template_name="authapp/membershipPlans.html")), name="membershipplans"),
