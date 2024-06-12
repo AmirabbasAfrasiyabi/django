@@ -1,0 +1,35 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Vazir', sans-serif;
+}
+
+h1.display-4 {
+    color: #343a40;
+    font-size: 4rem; /* اندازه بزرگتر عنوان */
+}
+
+.btn-primary, .btn-success {
+    font-size: 1.5rem; /* اندازه بزرگتر دکمه‌ها */
+    padding: 1rem 2rem; /* فاصله بیشتر درون دکمه‌ها */
+}
+
+p.lead {
+    font-size: 1.5rem; /* اندازه بزرگتر نوشته‌ها */
+    line-height: 1.75; /* فاصله خطوط بیشتر */
+}
+
+.bg-light {
+    background-color: #ffffff !important;
+    color: #343a40 !important; /* متن رنگی داخل کادر سفید */
+}
+
+.shadow-sm {
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;
+}
+
+#wellness-image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 2rem;
+    border-radius: 15px; /* گرد کردن گوشه های تصویر */
+}

@@ -11,10 +11,10 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from pathlib import Path
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -25,8 +25,7 @@ SECRET_KEY = 'ga+6r%6p9d%s*t4j@dz-j857gs7b0wwd=7d+^_@$ki^n5#m^a4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS =  ['localhost', '127.0.0.1']
-
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # Application definition
 
@@ -152,11 +151,11 @@ USE_TZ = True
 #                            STATIC and MEDIA PATH
 #----------------------------------------------------------------------------------
 STATIC_URL = '/static/'
-STATICFILES_DIRS =[os.path.basename('static')]
-# STATIC_ROOT = os.path.basename('static')
+STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.basename('media')
+MEDIA_ROOT = BASE_DIR / 'media'
 
 #----------------------------------------------------------------------------------
 
