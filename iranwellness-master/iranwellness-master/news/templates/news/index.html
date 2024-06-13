@@ -1,17 +1,58 @@
 {% extends "wellness/base.html" %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container-fluid p-0">
+    <style>
+        body {
+            font-family: RANSans, sans-serif;
+            margin: 0; /* حذف مارجین از بدنه */
+            padding: 0; /* حذف پدینگ از بدنه */
+        }
+
+        header {
+            background-color: #008080 !important;
+            border-color: #008080 !important;
+            color: white;
+            text-align: center;
+            font-weight: 200;
+            line-height: 2; /* افزایش فاصله بین خطوط */
+            width: 100%;
+            padding: 0.01rem 0; /* افزایش ارتفاع هدر */
+            margin: 0; /* حذف مارجین از هدر */
+        }
+
+        .btn {
+            background-color: #008080 !important;
+            border-color: #008080 !important;
+            color: white;
+            text-align: center;
+            font-weight: 300;
+            line-height: 1.5;
+            padding: 20px 60px; /* افزایش اندازه دکمه‌ها */
+            margin: 20px; /* فاصله بین دکمه‌ها */
+            font-size: 2rem; /* افزایش سایز فونت دکمه‌ها */
+            width: 200px; /* تنظیم عرض دکمه‌ها */
+            border: 2px solid white; /* اضافه کردن بوردر سفید */
+        }
+
+        .btn-group {
+            margin-top: 20rem; /* افزایش فاصله بین دکمه‌ها و هدر */
+        }
+    </style>
+
+    <header class="text-center">
+        <h1 class="display-4 my-4">به بلاگ ما خوش آمدید</h1>
+        <p class="lead">ولنس به معنی بهبود کلی سلامت و کیفیت زندگی افراد است. با ولنس، شما می‌توانید با ایجاد تغییرات مثبت در سبک زندگی خود، به تعادل جسمی و روحی برسید و زندگی سالم‌تری داشته باشید.</p>
+        <p class="lead">همراه ما باشید تا با هم به سوی زندگی بهتر و سالم‌تر گام برداریم.</p>
+        <p class="lead">برای مشاهده محتوای مربوط به سلامتی، دکمه "سلامت" را فشار دهید. برای مشاهده محتوای مربوط به ولنس، دکمه "ولنس" را فشار دهید. امیدواریم از محتوای ما بهره‌مند شوید.</p>
+    </header>
+
     <div class="row justify-content-center">
         <div class="col-md-8 text-center">
-            <img src="{% static 'images/blog.jpg' %}" alt="Wellness" id="wellness-image">
-            <h1 class="display-4 my-4">به بلاگ ما خوش آمدید</h1>
+            {% comment %} <img src="{% static 'images/blog.jpg' %}" alt="Wellness" id="wellness-image" class="img-fluid rounded mb-4"> {% endcomment %}
             <div class="btn-group my-4" role="group" aria-label="Basic example">
-                <button onclick="location.href='http://127.0.0.1:8000/news/health/'" class="btn btn-primary btn-lg mx-2">Health</button>
-                <button onclick="location.href='http://127.0.0.1:8000/news/wellness/'" class="btn btn-success btn-lg mx-2">Wellness</button>
-            </div>
-            <div class="my-4 p-4 bg-light rounded shadow-sm">
-                <p class="lead">ولنس به معنی بهبود کلی سلامت و کیفیت زندگی افراد است. با ولنس، شما می‌توانید با ایجاد تغییرات مثبت در سبک زندگی خود، به تعادل جسمی و روحی برسید و زندگی سالم‌تری داشته باشید.</p>
+                <button onclick="location.href='http://127.0.0.1:8000/news/health/'" class="btn btn-primary btn-lg">سلامت</button>
+                <button onclick="location.href='http://127.0.0.1:8000/news/wellness/'" class="btn btn-success btn-lg">ولنس</button>
             </div>
         </div>
     </div>
