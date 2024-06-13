@@ -1,8 +1,7 @@
 import os
-from pathlib import Path
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -81,7 +80,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-            'libraries':{
+            'libraries': {
                 'custom_file_field_tags': 'index.templatetags.custom_file_field_tags',
             }
         },
@@ -89,7 +88,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'wellness.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -100,7 +98,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -120,7 +117,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -134,32 +130,27 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Static and Media files
 
-#----------------------------------------------------------------------------------
-#                            STATIC and MEDIA PATH
-#----------------------------------------------------------------------------------
 STATIC_URL = '/static/'
+<<<<<<< HEAD
 STATICFILES_DIRS = [BASE_DIR / 'wellness' / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+=======
+STATICFILES_DIRS = [os.path.basename('static')]
+# STATIC_ROOT = os.path.basename('static')
+>>>>>>> ef99808eb962002dc3d990daf7218b68e7a18187
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.basename('media')
 
-#----------------------------------------------------------------------------------
+# Login settings
 
+LOGIN_REDIRECT_URL = '/dashboard/'
+LOGIN_URL = '/login/'
 
-#----------------------------------------------------------------------------------
-#                                LOGIN SETTINGS
-#----------------------------------------------------------------------------------
-LOGIN_REDIRECT_URL='/dashboard/'
-LOGIN_URL ='/login/'
+# Django Rest Framework settings
 
-#----------------------------------------------------------------------------------
-
-
-#----------------------------------------------------------------------------------
-#                             django rest framework settings
-#----------------------------------------------------------------------------------
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
@@ -168,15 +159,12 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
 }
 
-#-----------------------------------------------------------------------------------
+# Django Debug Toolbar settings
 
-
-#-----------------------------------------------------------------------------------
-#                                django-debug-toolbar settings
-#-----------------------------------------------------------------------------------
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
 
-#------------------------------------------------------------------------------------
+# Default primary key field type
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
