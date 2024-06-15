@@ -7,7 +7,7 @@ def NewsList(request):
 def NewsSubjectList(request, NewsName):
     news_instances = new.objects.filter(Ename=NewsName)
     if news_instances.exists():
-        news = news_instances.first()  # استفاده از اولین رکورد پیدا شده
+        news = news_instances.first()
     else:
         news = get_object_or_404(new, Ename=NewsName)
     
@@ -18,7 +18,7 @@ def NewsSubjectList(request, NewsName):
 def NewsTopicList(request, NewsName, NewsSubject):
     news_instances = new.objects.filter(Ename=NewsName)
     if news_instances.exists():
-        news = news_instances.first()  # استفاده از اولین رکورد پیدا شده
+        news = news_instances.first()
     else:
         news = get_object_or_404(new, Ename=NewsName)
     subject_instance = get_object_or_404(subject, Ename=NewsSubject, new=news)
@@ -27,15 +27,13 @@ def NewsTopicList(request, NewsName, NewsSubject):
     return render(request, 'news/NewsTopicList.html', context)
 
 def NewsText(request, NewsName, NewsSubject, NewsTopic):
-    news_instances = new.objects.filter(Ename='health')
+    news_instances = new.objects.filter(Ename=NewsName)
     if news_instances.exists():
-        news = news_instances.first()  # استفاده از اولین رکورد پیدا شده
+        news = news_instances.first()
     else:
-        news = get_object_or_404(new, Ename='health')
-
+        news = get_object_or_404(new, Ename=NewsName)
     subject_instance = get_object_or_404(subject, Ename=NewsSubject, new=news)
     info = get_object_or_404(topic, subject=subject_instance, Ename=NewsTopic)
     context = {'info': info}
-    
     template_name = 'news/Htmldocs/health-{}-{}.html'.format(NewsSubject, NewsTopic)
     return render(request, template_name, context)
