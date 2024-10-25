@@ -201,23 +201,3 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
 }
 
-#-----------------------------------------------------------------------------------
-
-
-#-----------------------------------------------------------------------------------
-#                                    sentry debug
-#-----------------------------------------------------------------------------------
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
-
-sentry_sdk.init(
-    dsn="https://3492b06191ba4151a1d7b2dbdfc799fb@o489411.ingest.sentry.io/5551589",
-    integrations=[DjangoIntegration()],
-    traces_sample_rate=0.2,
-
-    # If you wish to associate users to errors (assuming you are using
-    # django.contrib.auth) you may enable sending PII data.
-    send_default_pii=True
-)
-
-#-----------------------------------------------------------------------------------
